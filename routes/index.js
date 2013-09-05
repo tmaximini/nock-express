@@ -1,8 +1,13 @@
+var ErrorHandler = require('./error').errorHandler
+  , UserHandler  = require('./user');
 
-/*
- * GET home page.
- */
+module.exports = exports = function(app, db) {
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
-};
+    var userHandler = new UserHandler(db);
+
+    // GET all users
+    app.get('/users', userHandler.displayUsers);
+
+    // Error handling middleware
+    app.use(ErrorHandler);
+}
