@@ -14,11 +14,14 @@ function UserHandler (db) {
             throw err;
           }
 
+          // answer with JSON only atm
 
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.write(JSON.stringify(items));
+          res.json(items);
+
           console.dir(items);
-          res.end()
+
+
+
         });
     }
 }
