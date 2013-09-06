@@ -11,6 +11,9 @@ module.exports = exports = function(app, db) {
     // GET one user by :name
     app.get('/users/:name', userHandler.getUserByName);
 
+    // POST /users => add new users
+    app.post('/users/new', userHandler.newUser);
+
     // Error handling middleware
     app.use(ErrorHandler);
 }
