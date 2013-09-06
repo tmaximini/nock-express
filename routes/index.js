@@ -8,6 +8,9 @@ module.exports = exports = function(app, db) {
     // GET all users
     app.get('/users', userHandler.displayUsers);
 
+    // GET one user by :name
+    app.get('/users/:name', userHandler.getUserByName);
+
     // Error handling middleware
     app.use(ErrorHandler);
 }
