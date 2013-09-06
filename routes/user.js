@@ -38,15 +38,15 @@ function UserHandler (db) {
 
         console.log("trying to create generic user...");
 
-        console.dir(re.body);
+        console.dir(req.body);
 
-        var userObject = JSON.parse(req.body.user);
+        var userObject = req.body.user;
 
-        for (var key in userObject) {
-          if (userObject.hasOwnProperty(key)) {
-            console.log(key + " -> " + userObject[key]);
-          }
-        }
+        //for (var key in userObject) {
+        //  if (userObject.hasOwnProperty(key)) {
+        //    console.log(key + " -> " + userObject[key]);
+        //  }
+        //}
 
         // insert generic user in database
         users.insert(userObject, function (err, doc) {

@@ -12,7 +12,7 @@ module.exports = exports = function(app, db) {
     app.get('/users/:name', userHandler.getUserByName);
 
     // POST /users => add new users
-    app.post('/users/new', userHandler.newGenericUser);
+    app.post('/users', userHandler.newGenericUser);
 
     // Error handling middleware
     app.use(ErrorHandler);
