@@ -36,6 +36,10 @@ function UserHandler (db) {
     // exactly from different auth providers, such as facebook, twitter, google etc
     this.newGenericUser = function (req, res, next) {
 
+        console.log("trying to create generic user...");
+
+        console.dir(re.body);
+
         var userObject = JSON.parse(req.body.user);
 
         for (var key in userObject) {
