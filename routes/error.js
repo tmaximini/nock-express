@@ -11,5 +11,5 @@ exports.errorHandler = function(err, req, res, next) {
 
     //res.render('error_template', { error: err });
 
-    res.end({ error: err });
+    res.end("an error occured");
 }

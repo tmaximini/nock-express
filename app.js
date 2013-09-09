@@ -14,7 +14,7 @@ var app = express();
 
 MongoClient.connect('mongodb://localhost:27017/nock', function(err, db) {
     "use strict";
-    if(err) {
+    if (err) {
       console.log("error");
       throw err;
     }

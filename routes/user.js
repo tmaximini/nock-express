@@ -10,7 +10,21 @@ function UserHandler (db) {
         // limit to 20 users for now
         users.find().sort('name', 1).limit(20).toArray(function (err, items) {
           if (err) {
-            throw err;
+            next(err);
+          }
+          // answer with JSON only atm
+          res.render("users/index", {
+            title: "User Listing",
+            users: items
+          });
+        });
+    }
+
+    this.displayUsersJSON = function(req, res, next) {
+        // limit to 20 users for now
+        users.find().sort('name', 1).limit(20).toArray(function (err, items) {
+          if (err) {
+            next(err);
           }
           // answer with JSON only atm
           res.json(items);
@@ -21,9 +35,32 @@ function UserHandler (db) {
     this.getUserByName = function (req, res, next) {
         // extract name from params
         var name = req.params.name;
+
+        console.log("get user " + name + " by name");
+
         users.findOne({ "name": name}, function (err, user) {
-          if (err) {
-            res.status(404).send('Not found');
+          if (err || !user) {
+            console.log("user not found! error....");
+            next(new Error("User not found!"));
+          }
+          // answer with JSON only atm
+          res.render("users/show", {
+            title: "User Details",
+            user: user
+          });
+        });
+    }
+
+    this.getUserByNameJSON = function (req, res, next) {
+        // extract name from params
+        var name = req.params.name;
+
+        console.log("get user " + name + " by name");
+
+        users.findOne({ "name": name}, function (err, user) {
+          if (err || !user) {
+            console.log("user not found! error....");
+            next(new Error("User not found!"));
           }
           // answer with JSON only atm
           res.json(user);
@@ -40,7 +77,7 @@ function UserHandler (db) {
 
         console.dir(req.body);
 
-        var userObject = req.body.user;
+        var userObject = req.body;
 
         //for (var key in userObject) {
         //  if (userObject.hasOwnProperty(key)) {
@@ -71,7 +108,7 @@ function UserHandler (db) {
       // return error TODO
       if (!name) {
         console.log('Needs username');
-        next();
+        next(new Error("needs a username"));
       }
       else {
         var user = {
