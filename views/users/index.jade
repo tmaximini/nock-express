@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+  h1= title
+  .users
+    if users.length
+      ul
+      each user in users
+        li.user-box
+          p
+            span= user.name + " "
+            span= user.email
