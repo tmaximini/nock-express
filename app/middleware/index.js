@@ -2,17 +2,18 @@ var express = require('express');
 var MongoStore = require('connect-mongo')(express);
 var path = require('path'); // Path helpers
 
+var env = process.env.NODE_ENV || 'development'
+var settings = require('../../config/config')[env];
+
 module.exports = function (app) {
 
   app.use(express.favicon());
   app.use(express.logger('dev'));
 
-  console.dir(settings);
-
   app.use(express.session({
     secret: settings.cookie_secret,
     store: new MongoStore({
-      db: settings.db
+      db: 'nock_sessions'
     })
   }));
 
