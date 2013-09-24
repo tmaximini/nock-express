@@ -1,4 +1,5 @@
 var express = require('express');
+var MongoStore = require('connect-mongo')(express);
 var path = require('path'); // Path helpers
 
 module.exports = function (app) {
@@ -6,7 +7,14 @@ module.exports = function (app) {
   app.use(express.favicon());
   app.use(express.logger('dev'));
 
-  app.use(express.session({ secret: 'building a web app'} ));
+  console.dir(settings);
+
+  app.use(express.session({
+    secret: settings.cookie_secret,
+    store: new MongoStore({
+      db: settings.db
+    })
+  }));
 
   app.use(express.bodyParser());
   app.use(express.methodOverride());

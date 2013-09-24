@@ -8,6 +8,8 @@ lib-cov
 *.pid
 *.gz
 
+config/config.js
+
 pids
 logs
 results
