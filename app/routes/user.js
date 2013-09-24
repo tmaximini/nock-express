@@ -8,7 +8,7 @@ function UserHandler (db) {
 
     this.displayUsers = function(req, res, next) {
         // limit to 20 users for now
-        users.find().sort('name', 1).limit(20).toArray(function (err, items) {
+        users.find().sort('username', 1).limit(20).toArray(function (err, items) {
           if (err) {
             next(err);
           }
@@ -22,7 +22,7 @@ function UserHandler (db) {
 
     this.displayUsersJSON = function(req, res, next) {
         // limit to 20 users for now
-        users.find().sort('name', 1).limit(20).toArray(function (err, items) {
+        users.find().sort('username', 1).limit(20).toArray(function (err, items) {
           if (err) {
             next(err);
           }
@@ -34,11 +34,11 @@ function UserHandler (db) {
 
     this.getUserByName = function (req, res, next) {
         // extract name from params
-        var name = req.params.name;
+        var username = req.params.username;
 
-        console.log("get user " + name + " by name");
+        console.log("get user " + username + " by name");
 
-        users.findOne({ "name": name}, function (err, user) {
+        users.findOne({ "username": username}, function (err, user) {
           if (err || !user) {
             console.log("user not found! error....");
             next(new Error("User not found!"));
@@ -53,11 +53,11 @@ function UserHandler (db) {
 
     this.getUserByNameJSON = function (req, res, next) {
         // extract name from params
-        var name = req.params.name;
+        var username = req.params.username;
 
-        console.log("get user " + name + " by name");
+        console.log("get user " + username + " by name");
 
-        users.findOne({ "name": name}, function (err, user) {
+        users.findOne({ "username": username}, function (err, user) {
           if (err || !user) {
             console.log("user not found! error....");
             next(new Error("User not found!"));
@@ -65,6 +65,75 @@ function UserHandler (db) {
           // answer with JSON only atm
           res.json(user);
         });
+    }
+
+
+    /*
+     * handles user login
+     * @param username
+     * @param password
+     */
+    this.handleLogin = function (req, res, next) {
+      // extract name from params
+      var username = req.body.username;
+      var password = req.body.password;
+
+      console.dir(req.body);
+
+      console.log("login user " + username + " with password " + password);
+
+      users.findOne({ "username": username}, function (err, user) {
+        if (err) {
+          console.log("Error in login....");
+          next(new Error("Error in login!"));
+        }
+
+        if(!user) {
+          res.status(401).send({"error":"User not found"});
+        }
+        // TODO handle password
+
+
+        // answer with JSON only atm
+        res.json(user);
+
+      });
+    }
+
+
+    this.updateUser = function (req, res, next) {
+      // extract id from params
+      var id = parseInt(req.params.id);
+
+      var data = req.body;
+
+      console.log("updating user " + id + " with data:");
+
+      console.dir(data);
+
+      users.findOne({id: id}, function (err, _usr) {
+        if (err) {
+          console.log("error updating user....");
+          next(new Error("error updating user!"));
+        }
+
+        if(!_usr) {
+          res.status(401).send({"error":"User not found"});
+        }
+        // TODO handle update in mongo
+
+        if (data.location) {
+          users.update(
+            { 'id': id },
+            { $set: { 'location': data.location }},
+              function (err, user) {
+                  if (err) next(err);
+                  console.log("user updated")
+                  res.json(user);
+              }
+            );
+        }
+      });
     }
 
 
@@ -78,12 +147,6 @@ function UserHandler (db) {
         console.dir(req.body);
 
         var userObject = req.body;
-
-        //for (var key in userObject) {
-        //  if (userObject.hasOwnProperty(key)) {
-        //    console.log(key + " -> " + userObject[key]);
-        //  }
-        //}
 
         // insert generic user in database
         users.insert(userObject, function (err, doc) {

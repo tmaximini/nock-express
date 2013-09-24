@@ -4,35 +4,31 @@
  */
 
 var express = require('express')
+  , mongoose = require('mongoose')
   , app = express() // Web framework to handle routing requests
-  , cons = require('jade') // Templating library adapter for Express
-  , path = require('path') // Path helpers
+  , middleware = require('./app/middleware')
   , MongoClient = require('mongodb').MongoClient // Driver for connecting to MongoDB
-  , routes = require('./routes'); // Routes for our application
+  , routes = require('./app/routes'); // Routes for our application
 
+
+require('jade');
 var app = express();
 
-MongoClient.connect('mongodb://localhost:27017/nock', function(err, db) {
+mongoose.connect('mongodb://localhost:27017/nock', function(err) {
     "use strict";
     if (err) {
       console.log("error");
       throw err;
     }
 
-    // Register our templating engine
+    var db = mongoose.connection;
+
     app.set('port', process.env.PORT || 3000);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(express.static(path.join(__dirname, 'public')));
 
-    // development only
-    if ('development' == app.get('env')) {
-      app.use(express.errorHandler());
-    }
+    // middleware
+    middleware(app);
 
     // Application routes
     routes(app, db);

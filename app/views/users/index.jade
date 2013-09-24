@@ -1,9 +1,10 @@
 extends ../layout
 
 block content
-  h1= title
   .users
-    if users.length
+    if !(users && users.length)
+      p nothing to see here...
+    else
       ul
       each user in users
         li.user-box
