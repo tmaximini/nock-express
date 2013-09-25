@@ -8,7 +8,10 @@ var settings = require('../../config/config')[env];
 module.exports = function (app) {
 
   app.use(express.favicon());
-  app.use(express.logger('dev'));
+
+  if (env == 'development') {
+    app.use(express.logger('dev'));
+  }
 
   app.use(express.session({
     secret: settings.cookie_secret,
