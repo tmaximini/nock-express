@@ -3,6 +3,7 @@
  */
 
 var mongoose = require('mongoose');
+var createdDate = require('../helpers/plugins/createdDate');
 var validateEmail = require ('../helpers/validate/email');
 var Schema = mongoose.Schema;
 
@@ -15,4 +16,6 @@ var userSchema = new Schema({
   hash:   {type: String, required: true}
 });
 
-var User = mongoose.model('User', userSchema);
+
+
+module.exports = mongoose.model('User', userSchema);

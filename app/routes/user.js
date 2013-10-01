@@ -1,12 +1,14 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
+var cleanString = require('../helpers/cleanString');
+var hash = require('../helpers/hash');
+var crypto = require('crypto');
+
 /* The UserHandler must be constructed with a connected db */
-function UserHandler (db) {
+function UserHandler () {
     "use strict";
 
-    // users collection
-    var users = db.collection("users");
 
     this.displayUsers = function(req, res, next) {
 
@@ -68,30 +70,42 @@ function UserHandler (db) {
      * @param password
      */
     this.handleLogin = function (req, res, next) {
-      // extract name from params
-      var username = req.body.username;
-      var password = req.body.password;
+      // validate input
+      var email = cleanString(req.param('email'));
+      var pass = cleanString(req.param('pass'));
+      if (!(email && pass)) {
+        return invalid();
+      }
 
-      console.dir(req.body);
+      // user friendly
+      email = email.toLowerCase();
 
-      console.log("login user " + username + " with password " + password);
+      // query mongodb
+      User.findById(email, function (err, user) {
+        if (err) return next(err);
 
-      users.findOne({ "username": username}, function (err, user) {
-        if (err) {
-          console.log("Error in login....");
-          next(new Error("Error in login!"));
+        if (!user) {
+          return invalid();
         }
 
-        if(!user) {
-          res.status(401).send({"error":"User not found"});
+        // check pass
+        if (user.hash != hash(pass, user.salt)) {
+          return invalid();
         }
-        // TODO handle password
 
-
-        // answer with JSON only atm
-        res.json(user);
-
+        req.session.isLoggedIn = true;
+        req.session.user = email;
+        res.redirect('/');
       });
+      function invalid () {
+        return res.render('users/login.jade', { invalid: true });
+      }
+    }
+
+    this.logoutUser = function (req, res) {
+      req.session.isLoggedIn = false;
+      req.session.user = null;
+      res.redirect('/');
     }
 
 
@@ -155,36 +169,45 @@ function UserHandler (db) {
 
     // this will be called to insert user from our html form, where
     // we know exactly which fields we use and we can validate the input correctly
-    this.newUser = function (req, res, next) {
+    this.registerUser = function (req, res, next) {
 
-      var name  = req.body.userName;
-      var email = req.body.userEmail;
-      var age   = req.body.userAge;
-      var city  = req.body.userCity;
-
-      // return error TODO
-      if (!name) {
-        console.log('Needs username');
-        next(new Error("needs a username"));
-      }
-      else {
-        var user = {
-          "name": name,
-          "email": email,
-          "age": age,
-          "city": city
-        }
-        // insert db record
-        users.insert(user, function (err, doc) {
-          if (err) {
-            res.status(500).send('Error inserting in database');
-            console.log(err);
-          }
-          res.json(doc);
-        });
-      }
+    var email = cleanString(req.param('email'));
+    var pass = cleanString(req.param('pass'));
+    if (!(email && pass)) {
+      return invalid();
     }
 
+    User.findById(email, function (err, user) {
+      if (err) return next(err);
+
+      if (user) {
+        return res.render('signup.jade', { exists: true });
+      }
+
+      crypto.randomBytes(16, function (err, bytes) {
+        if (err) return next(err);
+
+        var user = { _id: email };
+        user.salt = bytes.toString('utf8');
+        user.hash = hash(pass, user.salt);
+
+        User.create(user, function (err, newUser) {
+          if (err) {
+            if (err instanceof mongoose.Error.ValidationError) {
+              return invalid();
+            }
+            return next(err);
+          }
+
+          // user created successfully
+          req.session.isLoggedIn = true;
+          req.session.user = email;
+          console.log('created user: %s', email);
+          return res.redirect('/');
+        });
+      });
+    });
+  }
 }
 
 module.exports = UserHandler;

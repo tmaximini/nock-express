@@ -31,9 +31,26 @@ module.exports = function (app) {
     app.use(express.errorHandler());
   }
 
-  // expose session to views
+  // expose session and url to views
   app.use(function (req, res, next) {
     res.locals.session = req.session;
+    res.locals.url = req.url;
+    res.locals.links = [
+      {
+        "url": "/challenges",
+        "name": "Challenges"
+      },
+      {
+        "url": "/locations",
+        "name": "Locations"
+      },
+      {
+        "url": "/users",
+        "name": "Users"
+      }
+    ]
+
+
     next();
   });
 

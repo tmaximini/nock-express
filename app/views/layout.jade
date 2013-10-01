@@ -21,19 +21,16 @@ html(lang='en')
       .collapse.navbar-collapse.navbar-ex1-collapse
         block navigation
           ul.nav.navbar-nav
-
-            li.active
-              a(href='#') Challenges
-            li
-              a(href='#') Locations
-            li
-              a(href='#') Users
-            li
-              a(href='#') Contact
+            each link in links
+              li
+                a(href=link.url, class=link.url === url && 'active')= link.name
 
           ul.nav.navbar-nav
-            button(type='button').btn.btn-default.navbar-btn Register
-            button(type='button').btn.btn-default.navbar-btn.btn-primary Log in
+            if session.isLoggedIn
+              a(href='/logout').btn.btn-default.navbar-btn.btn-primary Log Out
+            else
+              a(href='/register').btn.btn-default.navbar-btn Register
+              a(href='/login').btn.btn-default.navbar-btn.btn-primary Log in
 
 
 
