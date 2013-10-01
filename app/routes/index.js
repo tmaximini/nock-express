@@ -2,8 +2,11 @@
 var UserHandler  = require('./user');
 var StaticHandler  = require('./static');
 
-// error handler
+// sub route handlers
 var errors = require('./error');
+var challenges = require('./challenges');
+
+
 
 module.exports = exports = function(app, db) {
 
@@ -56,6 +59,10 @@ module.exports = exports = function(app, db) {
     // POST /users => add new users
     app.post('/users/:id', userHandler.updateUser);
     app.post('/api/users/:id', userHandler.updateUser);
+
+
+    // handle challenges
+    challenges(app);
 
 
     // handle errors

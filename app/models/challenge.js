@@ -4,6 +4,8 @@
 
 
 var mongoose = require('mongoose');
+var createdDate = require('../helpers/plugins/createdDate');
+
 var Schema = mongoose.Schema;
 
 var challengeSchema = new Schema({
@@ -15,10 +17,20 @@ var challengeSchema = new Schema({
   //comments: [{ body: String, date: Date }],
   date: { type: Date, default: Date.now },
   hidden: Boolean,
+  author: { type: String, ref: 'User' },
+  location: { type: String, ref: 'Location' },
   meta: {
     votes: Number,
     favs:  Number
   }
 });
 
-module.exports = mongoose.model('Challenge', challengeSchema);
+// add created date property
+challengeSchema.plugin(createdDate);
+
+var Challenge = mongoose.model('Challenge', challengeSchema);
+
+
+// CREATE HOOKS afterInsert, afterRemove, afterComplete etc.
+
+module.exports = Challenge;
