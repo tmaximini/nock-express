@@ -2,7 +2,6 @@
  * DB Schema for User
  */
 
-
 var mongoose = require('mongoose');
 var validateEmail = require ('../helpers/validate/email');
 var Schema = mongoose.Schema;
@@ -15,3 +14,5 @@ var userSchema = new Schema({
   salt:   {type: String, required: true},
   hash:   {type: String, required: true}
 });
+
+var User = mongoose.model('User', userSchema);

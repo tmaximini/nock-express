@@ -13,6 +13,8 @@ module.exports = function (app) {
     app.use(express.logger('dev'));
   }
 
+  app.use(express.cookieParser());
+  // store sessions in mongo
   app.use(express.session({
     secret: settings.cookie_secret,
     store: new MongoStore({
@@ -22,7 +24,7 @@ module.exports = function (app) {
 
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(__dirname, '../public')));
 
   // development only
   if ('development' == app.get('env')) {

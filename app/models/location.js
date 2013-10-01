@@ -15,10 +15,12 @@ var locationSchema = new Schema({
   location: {
     lang: Number,
     lat: Number
-  }
+  },
   hidden: Boolean,
   meta: {
     votes: Number,
     favs:  Number
   }
 });
+
+var Location = mongoose.model('Location', locationSchema);

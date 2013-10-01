@@ -3,16 +3,14 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , mongoose = require('mongoose')
-  , app = express() // Web framework to handle routing requests
-  , middleware = require('./app/middleware')
-  , MongoClient = require('mongodb').MongoClient // Driver for connecting to MongoDB
-  , routes = require('./app/routes'); // Routes for our application
+var mongoose = require('mongoose');
+var express = require('express');
+require('express-mongoose');
 
 
-require('jade');
-var app = express();
+var models = require('./app/models');
+var middleware = require('./app/middleware');
+var routes = require('./app/routes');
 
 mongoose.connect('mongodb://localhost:27017/nock', function(err) {
     "use strict";
@@ -22,9 +20,10 @@ mongoose.connect('mongodb://localhost:27017/nock', function(err) {
     }
 
     var db = mongoose.connection;
+    var app = express();
 
     app.set('port', process.env.PORT || 3000);
-    app.set('views', __dirname + '/views');
+    app.set('views', __dirname + '/app/views');
     app.set('view engine', 'jade');
 
     // middleware

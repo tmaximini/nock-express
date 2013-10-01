@@ -20,3 +20,5 @@ var challengeSchema = new Schema({
     favs:  Number
   }
 });
+
+var Challenge = mongoose.model('Challenge', challengeSchema);

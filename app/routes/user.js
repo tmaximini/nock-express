@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
 
 /* The UserHandler must be constructed with a connected db */
 function UserHandler (db) {
@@ -7,28 +9,24 @@ function UserHandler (db) {
     var users = db.collection("users");
 
     this.displayUsers = function(req, res, next) {
+
         // limit to 20 users for now
-        users.find().sort('username', 1).limit(20).toArray(function (err, items) {
-          if (err) {
-            next(err);
-          }
-          // answer with JSON only atm
+        User.find().sort('username').limit(10).exec(function (err, users) {
+          if (err) return next(err);
+
           res.render("users/index", {
             title: "User Listing",
-            users: items
+            users: users
           });
         });
     }
 
     this.displayUsersJSON = function(req, res, next) {
         // limit to 20 users for now
-        users.find().sort('username', 1).limit(20).toArray(function (err, items) {
-          if (err) {
-            next(err);
-          }
-          // answer with JSON only atm
-          res.json(items);
-          console.dir(items);
+        User.find().sort('username').limit(20).exec(function (err, users) {
+          if (err) return next(err);
+          res.json(users);
+          console.dir(users);
         });
     }
 
@@ -36,9 +34,7 @@ function UserHandler (db) {
         // extract name from params
         var username = req.params.username;
 
-        console.log("get user " + username + " by name");
-
-        users.findOne({ "username": username}, function (err, user) {
+        User.findOne({ "username": username}, function (err, user) {
           if (err || !user) {
             console.log("user not found! error....");
             next(new Error("User not found!"));
@@ -55,9 +51,7 @@ function UserHandler (db) {
         // extract name from params
         var username = req.params.username;
 
-        console.log("get user " + username + " by name");
-
-        users.findOne({ "username": username}, function (err, user) {
+        User.findOne({ "username": username}, function (err, user) {
           if (err || !user) {
             console.log("user not found! error....");
             next(new Error("User not found!"));
