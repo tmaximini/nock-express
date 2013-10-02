@@ -28,6 +28,10 @@ module.exports = function (app) {
 
   // development only
   if ('development' == app.get('env')) {
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  }
+
+  if ('production' == app.get('env')) {
     app.use(express.errorHandler());
   }
 

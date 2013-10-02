@@ -27,8 +27,7 @@ function UserHandler () {
         // limit to 20 users for now
         User.find().sort('username').limit(20).exec(function (err, users) {
           if (err) return next(err);
-          res.json(users);
-          console.dir(users);
+          res.json({"users": users});
         });
     }
 

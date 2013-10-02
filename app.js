@@ -24,7 +24,7 @@ mongoose.connect(settings.db, function(err) {
 
     var app = express();
 
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', process.env.PORT || settings.port || 3000);
     app.set('views', __dirname + '/app/views');
     app.set('view engine', 'jade');
 

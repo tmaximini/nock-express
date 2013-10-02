@@ -14,5 +14,10 @@
     "connect-mongo": "~0.3.3",
     "express-mongoose": "~0.1.0",
     "email-validator": "~0.1.2"
+  },
+  "devDependencies": {
+    "chai": "~1.8.0",
+    "mocha": "~1.13.0",
+    "supertest": "~0.8.0"
   }
 }
