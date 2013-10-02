@@ -7,19 +7,21 @@ var mongoose = require('mongoose');
 var express = require('express');
 require('express-mongoose');
 
+var env = process.env.NODE_ENV || 'development'
+var settings = require('./config/config')[env];
 
 var models = require('./app/models');
 var middleware = require('./app/middleware');
 var routes = require('./app/routes');
 
-mongoose.connect('mongodb://localhost:27017/nock', function(err) {
+mongoose.connect(settings.db, function(err) {
     "use strict";
+
     if (err) {
       console.log("error");
       throw err;
     }
 
-    var db = mongoose.connection;
     var app = express();
 
     app.set('port', process.env.PORT || 3000);
@@ -30,8 +32,8 @@ mongoose.connect('mongodb://localhost:27017/nock', function(err) {
     middleware(app);
 
     // Application routes
-    routes(app, db);
+    routes(app);
 
-    app.listen(3000);
-    console.log('Express server listening on port 3000');
+    app.listen(app.get('port'));
+    console.log('Express server listening on port ' + app.get('port'));
 });

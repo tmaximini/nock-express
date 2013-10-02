@@ -66,8 +66,8 @@ function UserHandler () {
 
     /*
      * handles user login
-     * @param username
-     * @param password
+     * @req.param username
+     * @req.param password
      */
     this.handleLogin = function (req, res, next) {
       // validate input
@@ -102,6 +102,51 @@ function UserHandler () {
       }
     }
 
+
+    /**
+     * Handles Login for Nock iOS APP / webservice
+     */
+    this.handleLoginJSON = function (req, res, next) {
+
+      console.log("incoming login request: ");
+      console.dir(req.body);
+
+      // validate input
+      var username = cleanString(req.param('username'));
+      var pass = cleanString(req.param('password'));
+      if (!(username && pass)) {
+        return invalid();
+      }
+
+      // user friendly
+      //email = email.toLowerCase();
+
+      // query mongodb
+      User.findById(username, function (err, user) {
+        if (err) return next(err);
+
+        if (!user) {
+          // create User if not exist
+          console.log("user not found");
+          next();
+        }
+
+        // check pass
+        if (!user || (user.hash != hash(pass, user.salt))) {
+          return invalid();
+        } else {
+          req.session.isLoggedIn = true;
+          req.session.user = username;
+          res.json(user);
+        }
+
+      });
+      function invalid () {
+        res.status(404);
+        return res.json({ "error" : "User is invalid. mofo" });
+      }
+    }
+
     this.logoutUser = function (req, res) {
       req.session.isLoggedIn = false;
       req.session.user = null;
@@ -109,61 +154,71 @@ function UserHandler () {
     }
 
 
-    this.updateUser = function (req, res, next) {
+    this.updateUserLocation = function (req, res, next) {
       // extract id from params
-      var id = parseInt(req.params.id);
+      var username = req.param('username');
 
       var data = req.body;
 
-      console.log("updating user " + id + " with data:");
+      console.log("updating user " + username + " with data:");
 
       console.dir(data);
 
-      users.findOne({id: id}, function (err, _usr) {
-        if (err) {
-          console.log("error updating user....");
-          next(new Error("error updating user!"));
-        }
-
-        if(!_usr) {
-          res.status(401).send({"error":"User not found"});
-        }
-        // TODO handle update in mongo
-
-        if (data.location) {
-          users.update(
-            { 'id': id },
-            { $set: { 'location': data.location }},
-              function (err, user) {
-                  if (err) next(err);
-                  console.log("user updated")
-                  res.json(user);
-              }
-            );
-        }
+      User.updateLocation(req, function (err) {
+        if (err) return next(err);
+        res.json({"status":"position updated"});
       });
     }
 
 
-    // this method adds a generic user object to mongodb
-    // as we do not know yet which fields we will receive / use
-    // exactly from different auth providers, such as facebook, twitter, google etc
-    this.newGenericUser = function (req, res, next) {
+    this.registerUserJSON = function (req, res, next) {
 
-        console.log("trying to create generic user...");
+      console.log("Requesting new User registration:");
+      console.dir(req);
 
-        console.dir(req.body);
+      var username = cleanString(req.param('username'));
+      var pass = cleanString(req.param('password'));
+      var points = 0;
+      var fbUserName = req.param('fbUserName');
+      if (!(username && pass)) {
+        return res.status(400).send("bad request. needs username und password.")
+      }
 
-        var userObject = req.body;
+      User.findById(req.username, function (err, user) {
+        if (err) return next(err);
 
-        // insert generic user in database
-        users.insert(userObject, function (err, doc) {
-          if (err) {
-            res.status(500).send('Error inserting generic user in database');
-            console.log(err);
-          }
-          res.json(doc);
-        });
+        if (!user) {
+          // create User if not exist
+          crypto.randomBytes(16, function (err, bytes) {
+            if (err) return next(err);
+
+            var user      = { _id: username };
+            user.username = fbUserName;
+            user.points   = points;
+            user.salt     = bytes.toString('utf8');
+            user.hash     = hash(pass, user.salt);
+            user.provider = "Facebook";
+
+            User.create(user, function (err, newUser) {
+              if (err) {
+                if (err instanceof mongoose.Error.ValidationError) {
+                  console.error("mongoose validation failed");
+                  return invalid();
+                }
+                return next(err);
+              }
+
+              // user created successfully
+              req.session.isLoggedIn = true;
+              req.session.user = username;
+              console.log('created user: %s', username);
+              return res.redirect('/api/users/' + username);
+            });
+          });
+        } else {
+          return next(new Error('User Id exists already'));
+        }
+      });
 
     }
 
@@ -172,28 +227,41 @@ function UserHandler () {
     this.registerUser = function (req, res, next) {
 
     var email = cleanString(req.param('email'));
+    var username = cleanString(req.param('username'));
     var pass = cleanString(req.param('pass'));
-    if (!(email && pass)) {
+
+    //console.dir(req.body);
+
+    if (!(email && pass && username)) {
       return invalid();
     }
 
-    User.findById(email, function (err, user) {
+    User.findById(username, function (err, user) {
       if (err) return next(err);
 
       if (user) {
-        return res.render('signup.jade', { exists: true });
+        console.error("user exists already");
+        return res.render('users/register.jade', {
+                 invalid: false,
+                 title: "Register to Nock",
+                 exists: true
+               });
       }
 
       crypto.randomBytes(16, function (err, bytes) {
         if (err) return next(err);
 
-        var user = { _id: email };
+        var user = { _id: username };
+        user.email = email;
+        user.username = username;
+        user.provider = 'email';
         user.salt = bytes.toString('utf8');
         user.hash = hash(pass, user.salt);
 
         User.create(user, function (err, newUser) {
           if (err) {
             if (err instanceof mongoose.Error.ValidationError) {
+              console.log("invalid user creation: ", err)
               return invalid();
             }
             return next(err);
@@ -201,12 +269,21 @@ function UserHandler () {
 
           // user created successfully
           req.session.isLoggedIn = true;
-          req.session.user = email;
-          console.log('created user: %s', email);
+          req.session.user = username;
+          console.log('created user: %s (%s)', username, email);
           return res.redirect('/');
         });
       });
     });
+
+    function invalid () {
+      return res.render('users/register.jade', {
+        invalid: true,
+        title: "Register to Nock",
+        exists: false
+      });
+    }
+
   }
 }
 

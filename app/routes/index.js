@@ -1,10 +1,17 @@
 
+
+// helpers
+var loggedIn = require('../middleware/loggedIn');
+
 var UserHandler  = require('./user');
 var StaticHandler  = require('./static');
 
 // sub route handlers
 var errors = require('./error');
 var challenges = require('./challenges');
+
+
+
 
 
 
@@ -35,6 +42,7 @@ module.exports = exports = function(app, db) {
         });
     });
     app.post('/users', userHandler.registerUser);
+    app.post('/api/users', userHandler.registerUserJSON);
 
     // GET all users
     app.get('/users', userHandler.displayUsers);
@@ -54,11 +62,11 @@ module.exports = exports = function(app, db) {
 
     // POST login
     app.post('/users/login', userHandler.handleLogin);
-    app.post('/api/users/login', userHandler.handleLogin);
+    app.post('/api/users/login', userHandler.handleLoginJSON);
 
     // POST /users => add new users
-    app.post('/users/:id', userHandler.updateUser);
-    app.post('/api/users/:id', userHandler.updateUser);
+    app.post('/users/:id', loggedIn, userHandler.updateUserLocation);
+    app.post('/api/users/:id', loggedIn, userHandler.updateUserLocation);
 
 
     // handle challenges
