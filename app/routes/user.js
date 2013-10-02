@@ -71,17 +71,17 @@ function UserHandler () {
      */
     this.handleLogin = function (req, res, next) {
       // validate input
-      var email = cleanString(req.param('email'));
+      var username = cleanString(req.param('username'));
       var pass = cleanString(req.param('pass'));
-      if (!(email && pass)) {
+      if (!(username && pass)) {
         return invalid();
       }
 
       // user friendly
-      email = email.toLowerCase();
+      username = username.toLowerCase();
 
       // query mongodb
-      User.findById(email, function (err, user) {
+      User.findById(username, function (err, user) {
         if (err) return next(err);
 
         if (!user) {
@@ -94,7 +94,7 @@ function UserHandler () {
         }
 
         req.session.isLoggedIn = true;
-        req.session.user = email;
+        req.session.user = username;
         res.redirect('/');
       });
       function invalid () {

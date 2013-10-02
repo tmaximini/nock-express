@@ -60,6 +60,9 @@ module.exports = exports = function(app, db) {
         });
     });
 
+    // GET logout
+    app.get('/logout', userHandler.logoutUser);
+
     // POST login
     app.post('/users/login', userHandler.handleLogin);
     app.post('/api/users/login', userHandler.handleLoginJSON);
