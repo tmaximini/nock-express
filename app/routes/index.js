@@ -49,8 +49,8 @@ module.exports = exports = function(app, db) {
     app.get('/api/users', userHandler.displayUsersJSON);
 
     // GET one user by :name
-    app.get('/users/:username', userHandler.getUserByName);
-    app.get('/api/users/:username', userHandler.getUserByNameJSON);
+    app.get('/users/:id', userHandler.getUserByName);
+    app.get('/api/users/:id', userHandler.getUserByNameJSON);
 
     // GET login page
     app.get('/login', function (req, res) {
@@ -68,8 +68,8 @@ module.exports = exports = function(app, db) {
     app.post('/api/users/login', userHandler.handleLoginJSON);
 
     // POST /users => add new users
-    app.post('/users/:id', loggedIn, userHandler.updateUserLocation);
-    app.post('/api/users/:id', loggedIn, userHandler.updateUserLocation);
+    app.post('/users/:id', userHandler.updateUserLocation);
+    app.post('/api/users/:id', userHandler.updateUserLocation);
 
 
     // handle challenges

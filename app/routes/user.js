@@ -13,52 +13,63 @@ function UserHandler () {
     this.displayUsers = function(req, res, next) {
 
         // limit to 20 users for now
-        User.find().sort('username').limit(10).exec(function (err, users) {
-          if (err) return next(err);
+        User.find()
+            .sort('username')
+            .limit(10)
+            .exec(function (err, users) {
+              if (err) return next(err);
 
-          res.render("users/index", {
-            title: "User Listing",
-            users: users
-          });
+              res.render("users/index", {
+                title: "User Listing",
+                users: users
+              });
         });
     }
 
     this.displayUsersJSON = function(req, res, next) {
         // limit to 20 users for now
-        User.find().sort('username').limit(20).exec(function (err, users) {
-          if (err) return next(err);
-          res.json({"users": users});
+        User.find()
+            .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+            .sort('username')
+            .limit(20)
+            .exec(function (err, users) {
+              if (err) return next(err);
+              res.json({"users": users});
         });
     }
 
     this.getUserByName = function (req, res, next) {
         // extract name from params
-        var username = req.params.username;
+        var id = req.params.id;
 
-        User.findOne({ "username": username}, function (err, user) {
-          if (err || !user) {
-            console.log("user not found! error....");
-            next(new Error("User not found!"));
-          }
-          // answer with JSON only atm
-          res.render("users/show", {
-            title: "User Details",
-            user: user
-          });
+        User.findOne({ "_id": id})
+            .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+            .exec(function (err, user) {
+              if (err || !user) {
+                console.log("user not found! error....");
+                next(new Error("User not found!"));
+              }
+              // answer with JSON only atm
+              res.render("users/show", {
+                title: "User Details",
+                user: user
+              });
         });
     }
 
     this.getUserByNameJSON = function (req, res, next) {
         // extract name from params
-        var username = req.params.username;
+        var id = req.params.id;
 
-        User.findOne({ "username": username}, function (err, user) {
-          if (err || !user) {
-            console.log("user not found! error....");
-            next(new Error("User not found!"));
-          }
-          // answer with JSON only atm
-          res.json(user);
+        User.findOne({ "_id": id})
+            .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+            .exec(function (err, user) {
+              if (err || !user) {
+                console.log("user not found! error....");
+                next(new Error("User not found!"));
+              }
+              // answer with JSON only atm
+              res.json(user);
         });
     }
 
@@ -117,9 +128,6 @@ function UserHandler () {
         return invalid();
       }
 
-      // user friendly
-      //email = email.toLowerCase();
-
       // query mongodb
       User.findById(username, function (err, user) {
         if (err) return next(err);
@@ -136,6 +144,7 @@ function UserHandler () {
         } else {
           req.session.isLoggedIn = true;
           req.session.user = username;
+          user.sessionToken = req.session['_id']
           res.json(user);
         }
 
@@ -149,31 +158,35 @@ function UserHandler () {
     this.logoutUser = function (req, res) {
       req.session.isLoggedIn = false;
       req.session.user = null;
+      req.session.token = null;
       res.redirect('/');
     }
 
 
     this.updateUserLocation = function (req, res, next) {
       // extract id from params
-      var username = req.param('username');
-
+      var id = req.params.id;
       var data = req.body;
 
-      console.log("updating user " + username + " with data:");
+      console.log("updating user " + id + " with data:");
+      console.dir(req.body);
 
-      console.dir(data);
-
-      User.updateLocation(req, function (err) {
-        if (err) return next(err);
-        res.json({"status":"position updated"});
+      User.edit(req, function (err) {
+        if (err) {
+          console.error(err);
+          return next(err);
+        }
+        return res.json({"status":"success", "action": "position updated"});
       });
+
+      next();
     }
 
 
     this.registerUserJSON = function (req, res, next) {
 
       console.log("Requesting new User registration:");
-      console.dir(req);
+      console.dir(req.body);
 
       var username = cleanString(req.param('username'));
       var pass = cleanString(req.param('password'));

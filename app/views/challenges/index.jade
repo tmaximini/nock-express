@@ -3,7 +3,7 @@ extends ../layout
 block content
   if session.isLoggedIn
     p
-      a(href="/challenges/create") New Challenge
+      a(href="/challenges/new") New Challenge
   if !(challenges && challenges.length)
     p Nothing to see here. Move along...
   else
@@ -11,4 +11,4 @@ block content
       each challenge in challenges
         li
           h2
-            a(href="/challenges/#{challenge.id}")= challenge
+            a(href="/challenges/#{challenge.id}")= challenge.title

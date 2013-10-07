@@ -20,7 +20,7 @@ var userSchema = new Schema({
 
 
 // edit method on model level
-userSchema.statics.updateLocation = function (req, callback) {
+userSchema.statics.edit = function (req, callback) {
 
   if (!req.session.user) {
     res.status(401).send("forbidden");
@@ -30,10 +30,19 @@ userSchema.statics.updateLocation = function (req, callback) {
   var query = { _id: req.session.user };
 
   var update = {};
-  update.location = req.param('location');
+  if (req.param('points')) {
+    var points = req.param('points');
+    update = { $inc: { 'points': points.inc } };
+  }
+  if (req.param('location')) update.location = req.param('location');
 
-  this.update(query, update, function (err, numAffected) {
+
+  console.log("update to do: ", update);
+
+  this.update(query, { $inc: { 'points': 100 } }, function (err, numAffected) {
     if (err) return callback(err);
+
+    console.log("user updated");
 
     if (0 === numAffected) {
       return callback(new Error('no post to modify'));

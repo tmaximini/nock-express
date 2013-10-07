@@ -2,24 +2,41 @@ var loggedIn = require('../middleware/loggedIn');
 var mongoose = require('mongoose')
 var Challenge = mongoose.model('Challenge');
 
+
+
 module.exports = function (app) {
   "use strict";
 
+  function convertToSlug(text) {
+      return text
+          .toLowerCase()
+          .replace(/ /g,'-')
+          .replace(/[^\w-]+/g,'');
+  }
+
   // create
-  app.get("/challenges/create", loggedIn, function (req, res) {
-    res.render('challenges/create.jade');
+  app.get("/challenges/new", loggedIn, function (req, res) {
+    res.render('challenges/create.jade', {
+      title: "Create Challenge",
+      invalid: false,
+      exists: false
+    });
   });
 
-  app.post("/challenges/create", loggedIn, function (req, res, next) {
-    var body = req.param('body');
-    var title = req.param('title');
-    var user = req.session.user;
+  app.post("/challenges", loggedIn, function (req, res, next) {
+    var body     = req.param('body');
+    var title    = req.param('title');
+    var points   = req.param('points');
+    var location = req.param('location');
+    var user     = req.session.user;
 
     Challenge.create({
-        body: body
-      , title: title
-      , points: points
-      , author: user
+        _id: convertToSlug(title),
+        body: body,
+        title: title,
+        points: points,
+        author: user,
+        location: location
      }, function (err, challenge) {
        if (err) return next(err);
        res.redirect('/challenges/' + challenge.id);
@@ -31,10 +48,12 @@ module.exports = function (app) {
 
   // read
   app.get("/challenges", function (req, res, next) {
-    var query = Challenge.find();
-    res.render('challenges/index.jade', {
-      title: "Nock Challenges",
-      challenges: ["bla", "blubb"]
+    Challenge.find().sort('created').limit(10).exec(function (err, challenges) {
+      if (err) return next(err);
+      res.render('challenges/index.jade', {
+        title: "Nock Challenges",
+        challenges: challenges
+      });
     });
   });
 
