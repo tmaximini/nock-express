@@ -4,7 +4,7 @@ var should = require('chai').should();
 var request = require('supertest');
 var mongoose = require('mongoose');
 
-var helper = require('./helpers')
+var helper = require('./helpers');
 
 var app = require('../app');
 var agent = request.agent(app);
@@ -96,10 +96,14 @@ describe('Users', function () {
 
     // new users
     describe('POST /api/users', function() {
+
+      // random integer as string between 10000 and 99999
+      var userId = (Math.floor(Math.random() * (99999 - 10000 + 1) + 10000)).toString();
+
       it('creates a new user record', function(done) {
         agent
         .post('/api/users')
-        .field('username', '56789')
+        .field('username', userId)
         .field('password', 'secret')
         .field('fbUserName', 'Klaus Kleber')
         .expect(302)
@@ -108,13 +112,25 @@ describe('Users', function () {
       });
 
       it('saves the record to the database', function(done) {
-        User.findOne({'_id':'56789'}, function (err, doc) {
+        User.findById(userId, function (err, doc) {
           should.not.exist(err);
           doc.should.be.an.instanceOf(User);
           doc.username.should.equal('Klaus Kleber');
           doc.provider.should.equal('Facebook');
           done();
         });
+      });
+
+      it('does not allow the same username twice', function(done) {
+        agent
+        .post('/api/users')
+        .field('username', userId)
+        .field('password', 'secret')
+        .field('fbUserName', 'Klaus Baus')
+        .expect(400)
+        .expect('Content-Type', /json/)
+        .expect(/error/)
+        .end(done);
       });
 
     });
@@ -124,7 +140,7 @@ describe('Users', function () {
 
 
   after(function (done) {
-    helper.clearDb(done)
+    helper.clearDb(done);
   });
 
 });

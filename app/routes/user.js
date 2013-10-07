@@ -196,14 +196,13 @@ function UserHandler () {
         return res.status(400).send("bad request. needs username und password.")
       }
 
-      User.findById(req.username, function (err, user) {
+      User.findById(username, function (err, user) {
         if (err) return next(err);
 
         if (!user) {
           // create User if not exist
           crypto.randomBytes(16, function (err, bytes) {
             if (err) return next(err);
-
             var user      = { _id: username };
             user.username = fbUserName;
             user.points   = points;
@@ -228,7 +227,8 @@ function UserHandler () {
             });
           });
         } else {
-          return next(new Error('User Id exists already'));
+          console.log("user exists already");
+          return res.status(400).json({'error': 'User Id exists already'});
         }
       });
 
