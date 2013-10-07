@@ -118,8 +118,8 @@ function UserHandler () {
      */
     this.handleLoginJSON = function (req, res, next) {
 
-      console.log("incoming login request: ");
-      console.dir(req.body);
+      //console.log("incoming login request: ");
+      //console.dir(req.body);
 
       // validate input
       var username = cleanString(req.param('username'));
@@ -185,8 +185,8 @@ function UserHandler () {
 
     this.registerUserJSON = function (req, res, next) {
 
-      console.log("Requesting new User registration:");
-      console.dir(req.body);
+      //console.log("Requesting new User registration:");
+      //console.dir(req.body);
 
       var username = cleanString(req.param('username'));
       var pass = cleanString(req.param('password'));
@@ -253,11 +253,11 @@ function UserHandler () {
 
       if (user) {
         console.error("user exists already");
-        return res.render('users/register.jade', {
-                 invalid: false,
-                 title: "Register to Nock",
-                 exists: true
-               });
+        return  res.render('users/register.jade', {
+                  invalid: false,
+                  title: "Register to Nock",
+                  exists: true
+                });
       }
 
       crypto.randomBytes(16, function (err, bytes) {

@@ -12,8 +12,8 @@ var userSchema = new Schema({
   username: {type: String, required: true},
   points:   {type: Number, required: true, default: 0},
   date:     {type: Date, default: Date.now},
-  salt:     {type: String, required: true},
-  hash:     {type: String, required: true},
+  salt:     {type: String, required: true, default: ''},
+  hash:     {type: String, required: true, default: ''},
   location: Array,
   provider: {type: String, required: true, default: "email"}
 });

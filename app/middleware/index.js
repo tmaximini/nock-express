@@ -1,9 +1,10 @@
 var express = require('express');
 var MongoStore = require('connect-mongo')(express);
 var path = require('path'); // Path helpers
+var flash = require('connect-flash');
 
 var env = process.env.NODE_ENV || 'development'
-var settings = require('../../config/config')[env];
+var config = require('../../config/config')[env];
 
 module.exports = function (app) {
 
@@ -13,14 +14,23 @@ module.exports = function (app) {
     app.use(express.logger('dev'));
   }
 
-  app.use(express.cookieParser());
-  // store sessions in mongo
-  app.use(express.session({
-    secret: settings.cookie_secret,
-    store: new MongoStore({
-      db: 'nock_sessions'
-    })
-  }));
+  // store sessions in mongo in production
+  if (env == 'production') {
+    app.use(express.cookieParser());
+    app.use(express.session({
+      secret: config.cookie_secret,
+      maxAge: 60000,
+      store: new MongoStore({
+        db: 'nock_sessions'
+      })
+    }));
+  } else {
+    app.use(express.cookieParser('keyboard cat'));
+    app.use(express.session({ cookie: { maxAge: 60000 }}));
+  }
+
+  // for flash messages
+  app.use(flash());
 
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -53,7 +63,6 @@ module.exports = function (app) {
         "name": "Users"
       }
     ]
-
 
     next();
   });
