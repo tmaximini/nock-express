@@ -138,7 +138,7 @@ describe('Users', function () {
   });
 
 
-
+  // delete all db records from test
   after(function (done) {
     helper.clearDb(done);
   });

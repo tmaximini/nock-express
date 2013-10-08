@@ -16,11 +16,12 @@ var routes = require('./app/routes');
 
 var app = express();
 
-mongoose.connect(config.db);
-
 app.set('port', process.env.PORT || config.port || 3000);
 app.set('views', __dirname + '/app/views');
 app.set('view engine', 'jade');
+
+// database
+mongoose.connect(config.db);
 
 // middleware
 middleware(app);
