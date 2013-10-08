@@ -9,6 +9,7 @@ lib-cov
 *.gz
 
 config/config.js
+config/imager.js
 
 pids
 logs

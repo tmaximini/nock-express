@@ -1,18 +1,11 @@
 var loggedIn = require('../middleware/loggedIn');
 var mongoose = require('mongoose')
 var Challenge = mongoose.model('Challenge');
-
+var utils = require('../../lib/utils');
 
 
 module.exports = function (app) {
   "use strict";
-
-  function convertToSlug(text) {
-      return text
-          .toLowerCase()
-          .replace(/ /g,'-')
-          .replace(/[^\w-]+/g,'');
-  }
 
   // create
   app.get("/challenges/new", loggedIn, function (req, res) {
@@ -24,25 +17,23 @@ module.exports = function (app) {
   });
 
   app.post("/challenges", loggedIn, function (req, res, next) {
-    var body     = req.param('body');
-    var title    = req.param('title');
-    var points   = req.param('points');
-    var location = req.param('location');
-    var user     = req.session.user;
+    var challenge = new Challenge(req.body);
+    challenge.author = req.user;
+    challenge._id = utils.convertToSlug(req.body.title)
 
-    Challenge.create({
-        _id: convertToSlug(title),
-        body: body,
-        title: title,
-        points: points,
-        author: user,
-        location: location
-     }, function (err, challenge) {
-       if (err) return next(err);
-       res.redirect('/challenges/' + challenge.id);
+    challenge.uploadAndSave(req.files.image, function (err) {
+      if (!err) {
+        req.flash('success', 'Successfully created article!');
+        return res.redirect('/challenges/' + challenge._id);
+      } else {
+        // error occured
+        res.render('challenges/new', {
+          title: 'New Challenge',
+          challenge: challenge,
+          errors: utils.errors(err.errors || err)
+        })
+      }
     });
-
-
   });
 
 

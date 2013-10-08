@@ -2,6 +2,8 @@ extends ../layout
 
 block content
   h1= challenge.title
+  - if (!challenge.isNew && challenge.image && challenge.image.files && challenge.image.files.length)
+    img(src=challenge.image.cdnUri + '/thumb_' + challenge.image.files[0])
   .description= challenge.body
   .points= challenge.points + " Points"
 
