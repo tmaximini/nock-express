@@ -12,9 +12,6 @@ var challenges = require('./challenges');
 
 
 
-
-
-
 module.exports = exports = function(app, db) {
 
     var userHandler   = new UserHandler(db);
@@ -30,7 +27,7 @@ module.exports = exports = function(app, db) {
 
 
     /**
-     * USER STUFF
+     * USER ROUTES
      */
 
     // register new user
@@ -41,6 +38,7 @@ module.exports = exports = function(app, db) {
           invalid: res.invalid || false
         });
     });
+
     app.post('/users', userHandler.registerUser);
     app.post('/api/users', userHandler.registerUserJSON);
 
@@ -72,11 +70,11 @@ module.exports = exports = function(app, db) {
     app.post('/api/users/:id', userHandler.updateUserLocation);
 
 
-    // handle challenges
+    // CHALLENGE ROUTES
     challenges(app);
 
 
-    // handle errors
+    // ERROR HANDLING
     errors(app);
 
 }

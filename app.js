@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var express = require('express');
 require('express-mongoose');
 
-var env = process.env.NODE_ENV || 'development'
+var env = process.env.NODE_ENV || 'development';
 var config = require('./config/config')[env];
 
 var models = require('./app/models');

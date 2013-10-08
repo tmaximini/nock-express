@@ -8,7 +8,7 @@ module.exports = function(app) {
       res.status(404);
 
       if (req.accepts('html')) {
-        return res.send('<h2>Sorry. I could not find that page.</h2>');
+        return res.render('404', {title: "An error occured", errorMessage: "The page you requested was not found."});
       }
 
       if (req.accepts('json')) {
@@ -16,15 +16,15 @@ module.exports = function(app) {
       }
 
       // default response type
-      res.type('txt');
-      res.send('Hmmm, could not find that one');
+      res.type('txt')
+      re.send("The page you requested was not found.");
 
     });
 
     // 500
     app.use(function (err, req, res, next) {
       console.error('error at %s\n', req.url, err);
-      res.send(500, "Opps, someting went wrong");
+      res.status(500).render('404', {title: "An error occured", errorMessage: "Opps, something went wrong"});
     })
 
 

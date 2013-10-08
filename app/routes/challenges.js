@@ -71,7 +71,11 @@ module.exports = function (app) {
 
       if (!challenge) return next(); // 404
 
-      res.render('challenges/show.jade', { challenge: challenge /*, comments: promise */ });
+      res.render('challenges/show.jade', {
+        title: challenge.title,
+        challenge: challenge
+        /* comments: promise */
+      });
     });
   });
 

@@ -10,15 +10,18 @@ function UserHandler () {
     "use strict";
 
 
+    /**
+     * displays all users
+     */
     this.displayUsers = function(req, res, next) {
 
         // limit to 20 users for now
         User.find()
+            .select({'salt':0, 'hash': 0, '__v':0})
             .sort('username')
             .limit(10)
             .exec(function (err, users) {
               if (err) return next(err);
-
               res.render("users/index", {
                 title: "User Listing",
                 users: users
@@ -26,18 +29,9 @@ function UserHandler () {
         });
     }
 
-    this.displayUsersJSON = function(req, res, next) {
-        // limit to 20 users for now
-        User.find()
-            .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
-            .sort('username')
-            .limit(20)
-            .exec(function (err, users) {
-              if (err) return next(err);
-              res.json({"users": users});
-        });
-    }
-
+    /**
+     * displays one user
+     */
     this.getUserByName = function (req, res, next) {
         // extract name from params
         var id = req.params.id;
@@ -54,22 +48,6 @@ function UserHandler () {
                 title: "User Details",
                 user: user
               });
-        });
-    }
-
-    this.getUserByNameJSON = function (req, res, next) {
-        // extract name from params
-        var id = req.params.id;
-
-        User.findOne({ "_id": id})
-            .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
-            .exec(function (err, user) {
-              if (err || !user) {
-                console.log("user not found! error....");
-                next(new Error("User not found!"));
-              }
-              // answer with JSON only atm
-              res.json(user);
         });
     }
 
@@ -113,6 +91,113 @@ function UserHandler () {
     }
 
 
+      // this will be called to insert user from our html form, where
+      // we know exactly which fields we use and we can validate the input correctly
+      this.registerUser = function (req, res, next) {
+
+      var email = cleanString(req.param('email'));
+      var username = cleanString(req.param('username'));
+      var pass = cleanString(req.param('pass'));
+
+      //console.dir(req.body);
+
+      if (!(email && pass && username)) {
+        return invalid();
+      }
+
+      User.findById(username, function (err, user) {
+        if (err) return next(err);
+
+        if (user) {
+          console.error("user exists already");
+          return  res.render('users/register.jade', {
+                    invalid: false,
+                    title: "Register to Nock",
+                    exists: true
+                  });
+        }
+
+        crypto.randomBytes(16, function (err, bytes) {
+          if (err) return next(err);
+
+          var user = { _id: username };
+          user.email = email;
+          user.username = username;
+          user.provider = 'email';
+          user.salt = bytes.toString('utf8');
+          user.hash = hash(pass, user.salt);
+
+          User.create(user, function (err, newUser) {
+            if (err) {
+              if (err instanceof mongoose.Error.ValidationError) {
+                console.log("invalid user creation: ", err)
+                return invalid();
+              }
+              return next(err);
+            }
+
+            // user created successfully
+            req.session.isLoggedIn = true;
+            req.session.user = username;
+            console.log('created user: %s (%s)', username, email);
+            return res.redirect('/');
+          });
+        });
+      });
+
+      function invalid () {
+        return res.render('users/register.jade', {
+          invalid: true,
+          title: "Register to Nock",
+          exists: false
+        });
+      }
+
+    }
+
+    this.logoutUser = function (req, res) {
+      req.session.isLoggedIn = false;
+      req.session.user = null;
+      req.session.token = null;
+      res.redirect('/');
+    }
+
+
+    /*--------------------------------------------------
+     *  API STUFF - json methods
+     *--------------------------------------------------*/
+
+
+
+    this.displayUsersJSON = function(req, res, next) {
+        // limit to 20 users for now
+        User.find()
+            .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+            .sort('username')
+            .limit(20)
+            .exec(function (err, users) {
+              if (err) return next(err);
+              res.json({"users": users});
+        });
+    }
+
+
+    this.getUserByNameJSON = function (req, res, next) {
+        // extract name from params
+        var id = req.params.id;
+
+        User.findOne({ "_id": id})
+            .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+            .exec(function (err, user) {
+              if (err || !user) {
+                console.log("user not found! error....");
+                next(new Error("User not found!"));
+              }
+              // answer with JSON only atm
+              res.json(user);
+        });
+    }
+
     /**
      * Handles Login for Nock iOS APP / webservice
      */
@@ -153,13 +238,6 @@ function UserHandler () {
         res.status(404);
         return res.json({ "error" : "User is invalid. mofo" });
       }
-    }
-
-    this.logoutUser = function (req, res) {
-      req.session.isLoggedIn = false;
-      req.session.user = null;
-      req.session.token = null;
-      res.redirect('/');
     }
 
 
@@ -234,69 +312,7 @@ function UserHandler () {
 
     }
 
-    // this will be called to insert user from our html form, where
-    // we know exactly which fields we use and we can validate the input correctly
-    this.registerUser = function (req, res, next) {
 
-    var email = cleanString(req.param('email'));
-    var username = cleanString(req.param('username'));
-    var pass = cleanString(req.param('pass'));
-
-    //console.dir(req.body);
-
-    if (!(email && pass && username)) {
-      return invalid();
-    }
-
-    User.findById(username, function (err, user) {
-      if (err) return next(err);
-
-      if (user) {
-        console.error("user exists already");
-        return  res.render('users/register.jade', {
-                  invalid: false,
-                  title: "Register to Nock",
-                  exists: true
-                });
-      }
-
-      crypto.randomBytes(16, function (err, bytes) {
-        if (err) return next(err);
-
-        var user = { _id: username };
-        user.email = email;
-        user.username = username;
-        user.provider = 'email';
-        user.salt = bytes.toString('utf8');
-        user.hash = hash(pass, user.salt);
-
-        User.create(user, function (err, newUser) {
-          if (err) {
-            if (err instanceof mongoose.Error.ValidationError) {
-              console.log("invalid user creation: ", err)
-              return invalid();
-            }
-            return next(err);
-          }
-
-          // user created successfully
-          req.session.isLoggedIn = true;
-          req.session.user = username;
-          console.log('created user: %s (%s)', username, email);
-          return res.redirect('/');
-        });
-      });
-    });
-
-    function invalid () {
-      return res.render('users/register.jade', {
-        invalid: true,
-        title: "Register to Nock",
-        exists: false
-      });
-    }
-
-  }
 }
 
 module.exports = UserHandler;
