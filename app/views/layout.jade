@@ -3,7 +3,8 @@ html(lang='en')
   head
     block header
       block title
-        title= title || "Untitled Document"
+        - if (!title) title = "Untitled Document"
+        title= title
       block meta
         meta(name='description', content='')
         meta(name='keywords', content='')

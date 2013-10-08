@@ -3,7 +3,7 @@ extends ../layout
 block content
   if session.isLoggedIn
     p
-      a(href="/challenges/new") New Challenge
+      a.btn.btn-success(href="/challenges/new") New Challenge
   if !(challenges && challenges.length)
     p Nothing to see here. Move along...
   else

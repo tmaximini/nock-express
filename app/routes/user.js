@@ -36,12 +36,14 @@ function UserHandler () {
         // extract name from params
         var id = req.params.id;
 
+        console.log("looking for user " + id);
+
         User.findOne({ "_id": id})
             .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
             .exec(function (err, user) {
               if (err || !user) {
                 console.log("user not found! error....");
-                next(new Error("User not found!"));
+                return res.render('404', {title: "User not found", errorMessage: "The user you requested does not exist."});
               }
               // answer with JSON only atm
               res.render("users/show", {

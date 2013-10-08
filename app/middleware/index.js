@@ -15,19 +15,16 @@ module.exports = function (app) {
   }
 
   // store sessions in mongo in production
-  if (env == 'production') {
-    app.use(express.cookieParser());
-    app.use(express.session({
-      secret: config.cookie_secret,
-      maxAge: 60000,
-      store: new MongoStore({
-        db: 'nock_sessions'
-      })
-    }));
-  } else {
-    app.use(express.cookieParser('keyboard cat'));
-    app.use(express.session({ cookie: { maxAge: 60000 }}));
-  }
+
+  app.use(express.cookieParser());
+  app.use(express.session({
+    secret: config.cookie_secret,
+    maxAge: 60000,
+    store: new MongoStore({
+      db: 'nock_sessions'
+    })
+  }));
+
 
   // for flash messages
   app.use(flash());
