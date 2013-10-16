@@ -97,8 +97,7 @@ describe('Users', function () {
     // new users
     describe('POST /api/users', function() {
 
-      // random integer as string between 10000 and 99999
-      var userId = (Math.floor(Math.random() * (99999 - 10000 + 1) + 10000)).toString();
+      var userId = helper.getRandomString();
 
       it('creates a new user record', function(done) {
         agent

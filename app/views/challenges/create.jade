@@ -3,15 +3,13 @@ extends ../layout
 block content
   h1= title
   form(role='form', method='post', action='/challenges', enctype='multipart/form-data')
-    if exists
-      .error
-        | That user exists. Are you trying to
-        a(href="/login") Login
-        | ?
-    if invalid
-      .error Please enter a valid email address, a username and password.
+    if errors
+      .errors
+      - each err in errors
+        .error= err
 
-    input(type="hidden", name="_csrf", value="#{csrf_token}")
+
+    // input(type="hidden", name="_csrf", value="#{csrf_token}")
 
     .form-group
       label(for='title').control-label Title

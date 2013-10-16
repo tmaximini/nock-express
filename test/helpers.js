@@ -41,3 +41,9 @@ exports.hash = function (pass, salt) {
   hash.update(salt, 'utf8');
   return hash.digest('base64');
 }
+
+
+// random integer as string between 10000 and 99999
+exports.getRandomString = function () {
+  return Math.floor(Math.random() * (99999 - 10000 + 1) + 10000).toString();
+}

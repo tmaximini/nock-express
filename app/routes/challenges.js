@@ -19,21 +19,40 @@ module.exports = function (app) {
   app.post("/challenges", loggedIn, function (req, res, next) {
     var challenge = new Challenge(req.body);
     challenge.author = req.user;
-    challenge._id = utils.convertToSlug(req.body.title)
 
-    challenge.uploadAndSave(req.files.image, function (err) {
-      if (!err) {
-        req.flash('success', 'Successfully created article!');
-        return res.redirect('/challenges/' + challenge._id);
-      } else {
-        // error occured
-        res.render('challenges/new', {
+    var challengeId = utils.convertToSlug(req.body.title);
+
+    Challenge.findById(challengeId, function (err, doc) {
+      if (err) return next(err);
+      if (doc) {
+        console.log("challenge already exists!");
+
+        return res.status(400).render('challenges/create', {
           title: 'New Challenge',
           challenge: challenge,
-          errors: utils.errors(err.errors || err)
-        })
+          errors: ["Challenge with that name already exists"]
+        });
+
+      } else {
+
+        challenge._id = challengeId;
+        challenge.uploadAndSave(req.files.image, function (err) {
+          if (!err) {
+            req.flash('success', 'Successfully created article!');
+            return res.redirect('/challenges/' + challenge._id);
+          } else {
+            // error occured
+            res.redirect('challenges/new', {
+              title: 'New Challenge',
+              challenge: challenge,
+              errors: utils.errors(err.errors || err)
+            });
+          }
+        });
       }
-    });
+
+    })
+
   });
 
 
