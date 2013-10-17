@@ -41,6 +41,12 @@ module.exports = function (app) {
       res.locals.csrf_token = req.csrfToken();
       next();
     });
+  } else {
+    // set up dummy csrf_token for tests
+    app.use(function(req, res, next){
+      res.locals.csrf_token = "ABCDEF";
+      next();
+    });
   }
 
 

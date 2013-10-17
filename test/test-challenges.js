@@ -71,6 +71,15 @@ describe('Challenges', function () {
 
   describe("The Web Interface", function () {
 
+
+    describe('GET /challenges', function() {
+
+
+
+
+    });
+
+
     // create challenge
     describe('POST /challenges', function() {
 
