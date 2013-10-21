@@ -3,7 +3,7 @@ extends ../layout
 block content
   h1= title
   form(role='form', method='post', action='/challenges', enctype='multipart/form-data')
-    if errors
+    if errors && errors.length
       .errors
       - each err in errors
         .error= err

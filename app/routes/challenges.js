@@ -11,8 +11,7 @@ module.exports = function (app) {
   app.get("/challenges/new", loggedIn, function (req, res) {
     res.render('challenges/create.jade', {
       title: "Create Challenge",
-      invalid: false,
-      exists: false
+      errors: []
     });
   });
 
@@ -38,7 +37,8 @@ module.exports = function (app) {
         challenge._id = challengeId;
         challenge.uploadAndSave(req.files.image, function (err) {
           if (!err) {
-            req.flash('success', 'Successfully created article!');
+            req.flash('success', 'Successfully created challenge!');
+            console.log('Successfully created challenge!');
             return res.redirect('/challenges/' + challenge._id);
           } else {
             // error occured
@@ -60,7 +60,7 @@ module.exports = function (app) {
   app.get("/challenges", function (req, res, next) {
     Challenge.find().sort('created').limit(10).exec(function (err, challenges) {
       if (err) return next(err);
-      res.render('challenges/index.jade', {
+      res.status(200).render('challenges/index.jade', {
         title: "Nock Challenges",
         challenges: challenges
       });

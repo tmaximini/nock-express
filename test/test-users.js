@@ -1,4 +1,4 @@
-
+"use strict";
 
 var should = require('chai').should();
 var request = require('supertest');

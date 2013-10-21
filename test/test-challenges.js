@@ -1,39 +1,39 @@
-
+"use strict";
 
 var should = require('chai').should();
 var request = require('supertest');
 var mongoose = require('mongoose');
 
-var helper = require('./helpers');
+var helper    = require('./helpers');
 
-var app = require('../app');
-var agent = request.agent(app);
+var app       = require('../app');
+var agent     = request.agent(app);
 
-var User = mongoose.model('User');
+var User      = mongoose.model('User');
 var Challenge = mongoose.model('Challenge');
 
-var utils = require('../lib/utils');
+var utils     = require('../lib/utils');
 
-
-var testUser = null;
+var testChallenge = null;
 
 describe('Challenges', function () {
 
   before(function (done) {
 
-    // create a user
+    var ident = helper.getRandomString();
+    // create a challenge
     testChallenge = new Challenge({
-      title: helper.getRandomString(),
+      title: ident,
       body: 'awesome thingy',
-      date: new Date(),
-      points: 500
+      points: 500,
+      _id: ident
     });
+    console.log('saving challenge');
     testChallenge.save(done);
   });
 
 
   describe('The API', function () {
-
     // get challenges
     describe('GET /api/challenges', function() {
       it('returns challenges as JSON', function(done) {
@@ -71,12 +71,25 @@ describe('Challenges', function () {
 
   describe("The Web Interface", function () {
 
-
     describe('GET /challenges', function() {
+      it('displays a list of challenges', function(done) {
+        agent
+        .get('/challenges')
+        .expect(200)
+        .expect('Content-Type', /html/)
+        .end(done);
+      });
+    });
 
 
-
-
+    describe('GET /challenges/:id', function() {
+      it('should display a single challenge', function(done) {
+        agent
+        .get('/challenges/' + testChallenge._id)
+        .expect(200)
+        .expect('Content-Type', /html/)
+        .end(done);
+      });
     });
 
 
