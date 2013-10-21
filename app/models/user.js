@@ -15,6 +15,7 @@ var userSchema = new Schema({
   salt:     {type: String, required: true, default: ''},
   hash:     {type: String, required: true, default: ''},
   location: Array,
+  email: String,
   provider: {type: String, required: true, default: "email"}
 });
 

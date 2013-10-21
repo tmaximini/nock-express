@@ -3,11 +3,22 @@ extends ../layout
 block content
   .users
     if !(users && users.length)
-      p nothing to see here...
+      p Nothing to see here. Move along...
     else
-      ul
-      each user in users
-        li.user-box
-          p
-            span= user.username + " "
-            span= user.email
+      table.users.table.table-striped
+        tr
+          th #
+          th id
+          th username
+          th points
+          th location
+          th provider
+        each user, i in users
+          tr
+            td= i+1
+            td
+              a(href="/users/#{user._id}")= user._id
+            td= user.username
+            td= user.points
+            td= user.location.toString()
+            td= user.provider
