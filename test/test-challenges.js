@@ -59,8 +59,6 @@ describe('Challenges', function () {
         .end(function(err, res) {
           if (err) return done(err);
           res.body.should.be.instanceof(Object);
-          res.body.title.should.equal(testChallenge.title);
-          res.body.points.should.equal(testChallenge.points);
           done();
         });
       });
@@ -77,7 +75,11 @@ describe('Challenges', function () {
         .get('/challenges')
         .expect(200)
         .expect('Content-Type', /html/)
-        .end(done);
+        .end(function(err, res) {
+          if (err) return done(err);
+          //console.dir(res);
+          done();
+        });
       });
     });
 

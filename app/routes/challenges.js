@@ -13,6 +13,7 @@ module.exports = function (app) {
       title: "Create Challenge",
       errors: []
     });
+    console.dir(res.locals);
   });
 
   app.post("/challenges", loggedIn, function (req, res, next) {
@@ -70,11 +71,6 @@ module.exports = function (app) {
   app.get("/challenges/:id", function (req, res, next) {
     var id = req.param('id');
 
-    //var promise = Challenge.findComments(id)
-    //                      .sort('created')
-    //                      .select('-_id') // exclude the _id
-    //                      .exec();
-
     var query = Challenge.findById(id).populate('author');
     query.exec(function (err, challenge) {
       if (err) return next(err);
@@ -89,7 +85,33 @@ module.exports = function (app) {
     });
   });
 
+  // API Read
 
+  // read
+  app.get("/api/challenges", function (req, res, next) {
+    Challenge.find().sort('created').limit(100).exec(function (err, challenges) {
+      if (err) return next(err);
+      res.status(200).json({
+        challenges: challenges
+      });
+    });
+  });
+
+  app.get("/api/challenges/:id", function (req, res, next) {
+    var id = req.param('id');
+
+    var query = Challenge.findById(id).populate('author');
+    query.exec(function (err, challenge) {
+      if (err) return next(err);
+      if (!challenge) {
+        return res,status(404).json({ "error" : "not found"})
+     } else {
+        return res.status(200).json({
+          challenge: challenge
+        });
+     }
+    });
+  });
 
 
   // update
@@ -126,5 +148,10 @@ module.exports = function (app) {
       });
     });
   });
+
+
+
+
+
 
 }
