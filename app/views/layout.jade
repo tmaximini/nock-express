@@ -2,8 +2,8 @@ doctype 5
 html(lang='en')
   head
     block header
+      - var title = title || "Untitled Document"
       block title
-        - if (!title) title = "Untitled Document"
         title= title
       block meta
         meta(name='description', content='')

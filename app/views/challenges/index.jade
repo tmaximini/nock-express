@@ -7,8 +7,18 @@ block content
   if !(challenges && challenges.length)
     p Nothing to see here. Move along...
   else
-    ul.challenges
-      each challenge in challenges
-        li
-          h2
+    table.challenges.table.table-striped
+      tr
+        th #
+        th title
+        th points
+        th description
+        th location
+      each challenge, i in challenges
+        tr
+          td= i+1
+          td
             a(href="/challenges/#{challenge.id}")= challenge.title
+          td= challenge.points
+          td.description= challenge.body
+          td.location Location

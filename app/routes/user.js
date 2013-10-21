@@ -88,7 +88,8 @@ function UserHandler () {
         res.redirect('/');
       });
       function invalid () {
-        return res.render('users/login.jade', { invalid: true });
+        req.flash('error', 'Invalid Login');
+        return res.render('users/login.jade', { invalid: true, messages: req.flash('error'), title: "Please log in." });
       }
     }
 
