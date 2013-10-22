@@ -11,8 +11,8 @@ var env = process.env.NODE_ENV || 'development';
 var config = require('./config/config')[env];
 
 var models = require('./app/models');
-var middleware = require('./app/middleware');
-var routes = require('./app/routes');
+var middleware = require('./config/middleware');
+var routes = require('./config/routes');
 
 var app = express();
 

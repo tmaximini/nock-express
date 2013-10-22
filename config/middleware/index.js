@@ -4,7 +4,7 @@ var path = require('path'); // Path helpers
 var flash = require('connect-flash');
 
 var env = process.env.NODE_ENV || 'development'
-var config = require('../../config/config')[env];
+var config = require('../config')[env];
 
 module.exports = function (app) {
 
@@ -31,7 +31,7 @@ module.exports = function (app) {
 
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.static(path.join(__dirname, '../public')));
+  app.use(express.static(path.join(__dirname, '../../app/public')));
 
   // adds CSRF support
   if (process.env.NODE_ENV !== 'test') {
