@@ -6,7 +6,7 @@ var utils = require('../../lib/utils');
 "use strict";
 
 exports.new = function (req, res, next) {
-  res.render('challenges/create.jade', {
+  res.render('challenges/new.jade', {
     title: "Create Challenge",
     errors: []
   });
@@ -25,7 +25,7 @@ exports.create = function (req, res, next) {
     if (doc) {
       console.log("challenge already exists!");
 
-      return res.status(400).render('challenges/create', {
+      return res.status(400).render('challenges/new', {
         title: 'New Challenge',
         challenge: challenge,
         errors: ["Challenge with that name already exists"]
@@ -83,7 +83,7 @@ exports.show = function (req, res, next) {
 
 
 exports.edit =  function (req, res) {
-  res.render('challenges/create.jade', {
+  res.render('challenges/new.jade', {
     challenge: Challenge.findById(req.param('id'))
   });
 }

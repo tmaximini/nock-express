@@ -14,6 +14,7 @@ block content
         th points
         th description
         th location
+        th actions
       each challenge, i in challenges
         tr
           td= i+1
@@ -22,3 +23,5 @@ block content
           td= challenge.points
           td.description= challenge.body
           td.location Location
+          td.actions
+            a(href="/challenges/#{challenge.id}/edit") edit

@@ -3,7 +3,6 @@
 // helpers
 var loggedIn = require('./middleware/loggedIn');
 
-var UserHandler  = require('../app/routes/user');
 var StaticHandler  = require('../app/routes/static');
 
 // sub route handlers
@@ -15,7 +14,6 @@ var usersController = require('../app/controllers/users-controller');
 
 module.exports = exports = function(app, db) {
 
-    var userHandler   = new UserHandler(db);
     var staticHandler = new StaticHandler(db);
 
     /*
