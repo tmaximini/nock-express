@@ -9,6 +9,7 @@ var StaticHandler  = require('../app/routes/static');
 // sub route handlers
 var errors = require('../app/routes/error');
 var challengesController = require('../app/controllers/challenges-controller');
+var usersController = require('../app/controllers/users-controller');
 
 
 
@@ -39,16 +40,16 @@ module.exports = exports = function(app, db) {
         });
     });
 
-    app.post('/users', userHandler.registerUser);
-    app.post('/api/users', userHandler.registerUserJSON);
+    app.post('/users', usersController.register);
+    app.post('/api/users', usersController.apiRegister);
 
     // GET all users
-    app.get('/users', userHandler.displayUsers);
-    app.get('/api/users', userHandler.displayUsersJSON);
+    app.get('/users', usersController.index);
+    app.get('/api/users', usersController.apiIndex);
 
     // GET one user by :name
-    app.get('/users/:id', userHandler.getUserByName);
-    app.get('/api/users/:id', userHandler.getUserByNameJSON);
+    app.get('/users/:id', usersController.show);
+    app.get('/api/users/:id', usersController.apiShow);
 
     // GET login page
     app.get('/login', function (req, res) {
@@ -59,18 +60,21 @@ module.exports = exports = function(app, db) {
     });
 
     // GET logout
-    app.get('/logout', userHandler.logoutUser);
+    app.get('/logout', usersController.logout);
 
     // POST login
-    app.post('/users/login', userHandler.handleLogin);
-    app.post('/api/users/login', userHandler.handleLoginJSON);
+    app.post('/users/login', usersController.login);
+    app.post('/api/users/login', usersController.apiLogin);
 
     // POST /users => add new users
-    app.post('/users/:id', userHandler.updateUserLocation);
-    app.post('/api/users/:id', userHandler.updateUserLocation);
+    app.post('/users/:id', usersController.updateLocation);
+    app.post('/api/users/:id', usersController.updateLocation);
 
 
-    // CHALLENGE ROUTES
+    /**
+     * CHALLENGE ROUTES
+     */
+
     //challenges(app);
     app.get('/challenges', challengesController.index)
     app.get('/challenges/new', challengesController.new)
