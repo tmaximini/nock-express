@@ -83,8 +83,10 @@ exports.show = function (req, res, next) {
 
 
 exports.edit =  function (req, res) {
-  res.render('challenges/new.jade', {
-    challenge: Challenge.findById(req.param('id'))
+  res.render('challenges/edit.jade', {
+    challenge: Challenge.findById(req.param('id')),
+    errors: [],
+    title: "Edit Challenge"
   });
 }
 

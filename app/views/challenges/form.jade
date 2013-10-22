@@ -6,7 +6,7 @@ block content
   - action += challenge.isNew? '' : '/' + challenge.id
   .row
     .span4
-      - if (!challenge.isNew && challenge.image && challenge.image.files && article.image.files.length)
+      - if (!challenge.isNew && challenge.image && challenge.image.files && challenge.image.files.length)
         img(src=challenge.image.cdnUri + "/mini_" + challenge.image.files[0])
     .span8
       form.form-horizontal(role='form', method='post', action=action, enctype='multipart/form-data')
