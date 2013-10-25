@@ -2,6 +2,7 @@ var loggedIn = require('../../config/middleware/loggedIn');
 var mongoose = require('mongoose')
 var Location = mongoose.model('Location');
 var utils = require('../../lib/utils');
+var _ = require('underscore');
 
 "use strict";
 
@@ -78,7 +79,7 @@ exports.show = function (req, res, next) {
     if (!location) return next(); // 404
 
     res.render('locations/show.jade', {
-      title: location.title,
+      title: location.name,
       location: location
       /* comments: promise */
     });
@@ -154,4 +155,28 @@ exports.apiShow = function (req, res, next) {
   });
 }
 
+/**
+ * Matches Foursquare Locations to Nock Locations by comparing FourSquare IDs
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+exports.matchFourSquareIds = function (req, res, next) {
+  console.log("incoming match request");
+  console.dir(req);
+  console.dir(req.body);
+
+  var fourSquareIds = req.body.ids;
+
+  Location.find({
+      '_id': { $in: fourSquareIds }
+  }, function(err, matchingLocations){
+      console.log('I found the following matches: ');
+      console.dir(matchingLocations);
+      res.json(matchingLocations);
+  });
+
+
+}
 

@@ -2,6 +2,7 @@ var loggedIn = require('../../config/middleware/loggedIn');
 var mongoose = require('mongoose')
 var Challenge = mongoose.model('Challenge');
 var utils = require('../../lib/utils');
+var _ = require('underscore');
 
 "use strict";
 
@@ -93,10 +94,37 @@ exports.edit =  function (req, res) {
 
 
 exports.update = function (req, res, next) {
-  Challenge.edit(req, function (err) {
-    if (err) return next(err);
-    res.redirect("/challenges/" + req.param('id'));
+
+  console.log("updating challenge ", req.challenge);
+  console.dir(req.body);
+  console.dir("id: ", req.param("id"));
+
+  Challenge.findOne({ '_id': req.param('id') }, function (err, challenge) {
+
+    console.log("challenge instance");
+    console.dir(challenge);
+
+    if (err) next(new Error(err));
+
+    challenge._id = utils.convertToSlug(req.body.title);
+
+    challenge.uploadAndSave(req.files.image, function(err) {
+      if (!err) {
+        console.log('update successful');
+        return res.redirect('/challenge/' + challenge._id);
+      } else {
+        console.error('update error', err);
+        return res.render('challenges/edit', {
+          title: 'Edit Challenge',
+          challenge: challenge,
+          errors: err.errors
+        });
+      }
+    });
+
+
   });
+  //challenge = _.extend(challenge, req.body)
 }
 
 

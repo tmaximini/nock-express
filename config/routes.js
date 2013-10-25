@@ -85,7 +85,7 @@ module.exports = exports = function(app, db) {
 
 
     /**
-     * LOCATION ROUTES
+     * LOCATION ROUTES (CRUD)
      */
     app.get('/locations',          locationsController.index)
     app.get('/locations/new',      locationsController.new)
@@ -97,6 +97,11 @@ module.exports = exports = function(app, db) {
     app.get('/api/locations',      locationsController.apiIndex)
     app.get('/api/locations/:id',  locationsController.apiShow)
 
+    /**
+     *  LOCATION WEBSERVICES
+     */
+
+    app.post('/api/getLocationData', locationsController.matchFourSquareIds)
 
 
     // ERROR HANDLING

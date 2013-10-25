@@ -3,7 +3,7 @@ extends ../layout
 block content
   h1= title
   - var action = '/locations'
-  //- action += location.isNew? '' : '/' + location.id
+  - action += location.isNew? '' : '/' + location.id
   .row
     .span4
       - if (!location.isNew && location.image && location.image.files && location.image.files.length)
