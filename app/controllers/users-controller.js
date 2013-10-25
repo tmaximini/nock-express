@@ -250,11 +250,10 @@ exports.updateLocation = function (req, res, next) {
     if (err) {
       console.error(err);
       return next(err);
+    } else {
+      return res.json({"status":"success", "action": "position updated"});
     }
-    return res.json({"status":"success", "action": "position updated"});
   });
-
-  next();
 }
 
 

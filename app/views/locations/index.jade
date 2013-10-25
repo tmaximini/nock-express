@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+  if session.isLoggedIn
+    p
+      a.btn.btn-success(href="/locations/new") New Location
+  if !(locations && locations.length)
+    p Nothing to see here. Move along...
+  else
+    table.challenges.table.table-striped
+      tr
+        th #
+        th Name
+        th description
+        th fourSquareId
+        th actions
+      each location, i in locations
+        tr
+          td= i+1
+          td
+            a(href="/locations/#{location.id}")= location.name
+          td.description= location.body
+          td.fourSquareId= location.fourSquareId
+          td.actions
+            a(href="/locations/#{location.id}/edit") edit

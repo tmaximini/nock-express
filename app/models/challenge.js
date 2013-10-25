@@ -61,7 +61,7 @@ ChallengeSchema.plugin(createdDate);
  ChallengeSchema.methods = {
 
   /**
-   * Save article and upload image
+   * Save challenge and upload image
    *
    * @param {Object} images
    * @param {Function} cb

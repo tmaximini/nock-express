@@ -40,16 +40,16 @@ userSchema.statics.edit = function (req, callback) {
 
   console.log("update to do: ", update);
 
-  this.update(query, { $inc: { 'points': 100 } }, function (err, numAffected) {
+  this.update(query, update, function (err, numAffected) {
     if (err) return callback(err);
 
-    console.log("user updated");
+    console.log("user updated, numAffected: " + numAffected);
 
     if (0 === numAffected) {
       return callback(new Error('no post to modify'));
     }
 
-    callback();
+    callback(null);
   })
 }
 

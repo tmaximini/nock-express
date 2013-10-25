@@ -34,7 +34,7 @@ module.exports = function (app) {
   app.use(express.static(path.join(__dirname, '../../app/public')));
 
   // adds CSRF support
-  if (process.env.NODE_ENV !== 'test') {
+  if (false) {
     app.use(express.csrf());
     // This could be moved to view-helpers
     app.use(function(req, res, next){

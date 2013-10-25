@@ -1,0 +1,44 @@
+extends ../layout
+
+block content
+  h1= title
+  - var action = '/locations'
+  //- action += location.isNew? '' : '/' + location.id
+  .row
+    .span4
+      - if (!location.isNew && location.image && location.image.files && location.image.files.length)
+        img(src=location.image.cdnUri + "/mini_" + location.image.files[0])
+    .span8
+      form.form-horizontal(role='form', method='post', action=action, enctype='multipart/form-data')
+        if errors && errors.length
+          .errors
+          - each err in errors
+            .error= err
+
+
+        input(type="hidden", name="_csrf", value="#{csrf_token}")
+
+        - if (!location.isNew)
+          input(type="hidden", name="_method", value="PUT")
+
+        .form-group
+          label(for='name').control-label Name
+          input#title(name='name', placeholder='Name', value=location.name).form-control
+        .form-group
+          label(for='adress').control-label Adress
+          textarea#adress(name='adress', placeholder='Adress').form-control= location.adress
+        .form-group
+          label(for='file').control-label Image
+          input#body(name='image[]', type='file').form-control
+        .form-group
+          label(for='body').control-label Description
+          textarea#body(name='body', placeholder='Description').form-control= location.body
+        .form-group
+          label(for='points').control-label FourSquare ID
+          input#foursquare(name='fourSquareId', placeholder='FourSquare ID', value=location.fourSquareId).form-control
+        .form-group
+          label(for='location').control-label hidden
+          input#hidden(name='hidden', type='checkbox', value=location.hidden).form-control
+        .form-group
+          button(type='submit', value='Log In').btn.btn-default Save
+

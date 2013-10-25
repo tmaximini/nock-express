@@ -3,12 +3,13 @@
 // helpers
 var loggedIn = require('./middleware/loggedIn');
 
-var StaticHandler  = require('../app/routes/static');
+var StaticHandler  = require('../app/handlers/static');
 
 // sub route handlers
-var errors = require('../app/routes/error');
+var errorHandler = require('../app/handlers/error');
 var challengesController = require('../app/controllers/challenges-controller');
 var usersController = require('../app/controllers/users-controller');
+var locationsController = require('../app/controllers/locations-controller');
 
 
 
@@ -72,20 +73,33 @@ module.exports = exports = function(app, db) {
     /**
      * CHALLENGE ROUTES
      */
-
-    //challenges(app);
-    app.get('/challenges', challengesController.index)
-    app.get('/challenges/new', challengesController.new)
-    app.post('/challenges', challengesController.create)
-    app.get('/challenges/:id', challengesController.show)
+    app.get('/challenges',          challengesController.index)
+    app.get('/challenges/new',      challengesController.new)
+    app.post('/challenges',         challengesController.create)
+    app.get('/challenges/:id',      challengesController.show)
     app.get('/challenges/:id/edit', challengesController.edit)
-    app.put('/challenges/:id', challengesController.update)
-    app.del('/challenges/:id', challengesController.destroy)
-    app.get('/api/challenges', challengesController.apiIndex)
-    app.get('/api/challenges/:id', challengesController.apiShow)
+    app.put('/challenges/:id',      challengesController.update)
+    app.del('/challenges/:id',      challengesController.destroy)
+    app.get('/api/challenges',      challengesController.apiIndex)
+    app.get('/api/challenges/:id',  challengesController.apiShow)
+
+
+    /**
+     * LOCATION ROUTES
+     */
+    app.get('/locations',          locationsController.index)
+    app.get('/locations/new',      locationsController.new)
+    app.post('/locations',         locationsController.create)
+    app.get('/locations/:id',      locationsController.show)
+    app.get('/locations/:id/edit', locationsController.edit)
+    app.put('/locations/:id',      locationsController.update)
+    app.del('/locations/:id',      locationsController.destroy)
+    app.get('/api/locations',      locationsController.apiIndex)
+    app.get('/api/locations/:id',  locationsController.apiShow)
+
 
 
     // ERROR HANDLING
-    errors(app);
+    errorHandler(app);
 
 }

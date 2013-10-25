@@ -23,19 +23,19 @@ block content
 
         .form-group
           label(for='title').control-label Title
-          input#title(name='title', placeholder='Title').form-control
+          input#title(name='title', placeholder='Title', value=challenge.title).form-control
         .form-group
           label(for='file').control-label Image
           input#body(name='image[]', type='file').form-control
         .form-group
           label(for='body').control-label Description
-          textarea#body(name='body', placeholder='Description').form-control
+          textarea#body(name='body', placeholder='Description').form-control= challenge.body
         .form-group
           label(for='points').control-label Points
-          input#points(name='points', placeholder='Points').form-control
+          input#points(name='points', placeholder='Points', value=challenge.points).form-control
         .form-group
           label(for='location').control-label Location
-          input#location(name='location', placeholder='Location').form-control
+          input#location(name='location', placeholder='Location', value=challenge.location).form-control
         .form-group
-          button(type='submit', value='Log In').btn.btn-default Submit
+          button(type='submit', value='Log In').btn.btn-default Save
 

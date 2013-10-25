@@ -8,6 +8,7 @@ var utils = require('../../lib/utils');
 exports.new = function (req, res, next) {
   res.render('challenges/new.jade', {
     title: "Create Challenge",
+    challenge: new Challenge({}),
     errors: []
   });
   console.dir(res.locals);

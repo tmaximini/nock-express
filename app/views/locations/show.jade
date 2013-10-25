@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  h1= location.name
+  - if (!location.isNew && location.image && location.image.files && location.image.files.length)
+    img(src=location.image.cdnUri + '/thumb_' + location.image.files[0])
+  .description= location.body
+  h5 Adress
+  .adress= location.adress
+
