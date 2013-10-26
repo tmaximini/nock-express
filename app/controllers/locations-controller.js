@@ -169,8 +169,32 @@ exports.matchFourSquareIds = function (req, res, next) {
 
   var fourSquareIds = req.body.ids;
 
+/* corrected 'foursquareId'; it was '_id'; working now, getting OBJECT: (
+        {
+        "__v" = 0;
+        "_id" = "a-place";
+        adress = "";
+        body = "";
+        fourSquareId = 4cb607ca52edb1f79fc16bfe;
+        images =         (
+        );
+        name = "A place";
+    },
+        {
+        "__v" = 0;
+        "_id" = "another-place";
+        adress = "";
+        body = "";
+        fourSquareId = 4de4b8ac18385df2b059fa0a;
+        images =         (
+        );
+        name = "Another place";
+    } 
+      is __v for hidden value ?
+    feel free to delete this comment COBRA !!! */
+
   Location.find({
-      '_id': { $in: fourSquareIds }
+      'fourSquareId': { $in: fourSquareIds }
   }, function(err, matchingLocations){
       console.log('I found the following matches: ');
       console.dir(matchingLocations);
