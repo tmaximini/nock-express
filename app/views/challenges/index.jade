@@ -19,9 +19,9 @@ block content
         tr
           td= i+1
           td
-            a(href="/challenges/#{challenge.id}")= challenge.title
+            a(href="/challenges/#{challenge.slug}")= challenge.title
           td= challenge.points
           td.description= challenge.body
           td.location Location
           td.actions
-            a(href="/challenges/#{challenge.id}/edit") edit
+            a(href="/challenges/#{challenge.slug}/edit") edit

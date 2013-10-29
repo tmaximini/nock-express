@@ -18,8 +18,8 @@ block content
         tr
           td= i+1
           td
-            a(href="/locations/#{location.id}")= location.name
+            a(href="/locations/#{location.slug}")= location.name
           td.description= location.body
           td.fourSquareId= location.fourSquareId
           td.actions
-            a(href="/locations/#{location.id}/edit") edit
+            a(href="/locations/#{location.slug}/edit") edit

@@ -13,6 +13,7 @@ var imagerConfig = require(config.root + '/config/imager.js');
 
 var LocationSchema = new Schema({
   _id:    String,
+  slug: {type: String, required: true},
   fourSquareId: String,
   name:  {type: String, required: true},
   adress: String,

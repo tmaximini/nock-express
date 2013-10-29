@@ -26,7 +26,7 @@ describe('Challenges', function () {
       title: ident,
       body: 'awesome thingy',
       points: 500,
-      _id: ident
+      slug: ident
     });
     console.log('saving challenge');
     testChallenge.save(done);
@@ -53,7 +53,7 @@ describe('Challenges', function () {
     describe('GET /api/challenges/:id', function() {
       it('returns one challenge record as JSON', function(done) {
         agent
-        .get('/api/challenges/' + testChallenge._id)
+        .get('/api/challenges/' + testChallenge.slug)
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
@@ -87,7 +87,7 @@ describe('Challenges', function () {
     describe('GET /challenges/:id', function() {
       it('should display a single challenge', function(done) {
         agent
-        .get('/challenges/' + testChallenge._id)
+        .get('/challenges/' + testChallenge.slug)
         .expect(200)
         .expect('Content-Type', /html/)
         .end(done);
@@ -115,7 +115,7 @@ describe('Challenges', function () {
       });
 
       it('saves the record to the database', function(done) {
-        Challenge.findById(utils.convertToSlug(challengeId), function (err, doc) {
+        Challenge.findOne({ 'slug': utils.convertToSlug(challengeId) }, function (err, doc) {
           should.not.exist(err);
           doc.should.be.an.instanceOf(Challenge);
           doc.title.should.equal(challengeId);

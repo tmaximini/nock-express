@@ -2,7 +2,6 @@ var loggedIn = require('../../config/middleware/loggedIn');
 var mongoose = require('mongoose')
 var Challenge = mongoose.model('Challenge');
 var utils = require('../../lib/utils');
-var _ = require('underscore');
 
 "use strict";
 
@@ -22,7 +21,7 @@ exports.create = function (req, res, next) {
 
   var challengeId = utils.convertToSlug(req.body.title);
 
-  Challenge.findById(challengeId, function (err, doc) {
+  Challenge.findOne({ 'slug': challengeId }, function (err, doc) {
     if (err) return next(err);
     if (doc) {
       console.log("challenge already exists!");
@@ -35,16 +34,16 @@ exports.create = function (req, res, next) {
 
     }
     else {
-      challenge._id = challengeId;
+      challenge.slug = challengeId;
       challenge.uploadAndSave(req.files.image, function (err) {
         if (!err) {
           req.flash('success', 'Successfully created challenge!');
           console.log('Successfully created challenge!');
-          return res.redirect('/challenges/' + challenge._id);
+          return res.redirect('/challenges/' + challenge.slug);
         } else {
           // error occured
           res.redirect('challenges/new', {
-            title: 'New Challenge',
+            title: "New Challenge",
             challenge: challenge,
             errors: utils.errors(err.errors || err)
           });
@@ -67,26 +66,22 @@ exports.index = function (req, res, next) {
 
 
 exports.show = function (req, res, next) {
-  var id = req.param('id');
 
-  var query = Challenge.findById(id).populate('author');
-  query.exec(function (err, challenge) {
-    if (err) return next(err);
+  var challenge = req.challenge;
 
-    if (!challenge) return next(); // 404
+  if (!challenge) return next(); // 404
 
-    res.render('challenges/show.jade', {
-      title: challenge.title,
-      challenge: challenge
-      /* comments: promise */
-    });
+  res.render('challenges/show.jade', {
+    title: challenge.title,
+    challenge: challenge
+    /* comments: promise */
   });
 }
 
 
 exports.edit =  function (req, res) {
   res.render('challenges/edit.jade', {
-    challenge: Challenge.findById(req.param('id')),
+    challenge: req.challenge,
     errors: [],
     title: "Edit Challenge"
   });
@@ -95,57 +90,47 @@ exports.edit =  function (req, res) {
 
 exports.update = function (req, res, next) {
 
-  console.log("updating challenge ", req.challenge);
-  console.dir(req.body);
-  console.dir("id: ", req.param("id"));
+  var challenge = req.challenge;
 
-  Challenge.findOne({ '_id': req.param('id') }, function (err, challenge) {
+  Challenge.findOne({ slug: challenge.slug }, function (err, doc) {
 
-    console.log("challenge instance");
-    console.dir(challenge);
+    doc.set(req.body);
+    doc.slug = utils.convertToSlug(doc.title);
 
-    if (err) next(new Error(err));
+    console.dir(doc);
 
-    challenge._id = utils.convertToSlug(req.body.title);
-
-    challenge.uploadAndSave(req.files.image, function(err) {
+    doc.uploadAndSave(req.files.image, function(err) {
       if (!err) {
         console.log('update successful');
-        return res.redirect('/challenge/' + challenge._id);
+        return res.redirect('/challenges/' + doc.slug);
       } else {
         console.error('update error', err);
         return res.render('challenges/edit', {
           title: 'Edit Challenge',
-          challenge: challenge,
+          challenge: doc,
           errors: err.errors
         });
       }
     });
-
-
   });
-  //challenge = _.extend(challenge, req.body)
 }
 
 
 
 exports.destroy = function (req, res, next) {
-  var id = req.param('id');
 
-  Challenge.findOne({ _id: id }, function (err, challenge) {
+  var challenge = req.challenge;
+
+  // validate logged in user authored this challenge
+  if (challenge.author != req.session.user) {
+    return res.send(403);
+  }
+
+  challenge.remove(function (err) {
     if (err) return next(err);
 
-    // validate logged in user authored this challenge
-    if (challenge.author != req.session.user) {
-      return res.send(403);
-    }
-
-    challenge.remove(function (err) {
-      if (err) return next(err);
-
-      // TODO display a confirmation msg to user
-      res.redirect('/');
-    });
+    // TODO display a confirmation msg to user
+    res.redirect('/');
   });
 }
 
@@ -164,19 +149,16 @@ exports.apiIndex = function (req, res, next) {
 
 
 exports.apiShow = function (req, res, next) {
-  var id = req.param('id');
 
-  var query = Challenge.findById(id).populate('author');
-  query.exec(function (err, challenge) {
-    if (err) return next(err);
-    if (!challenge) {
+  var challenge = req.challenge;
+
+  if (!challenge) {
       return res,status(404).json({ "error" : "not found"})
-   } else {
-      return res.status(200).json({
-        challenge: challenge
-      });
-   }
-  });
+  } else {
+    return res.status(200).json({
+      challenge: challenge
+    });
+  }
 }
 
 

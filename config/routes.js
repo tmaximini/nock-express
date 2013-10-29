@@ -3,6 +3,10 @@
 // helpers
 var loggedIn = require('./middleware/loggedIn');
 
+var mongoose = require('mongoose')
+var Challenge = mongoose.model('Challenge');
+var Location = mongoose.model('Location');
+
 var StaticHandler  = require('../app/handlers/static');
 
 // sub route handlers
@@ -73,29 +77,57 @@ module.exports = exports = function(app, db) {
     /**
      * CHALLENGE ROUTES
      */
-    app.get('/challenges',          challengesController.index)
-    app.get('/challenges/new',      challengesController.new)
-    app.post('/challenges',         challengesController.create)
-    app.get('/challenges/:id',      challengesController.show)
-    app.get('/challenges/:id/edit', challengesController.edit)
-    app.put('/challenges/:id',      challengesController.update)
-    app.del('/challenges/:id',      challengesController.destroy)
-    app.get('/api/challenges',      challengesController.apiIndex)
-    app.get('/api/challenges/:id',  challengesController.apiShow)
+    app.param('challenge', function(req, res, next, id){
+      Challenge.findOne({ 'slug': id }, function(err, challenge) {
+        if (err) {
+          next(err);
+        } else if (challenge) {
+          req.challenge = challenge;
+          next();
+        } else {
+          res.status(404).render('404', {title: "Not found", errorMessage: "The requested challenge was not found."});
+        }
+      });
+    });
+    app.get('/challenges',                 challengesController.index);
+    app.get('/challenges/new',             challengesController.new);
+    app.post('/challenges',                challengesController.create);
+    app.get('/challenges/:challenge',      challengesController.show);
+    app.get('/challenges/:challenge/edit', challengesController.edit);
+    app.put('/challenges/:challenge',      challengesController.update);
+    app.del('/challenges/:challenge',      challengesController.destroy);
+    app.get('/api/challenges',             challengesController.apiIndex);
+    app.get('/api/challenges/:challenge',  challengesController.apiShow);
+
+
 
 
     /**
      * LOCATION ROUTES (CRUD)
      */
-    app.get('/locations',          locationsController.index)
-    app.get('/locations/new',      locationsController.new)
-    app.post('/locations',         locationsController.create)
-    app.get('/locations/:id',      locationsController.show)
-    app.get('/locations/:id/edit', locationsController.edit)
-    app.put('/locations/:id',      locationsController.update)
-    app.del('/locations/:id',      locationsController.destroy)
-    app.get('/api/locations',      locationsController.apiIndex)
-    app.get('/api/locations/:id',  locationsController.apiShow)
+    app.param('location', function(req, res, next, id){
+      Location.findOne({ 'slug': id }, function(err, location) {
+        if (err) {
+          next(err);
+        } else if (location) {
+          req.location = location;
+          next();
+        } else {
+          res.status(404).render('404', {title: "Not found", errorMessage: "The requested location was not found."});
+        }
+      });
+    });
+    app.get('/locations',                locationsController.index);
+    app.get('/locations/new',            locationsController.new);
+    app.post('/locations',               locationsController.create);
+    app.get('/locations/:location',      locationsController.show);
+    app.get('/locations/:location/edit', locationsController.edit);
+    app.put('/locations/:location',      locationsController.update);
+    app.del('/locations/:location',      locationsController.destroy);
+    app.get('/api/locations',            locationsController.apiIndex);
+    app.get('/api/locations/:location',  locationsController.apiShow);
+
+
 
     /**
      *  LOCATION WEBSERVICES

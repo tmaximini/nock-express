@@ -2,7 +2,6 @@ var loggedIn = require('../../config/middleware/loggedIn');
 var mongoose = require('mongoose')
 var Location = mongoose.model('Location');
 var utils = require('../../lib/utils');
-var _ = require('underscore');
 
 "use strict";
 
@@ -18,13 +17,11 @@ exports.new = function (req, res, next) {
 
 exports.create = function (req, res, next) {
 
-  console.dir(req.body);
-
   var location = new Location(req.body);
 
   var locationId = utils.convertToSlug(req.body.name);
 
-  Location.findById(locationId, function (err, doc) {
+  Location.findOne({ 'slug': locationId }, function (err, doc) {
     if (err) return next(err);
     if (doc) {
       console.log("location already exists!");
@@ -37,12 +34,12 @@ exports.create = function (req, res, next) {
 
     }
     else {
-      location._id = locationId;
+      location.slug = locationId;
       location.uploadAndSave(req.files.image, function (err) {
         if (!err) {
           req.flash('success', 'Successfully created location!');
           console.log('Successfully created location!');
-          return res.redirect('/locations/' + location._id);
+          return res.redirect('/locations/' + location.slug);
         } else {
           console.error(err);
           // error occured
@@ -70,26 +67,20 @@ exports.index = function (req, res, next) {
 
 
 exports.show = function (req, res, next) {
-  var id = req.param('id');
 
-  var query = Location.findById(id);
-  query.exec(function (err, location) {
-    if (err) return next(err);
+  var location = req.location;
 
-    if (!location) return next(); // 404
-
-    res.render('locations/show.jade', {
-      title: location.name,
-      location: location
-      /* comments: promise */
-    });
+  res.render('locations/show.jade', {
+    title: location.name,
+    location: location
+    /* comments: promise */
   });
 }
 
 
 exports.edit =  function (req, res) {
   res.render('locations/edit.jade', {
-    location: Location.findById(req.param('id')),
+    location: req.location,
     errors: [],
     title: "Edit location"
   });
@@ -97,32 +88,32 @@ exports.edit =  function (req, res) {
 
 
 exports.update = function (req, res, next) {
+  var location = req.location;
+
   location.edit(req, function (err) {
     if (err) return next(err);
-    res.redirect("/locations/" + req.param('id'));
+    res.redirect("/locations/" + location.slug);
   });
+
 }
 
 
 
 exports.destroy = function (req, res, next) {
-  var id = req.param('id');
+  var location = req.location;
 
-  Location.findOne({ _id: id }, function (err, location) {
+  // validate logged in user authored this location
+  if (location.author != req.session.user) {
+    return res.send(403);
+  }
+
+  location.remove(function (err) {
     if (err) return next(err);
 
-    // validate logged in user authored this location
-    if (location.author != req.session.user) {
-      return res.send(403);
-    }
-
-    location.remove(function (err) {
-      if (err) return next(err);
-
-      // TODO display a confirmation msg to user
-      res.redirect('/');
-    });
+    // TODO display a confirmation msg to user
+    res.redirect('/');
   });
+
 }
 
 
@@ -140,27 +131,21 @@ exports.apiIndex = function (req, res, next) {
 
 
 exports.apiShow = function (req, res, next) {
-  var id = req.param('id');
 
-  var query = Location.findById(id);
-  query.exec(function (err, location) {
-    if (err) return next(err);
-    if (!location) {
-      return res,status(404).json({ "error" : "not found"})
-   } else {
-      return res.status(200).json({
-        location: location
-      });
-   }
-  });
+  var location = req.location;
+
+  if (!location) {
+    return res,status(404).json({ "error" : "not found"})
+  } else {
+    return res.status(200).json({
+      location: location
+    });
+  }
+
 }
 
 /**
  * Matches Foursquare Locations to Nock Locations by comparing FourSquare IDs
- * @param  {[type]}   req  [description]
- * @param  {[type]}   res  [description]
- * @param  {Function} next [description]
- * @return {[type]}        [description]
  */
 exports.matchFourSquareIds = function (req, res, next) {
   console.log("incoming match request");
@@ -169,30 +154,6 @@ exports.matchFourSquareIds = function (req, res, next) {
 
   var fourSquareIds = req.body.ids;
 
-/* corrected 'foursquareId'; it was '_id'; working now, getting OBJECT: (
-        {
-        "__v" = 0;
-        "_id" = "a-place";
-        adress = "";
-        body = "";
-        fourSquareId = 4cb607ca52edb1f79fc16bfe;
-        images =         (
-        );
-        name = "A place";
-    },
-        {
-        "__v" = 0;
-        "_id" = "another-place";
-        adress = "";
-        body = "";
-        fourSquareId = 4de4b8ac18385df2b059fa0a;
-        images =         (
-        );
-        name = "Another place";
-    } 
-      is __v for hidden value ?
-    feel free to delete this comment COBRA !!! */
-
   Location.find({
       'fourSquareId': { $in: fourSquareIds }
   }, function(err, matchingLocations){
@@ -200,7 +161,5 @@ exports.matchFourSquareIds = function (req, res, next) {
       console.dir(matchingLocations);
       res.json(matchingLocations);
   });
-
-
 }
 

@@ -3,7 +3,7 @@ extends ../layout
 block content
   h1= title
   - var action = '/challenges'
-  - action += challenge.isNew? '' : '/' + challenge.id
+  - action += challenge.isNew? '' : '/' + challenge.slug
   .row
     .span4
       - if (!challenge.isNew && challenge.image && challenge.image.files && challenge.image.files.length)
