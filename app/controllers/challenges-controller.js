@@ -9,7 +9,7 @@ var utils = require('../../lib/utils');
 exports.load = function(req, res, next, id) {
   Challenge.load(id, function (err, challenge) {
     if (err) return next(err);
-    if (!article) return next(new Error('not found'));
+    if (!challenge) return next(new Error('not found'));
     req.challenge = challenge;
     next();
   });
