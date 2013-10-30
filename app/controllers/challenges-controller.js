@@ -1,9 +1,22 @@
 var loggedIn = require('../../config/middleware/loggedIn');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var Challenge = mongoose.model('Challenge');
 var utils = require('../../lib/utils');
 
 "use strict";
+
+
+exports.load = function(req, res, next, id) {
+  Challenge.load(id, function (err, challenge) {
+    if (err) return next(err);
+    if (!article) return next(new Error('not found'));
+    req.challenge = challenge;
+    next();
+  });
+}
+
+
+
 
 exports.new = function (req, res, next) {
   res.render('challenges/new.jade', {
@@ -92,27 +105,23 @@ exports.update = function (req, res, next) {
 
   var challenge = req.challenge;
 
-  Challenge.findOne({ slug: challenge.slug }, function (err, doc) {
+  challenge.set(req.body);
+  challenge.slug = utils.convertToSlug(req.body.title);
 
-    doc.set(req.body);
-    doc.slug = utils.convertToSlug(doc.title);
-
-    console.dir(doc);
-
-    doc.uploadAndSave(req.files.image, function(err) {
-      if (!err) {
-        console.log('update successful');
-        return res.redirect('/challenges/' + doc.slug);
-      } else {
-        console.error('update error', err);
-        return res.render('challenges/edit', {
-          title: 'Edit Challenge',
-          challenge: doc,
-          errors: err.errors
-        });
-      }
-    });
+  challenge.uploadAndSave(req.files.image, function(err) {
+    if (!err) {
+      console.log('update successful');
+      return res.redirect('/challenges/' + challenge.slug);
+    } else {
+      console.error('update error', err);
+      return res.render('challenges/edit', {
+        title: 'Edit Challenge',
+        challenge: challenge,
+        errors: err.errors
+      });
+    }
   });
+
 }
 
 

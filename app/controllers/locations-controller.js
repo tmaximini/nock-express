@@ -1,9 +1,21 @@
 var loggedIn = require('../../config/middleware/loggedIn');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var Location = mongoose.model('Location');
 var utils = require('../../lib/utils');
 
 "use strict";
+
+
+exports.load = function(req, res, next, id) {
+  Location.load(id, function (err, location) {
+    if (err) return next(err);
+    if (!location) return next(new Error('location not found'));
+    req.location = location;
+    next();
+  });
+}
+
+
 
 exports.new = function (req, res, next) {
   res.render('locations/new.jade', {
@@ -88,13 +100,25 @@ exports.edit =  function (req, res) {
 
 
 exports.update = function (req, res, next) {
+
   var location = req.location;
 
-  location.edit(req, function (err) {
-    if (err) return next(err);
-    res.redirect("/locations/" + location.slug);
-  });
+  location.set(req.body);
+  location.slug = utils.convertToSlug(req.body.name);
 
+  location.uploadAndSave(req.files.image, function(err) {
+    if (!err) {
+      console.log('location update successful');
+      return res.redirect('/locations/' + location.slug);
+    } else {
+      console.error('location update error', err);
+      return res.render('locations/edit', {
+        title: 'Edit Challenge',
+        location: location,
+        errors: err.errors
+      });
+    }
+  });
 }
 
 

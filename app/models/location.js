@@ -12,7 +12,6 @@ var config = require('../../config/config')[env];
 var imagerConfig = require(config.root + '/config/imager.js');
 
 var LocationSchema = new Schema({
-  _id:    String,
   slug: {type: String, required: true},
   fourSquareId: String,
   name:  {type: String, required: true},
@@ -28,7 +27,11 @@ var LocationSchema = new Schema({
   meta: {
     votes: Number,
     favs:  Number
-  }
+  },
+  challenges: [{
+    type: Schema.ObjectId,
+    ref: 'Challenge'
+  }]
 });
 
 /**
@@ -49,11 +52,34 @@ var LocationSchema = new Schema({
 
 
 
+
+LocationSchema.statics = {
+
+
+  /**
+   * Find article by id
+   *
+   * @param {ObjectId} id
+   * @param {Function} cb
+   * @api private
+   */
+
+  load: function (id, cb) {
+    this.findOne({ slug : id })
+      .populate('challenges', 'title body points meta image')
+      .exec(cb)
+  }
+
+
+}
+
+
+
 /**
  *  Methods
  */
 
-  LocationSchema.methods = {
+LocationSchema.methods = {
 
   /**
    * Save location and upload image

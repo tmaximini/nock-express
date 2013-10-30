@@ -3,7 +3,7 @@
 // helpers
 var loggedIn = require('./middleware/loggedIn');
 
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var Challenge = mongoose.model('Challenge');
 var Location = mongoose.model('Location');
 
@@ -77,18 +77,7 @@ module.exports = exports = function(app, db) {
     /**
      * CHALLENGE ROUTES
      */
-    app.param('challenge', function(req, res, next, id){
-      Challenge.findOne({ 'slug': id }, function(err, challenge) {
-        if (err) {
-          next(err);
-        } else if (challenge) {
-          req.challenge = challenge;
-          next();
-        } else {
-          res.status(404).render('404', {title: "Not found", errorMessage: "The requested challenge was not found."});
-        }
-      });
-    });
+    app.param('challenge',                 challengesController.load);
     app.get('/challenges',                 challengesController.index);
     app.get('/challenges/new',             challengesController.new);
     app.post('/challenges',                challengesController.create);
@@ -105,18 +94,7 @@ module.exports = exports = function(app, db) {
     /**
      * LOCATION ROUTES (CRUD)
      */
-    app.param('location', function(req, res, next, id){
-      Location.findOne({ 'slug': id }, function(err, location) {
-        if (err) {
-          next(err);
-        } else if (location) {
-          req.location = location;
-          next();
-        } else {
-          res.status(404).render('404', {title: "Not found", errorMessage: "The requested location was not found."});
-        }
-      });
-    });
+    app.param('location',                locationsController.load);
     app.get('/locations',                locationsController.index);
     app.get('/locations/new',            locationsController.new);
     app.post('/locations',               locationsController.create);

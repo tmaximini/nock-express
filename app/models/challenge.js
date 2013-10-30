@@ -14,17 +14,15 @@ var utils = require('../../lib/utils');
 var Schema = mongoose.Schema;
 
 var ChallengeSchema = new Schema({
-  _id:    String,
   slug: {type: String, required: true}, // this is the SEO optimized title, lowercased, dashed
   title:  {type: String, required: true},
   body:   String,
   points: {type: Number, required: true, default: 0},
-  images: Array,
   //comments: [{ body: String, date: Date }],
   date: { type: Date, default: Date.now },
   hidden: Boolean,
-  author: { type: String, ref: 'User' },
-  location: { type: String, ref: 'Location' },
+  author: { type: Schema.ObjectId, ref: 'User' },
+  locations: [{ type: Schema.ObjectId, ref: 'Location' }],
   image: {
     cdnUri: String,
     files: []
@@ -59,31 +57,47 @@ ChallengeSchema.plugin(createdDate);
   * Statics
   */
 
-ChallengeSchema.statics.edit = function (req, callback) {
+ChallengeSchema.statics = {
 
+  edit: function (req, callback) {
+    // var author = req.session.user;
+    var challenge = req.challenge;
 
-  // var author = req.session.user;
-  var challenge = req.challenge;
+    // validate current user authored this blogpost
+    var query = { slug: challenge.slug };
 
-  // validate current user authored this blogpost
-  var query = { slug: challenge.slug };
+    var update = {};
+    update.title = req.param('title');
+    update.body = req.param('body');
+    update.points = req.param('points');
+    update.location = req.param('location');
+    update.slug = utils.convertToSlug(req.param('title'));
 
-  var update = {};
-  update.title = req.param('title');
-  update.body = req.param('body');
-  update.points = req.param('points');
-  update.location = req.param('location');
-  update.slug = utils.convertToSlug(req.param('title'));
+    this.update(query, update, function (err, numAffected) {
+      if (err) return callback(err, null);
 
-  this.update(query, update, function (err, numAffected) {
-    if (err) return callback(err);
+      if (0 === numAffected) {
+        return callback(new Error('no challenge to modify'), null);
+      }
 
-    if (0 === numAffected) {
-      return callback(new Error('no challenge to modify'));
-    }
+      callback(null, '/challenges/' + update.slug);
+    });
+  },
 
-    callback();
-  });
+  /**
+   * Find article by id
+   *
+   * @param {ObjectId} id
+   * @param {Function} cb
+   * @api private
+   */
+
+  load: function (id, cb) {
+    this.findOne({ slug : id })
+      .populate('author', 'username email')
+      .exec(cb)
+  }
+
 }
 
 /**
@@ -99,7 +113,6 @@ ChallengeSchema.methods = {
    * @param {Function} cb
    * @api private
    */
-
   uploadAndSave: function (images, cb) {
     if (!images || !images.length) return this.save(cb);
 
