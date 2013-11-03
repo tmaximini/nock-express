@@ -12,26 +12,27 @@ html(lang='en')
       link(rel='stylesheet', href='/stylesheets/style.css')
   body
     nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
-      .navbar-header
-        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-ex1-collapse')
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.navbar-brand(href='/') Nock
-      .collapse.navbar-collapse.navbar-ex1-collapse
-        block navigation
-          ul.nav.navbar-nav
-            each link in links
-              li
-                a(href=link.url, class=link.url === url && 'active')= link.name
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-ex1-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/') Nock
+        .collapse.navbar-collapse.navbar-ex1-collapse
+          block navigation
+            ul.nav.navbar-nav
+              each link in links
+                li
+                  a(href=link.url, class=link.url === url && 'active')= link.name
 
-          ul.nav.navbar-nav
-            if session.isLoggedIn
-              a(href='/logout').btn.btn-default.navbar-btn.btn-primary Log Out
-            else
-              a(href='/register').btn.btn-default.navbar-btn Register
-              a(href='/login').btn.btn-default.navbar-btn.btn-primary Log in
+            ul.nav.navbar-nav.navbar-right
+              if session.isLoggedIn
+                a(href='/logout').btn.btn-default.navbar-btn.btn-primary Log Out
+              else
+                a(href='/register').btn.btn-default.navbar-btn Register
+                a(href='/login').btn.btn-default.navbar-btn.btn-primary Log in
 
 
 

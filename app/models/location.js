@@ -31,7 +31,9 @@ var LocationSchema = new Schema({
   challenges: [{
     type: Schema.ObjectId,
     ref: 'Challenge'
-  }]
+  }],
+  lastModified: { type: Date, default: Date.now },
+  lastEditedBy: { type: Schema.ObjectId, ref: 'User' }
 });
 
 /**

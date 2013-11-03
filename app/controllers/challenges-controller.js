@@ -131,15 +131,15 @@ exports.destroy = function (req, res, next) {
   var challenge = req.challenge;
 
   // validate logged in user authored this challenge
-  if (challenge.author != req.session.user) {
-    return res.send(403);
+  if (!req.session.user) {
+    return res.status(403).render('404', { title: "Forbidden.", errorMessage: "You don't have the permission to do that." } );
   }
 
   challenge.remove(function (err) {
     if (err) return next(err);
 
     // TODO display a confirmation msg to user
-    res.redirect('/');
+    res.redirect('/challenges');
   });
 }
 

@@ -22,7 +22,10 @@ var ChallengeSchema = new Schema({
   date: { type: Date, default: Date.now },
   hidden: Boolean,
   author: { type: Schema.ObjectId, ref: 'User' },
-  locations: [{ type: Schema.ObjectId, ref: 'Location' }],
+  locations: [{
+    type: Schema.ObjectId,
+    ref: 'Location'
+  }],
   image: {
     cdnUri: String,
     files: []
@@ -30,17 +33,20 @@ var ChallengeSchema = new Schema({
   meta: {
     votes: Number,
     favs:  Number
-  }
+  },
+  lastModified: { type: Date, default: Date.now },
+  lastEditedBy: { type: Schema.ObjectId, ref: 'User' }
 });
 
 // add created date property
 ChallengeSchema.plugin(createdDate);
 
+
+
 /**
  * Pre-remove hook - delete images from S3 when removing record from db
  */
-
- ChallengeSchema.pre('remove', function (next) {
+ChallengeSchema.pre('remove', function (next) {
   var imager = new Imager(imagerConfig, 'S3');
   var files = this.image.files;
 
