@@ -118,13 +118,13 @@ exports.update = function (req, res, next) {
   challenge.set(req.body);
   challenge.slug = utils.convertToSlug(req.body.title);
 
-  challenge.connectToLocation('527127050506df6897000004', function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Successfully connected to location');
-    }
-  })
+  //challenge.connectToLocation('527127050506df6897000004', function (err) {
+  //  if (err) {
+  //    console.log(err);
+  //  } else {
+  //    console.log('Successfully connected to location');
+  //  }
+  //})
 
   challenge.uploadAndSave(req.files.image, function(err) {
     if (!err) {

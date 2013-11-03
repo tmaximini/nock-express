@@ -11,7 +11,7 @@ var config = require('../../config/config')[env];
 var imagerConfig = require(config.root + '/config/imager.js');
 var utils = require('../../lib/utils');
 
-var Location = require('./Location');
+var Location = require('./location');
 
 var Schema = mongoose.Schema;
 
