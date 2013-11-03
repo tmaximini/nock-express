@@ -137,6 +137,21 @@ describe('Challenges', function () {
 
     });
 
+    describe('PUT /challenges/:id', function() {
+
+      it('challenge records can be edited', function(done) {
+        agent
+        .put('/challenges/' + testChallenge.slug)
+        .field('title', 'pi pa po')
+        .field('body', 'lalalala')
+        .field('image[]', '')
+        .expect(302)
+        .expect(/pi-pa-po/)
+        .end(done);
+      });
+
+    });
+
   }); // END Web Interface
 
 

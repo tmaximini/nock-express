@@ -68,11 +68,21 @@ exports.create = function (req, res, next) {
 
 
 exports.index = function (req, res, next) {
-  Challenge.find().sort('created').limit(10).exec(function (err, challenges) {
+
+  // pagination
+  var totalCount = Challenge.count();
+  var perPage = 10;
+  var page = req.query.page || 1;
+
+
+  Challenge.find().sort('created').skip((page -1) * perPage).limit(perPage).exec(function (err, challenges) {
     if (err) return next(err);
     res.status(200).render('challenges/index.jade', {
       title: "Nock Challenges",
-      challenges: challenges
+      challenges: challenges,
+      totalCount: totalCount,
+      page: page,
+      perPage: perPage
     });
   });
 }
@@ -107,6 +117,14 @@ exports.update = function (req, res, next) {
 
   challenge.set(req.body);
   challenge.slug = utils.convertToSlug(req.body.title);
+
+  challenge.connectToLocation('527127050506df6897000004', function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Successfully connected to location');
+    }
+  })
 
   challenge.uploadAndSave(req.files.image, function(err) {
     if (!err) {

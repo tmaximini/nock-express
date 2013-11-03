@@ -137,6 +137,21 @@ describe('Locations', function () {
 
     });
 
+    describe('PUT /locations/:id', function() {
+
+      it('location records can be edited', function(done) {
+        agent
+        .put('/locations/' + testLocation.slug)
+        .field('name', 'pi pa po')
+        .field('body', 'lalalala')
+        .field('image[]', '')
+        .expect(302)
+        .expect(/pi-pa-po/)
+        .end(done);
+      });
+
+    });
+
   }); // END Web Interface
 
 

@@ -23,3 +23,7 @@ block content
           td.fourSquareId= location.fourSquareId
           td.actions
             a(href="/locations/#{location.slug}/edit") edit
+    - if page > 1
+      a.prevPage(href="/locations")
+    - if page*perPage < totalCount
+      a.nextPage(href="/locations?page={page+1}")

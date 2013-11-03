@@ -11,6 +11,10 @@ a {
   margin-right:10px;
 }
 
+.nextPage {
+  float: right;
+}
+
 
 .content {
   padding-top: 50px;

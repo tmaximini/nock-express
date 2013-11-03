@@ -15,9 +15,10 @@ block content
         th description
         th location
         th actions
-      each challenge, i in challenges
+      - var i = parseInt(page) * parseInt(perPage)
+      each challenge in challenges
         tr
-          td= i+1
+          td= i++
           td
             a(href="/challenges/#{challenge.slug}")= challenge.title
           td= challenge.points
@@ -27,3 +28,9 @@ block content
             a(href="/challenges/#{challenge.slug}/edit") edit
             br
             a.destroy(href="/challenges/#{challenge.slug}") delete
+    if (page > 1)
+      - var nextPage = parseInt(page) - 1
+      a.btn.btn-primary.prevPage(href="/challenges?page=#{nextPage}") prev
+    if (page*perPage < totalCount)
+      - var nextPage = parseInt(page) + 1
+      a.btn.btn-primary.nextPage(href="/challenges?page=#{nextPage}") next

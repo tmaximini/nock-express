@@ -11,6 +11,8 @@ var config = require('../../config/config')[env];
 var imagerConfig = require(config.root + '/config/imager.js');
 var utils = require('../../lib/utils');
 
+var Location = require('./Location');
+
 var Schema = mongoose.Schema;
 
 var ChallengeSchema = new Schema({
@@ -135,6 +137,25 @@ ChallengeSchema.methods = {
       }
       self.save(cb)
     }, 'challenge')
+  },
+
+  /**
+   * adds a location reference to a challenge
+   * @param  {String}   locationId _id of the location
+   * @param  {Function} cb         callback(err)
+   */
+  connectToLocation: function (locationId, cb) {
+    var self = this;
+    var location = Location.findOne({ _id: locationId}, function (err, loc) {
+      if (err) return cb(new Error(err));
+      if (!loc) {
+        return cb(new Error('location not found'));
+      } else {
+        self.locations.push(loc);
+        return self.save(cb);
+      }
+    });
+
   }
 
 }
