@@ -1,3 +1,3 @@
-exports.User = require('./User');
-exports.Challenge = require('./Challenge');
-exports.Location = require('./Location');
+exports.User = require('./user');
+exports.Challenge = require('./challenge');
+exports.Location = require('./location');
