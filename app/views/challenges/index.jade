@@ -18,7 +18,7 @@ block content
       - var i = parseInt(page-1) * parseInt(perPage)
       each challenge in challenges
         tr
-          td= i++
+          td= ++i
           td
             a(href="/challenges/#{challenge.slug}")= challenge.title
           td= challenge.points
