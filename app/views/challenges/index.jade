@@ -15,7 +15,7 @@ block content
         th description
         th location
         th actions
-      - var i = parseInt(page) * parseInt(perPage)
+      - var i = parseInt(page-1) * parseInt(perPage)
       each challenge in challenges
         tr
           td= i++
