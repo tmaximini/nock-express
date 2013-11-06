@@ -105,6 +105,7 @@ module.exports = exports = function(app, db) {
     app.del('/locations/:location',      locationsController.destroy);
     app.get('/api/locations',            locationsController.apiIndex);
     app.get('/api/locations/:location',  locationsController.apiShow);
+    app.get('/api/locations/:location/addChallenge', locationsController.apiAddChallenge);
 
 
 

@@ -58,7 +58,33 @@ block footerExtra
         theme: "facebook",
         tokenValue: "_id",
         propertyToSearch: "title",
-        jsonContainer: "challenges"
+        jsonContainer: "challenges",
+
+        prePopulate: !{JSON.stringify(location.challenges)},
+
+        onAdd: function (item) {
+          var data = {
+            challenge: item.id,
+          };
+
+          $.ajax({
+
+            //beforeSend: function (jqXHR, settings) {
+            //  return jqXHR.setRequestHeader("X-Session-Token", session.getSessionToken());
+            //},
+
+            dataType: "json",
+            cache: false,
+            url: "/api/locations/#{location.slug}/addChallenge",
+            data: data,
+
+            success: function (result) {
+              console.log("challenge update successful: ", result);
+            }
+
+          });
+        }
+
       });
     });
 

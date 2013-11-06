@@ -1,6 +1,7 @@
 var loggedIn = require('../../config/middleware/loggedIn');
 var mongoose = require('mongoose');
 var Location = mongoose.model('Location');
+var Challenge = mongoose.model('Challenge');
 var utils = require('../../lib/utils');
 
 "use strict";
@@ -166,8 +167,39 @@ exports.apiShow = function (req, res, next) {
       location: location
     });
   }
-
 }
+
+
+exports.apiAddChallenge = function (req, res, next) {
+
+  var location = req.location;
+  var challengeId = req.query.challenge;
+
+  console.dir(location);
+
+  console.log("trying to add challenge " + challengeId);
+
+  if (!location) {
+    return res,status(404).json({ "error" : "not found"})
+  } else {
+    Challenge.findOne({'_id': challengeId}, function (err, doc) {
+      if (err) {
+        next(new Error(err));
+      } else {
+        location.challenges.push(doc);
+        location.save(function (err, doc) {
+          if (err) throw err;
+          return res.status(200).json({
+            'success': 'Challenge added'
+          });
+        })
+      }
+
+    });
+  }
+}
+
+
 
 /**
  * Matches Foursquare Locations to Nock Locations by comparing FourSquare IDs

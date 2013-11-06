@@ -80,7 +80,7 @@ LocationSchema.statics = {
     options.page = options.page || 0;
 
     this.find(criteria)
-      .select('id name body fourSquareId adress image location meta')
+      .select('id name body fourSquareId adress image location meta challenges')
       .populate('challenges', 'id title body created points image meta')
       .sort({'created': -1}) // sort by date
       .limit(options.perPage)
