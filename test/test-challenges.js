@@ -64,6 +64,21 @@ describe('Challenges', function () {
       });
     });
 
+    describe('GET /api/challenges/search?query=abc', function() {
+      it('allows searching for challenges', function(done) {
+        agent
+        .get('/api/challenges/search?+q=' + testChallenge.title)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function(err, res) {
+          if (err) return done(err);
+          res.body.should.be.instanceof(Object);
+          res.body.should.have.property('challenges').and.be.instanceof(Array);
+          done();
+        });
+      });
+    });
+
   }); // END API
 
 

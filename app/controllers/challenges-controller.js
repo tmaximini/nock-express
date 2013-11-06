@@ -180,12 +180,33 @@ exports.apiShow = function (req, res, next) {
   var challenge = req.challenge;
 
   if (!challenge) {
-      return res,status(404).json({ "error" : "not found"})
+      return res.status(404).json({ "error" : "not found"})
   } else {
     return res.status(200).json({
       challenge: challenge
     });
   }
 }
+
+exports.apiSearch = function (req, res, next) {
+
+  var query = new RegExp(req.query.q, "i");
+
+  console.log("searching for: ", query);
+
+  // { $or: [ { title: query }, { body: query } ] }
+
+  Challenge.find({ "title": query }, function(err, docs) {
+    if (err) {
+      next(new Error(err));
+    } else {
+      return res.status(200).json({
+        challenges: docs
+      });
+    }
+  });
+
+}
+
 
 

@@ -86,6 +86,7 @@ module.exports = exports = function(app, db) {
     app.put('/challenges/:challenge',      challengesController.update);
     app.del('/challenges/:challenge',      challengesController.destroy);
     app.get('/api/challenges',             challengesController.apiIndex);
+    app.get('/api/challenges/search',      challengesController.apiSearch);
     app.get('/api/challenges/:challenge',  challengesController.apiShow);
 
 
