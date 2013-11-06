@@ -52,7 +52,15 @@ var LocationSchema = new Schema({
   next();
 });
 
+ // Duplicate the ID field.
+ LocationSchema.virtual('id').get(function(){
+     return this._id.toHexString();
+ });
 
+ // Ensure virtual fields are serialised.
+ LocationSchema.set('toJSON', {
+     virtuals: true
+ });
 
 
 LocationSchema.statics = {

@@ -44,6 +44,20 @@ ChallengeSchema.plugin(createdDate);
 
 
 
+// Duplicate the ID field.
+ChallengeSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+ChallengeSchema.set('toJSON', {
+    virtuals: true
+});
+
+
+
+
+
 /**
  * Pre-remove hook - delete images from S3 when removing record from db
  */

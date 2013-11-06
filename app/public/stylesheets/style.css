@@ -19,3 +19,8 @@ a {
 .content {
   padding-top: 50px;
 }
+
+.search-challenges {
+  padding: 5px;
+  border-radius: 5px;
+}

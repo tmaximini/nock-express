@@ -1,5 +1,9 @@
 extends ../layout
 
+block headerExtra
+  link(rel='stylesheet', href='/stylesheets/vendor/token-input-facebook.css')
+
+
 block content
   h1= title
   - var action = '/locations'
@@ -40,5 +44,23 @@ block content
           label(for='hidden').control-label hidden
           input#hidden(name='hidden', type='checkbox', value=location.hidden).form-control
         .form-group
+          label(for='challengeToken').control-label Active Challenges
+          input#challengeToken(type="text", name="challengeToken").form-control
+        .form-group
           button(type='submit', value='Log In').btn.btn-default Save
+
+
+block footerExtra
+  script(src='/javascripts/vendor/jquery.tokeninput.js')
+  script.
+    $(document).ready(function() {
+      $("#challengeToken").tokenInput("/api/challenges/search/", {
+        theme: "facebook",
+        tokenValue: "_id",
+        propertyToSearch: "title",
+        jsonContainer: "challenges"
+      });
+    });
+
+
 
