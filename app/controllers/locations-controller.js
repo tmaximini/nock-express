@@ -145,12 +145,13 @@ exports.destroy = function (req, res, next) {
 // API
 
 exports.apiIndex = function (req, res, next) {
-    Location.find().sort('created').limit(100).exec(function (err, locations) {
-      if (err) return next(err);
-      res.status(200).json({
-        locations: locations
-      });
+  var options = {};
+  Location.list(options, function (err, locations) {
+    if (err) return next(err);
+    res.status(200).json({
+      locations: locations
     });
+  });
 }
 
 

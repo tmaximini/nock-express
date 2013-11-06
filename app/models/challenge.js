@@ -21,7 +21,6 @@ var ChallengeSchema = new Schema({
   body:   String,
   points: {type: Number, required: true, default: 0},
   //comments: [{ body: String, date: Date }],
-  date: { type: Date, default: Date.now },
   hidden: Boolean,
   author: { type: Schema.ObjectId, ref: 'User' },
   locations: [{
@@ -67,33 +66,31 @@ ChallengeSchema.pre('remove', function (next) {
 
 ChallengeSchema.statics = {
 
-  edit: function (req, callback) {
-    // var author = req.session.user;
-    var challenge = req.challenge;
+  /**
+   * List challenges
+   *
+   * @param {Object} options
+   * @param {Function} cb
+   * @api private
+   */
 
-    // validate current user authored this blogpost
-    var query = { slug: challenge.slug };
+  list: function (o, cb) {
+    var options = o || {};
+    var criteria = options.criteria || {}
+    options.perPage = options.perPage || 200;
+    options.page = options.page || 0;
 
-    var update = {};
-    update.title = req.param('title');
-    update.body = req.param('body');
-    update.points = req.param('points');
-    update.location = req.param('location');
-    update.slug = utils.convertToSlug(req.param('title'));
-
-    this.update(query, update, function (err, numAffected) {
-      if (err) return callback(err, null);
-
-      if (0 === numAffected) {
-        return callback(new Error('no challenge to modify'), null);
-      }
-
-      callback(null, '/challenges/' + update.slug);
-    });
+    this.find(criteria)
+      .select('id slug title body created points image meta')
+      .populate('locations', 'name adress fourSquareId')
+      .sort({'created': -1}) // sort by date
+      .limit(options.perPage)
+      .skip(options.perPage * options.page)
+      .exec(cb);
   },
 
   /**
-   * Find article by id
+   * Find challenge by id
    *
    * @param {ObjectId} id
    * @param {Function} cb

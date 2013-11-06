@@ -57,6 +57,29 @@ var LocationSchema = new Schema({
 
 LocationSchema.statics = {
 
+  /**
+   * List locations
+   *
+   * @param {Object} options
+   * @param {Function} cb
+   * @api private
+   */
+
+  list: function (o, cb) {
+    var options = o || {};
+    var criteria = options.criteria || {}
+    options.perPage = options.perPage || 200;
+    options.page = options.page || 0;
+
+    this.find(criteria)
+      .select('id name body fourSquareId adress image location meta')
+      .populate('challenges', 'id title body created points image meta')
+      .sort({'created': -1}) // sort by date
+      .limit(options.perPage)
+      .skip(options.perPage * options.page)
+      .exec(cb);
+  },
+
 
   /**
    * Find article by id

@@ -166,12 +166,13 @@ exports.destroy = function (req, res, next) {
 // API
 
 exports.apiIndex = function (req, res, next) {
-    Challenge.find().sort('created').limit(100).exec(function (err, challenges) {
-      if (err) return next(err);
-      res.status(200).json({
-        challenges: challenges
-      });
+  var options = {};
+  Challenge.list(options, function (err, challenges) {
+    if (err) return next(err);
+    res.status(200).json({
+      challenges: challenges
     });
+  });
 }
 
 
@@ -196,7 +197,11 @@ exports.apiSearch = function (req, res, next) {
 
   // { $or: [ { title: query }, { body: query } ] }
 
-  Challenge.find({ "title": query }, function(err, docs) {
+  var options = {
+    criteria: { "title": query }
+  }
+
+  Challenge.list(options, function(err, docs) {
     if (err) {
       next(new Error(err));
     } else {

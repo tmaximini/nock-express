@@ -4,8 +4,15 @@ block content
   if session.isLoggedIn
     p
       a.btn.btn-success(href="/challenges/new") New Challenge
+
+
+  form.form-search
+    input.input-medium.search-query(type="text", placeholder="Search Challenges")
+  br
+
+
   if !(challenges && challenges.length)
-    p Nothing to see here. Move along...
+    p Nothing to see here.
   else
     table.challenges.table.table-striped
       tr
