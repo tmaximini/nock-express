@@ -169,7 +169,14 @@ exports.apiShow = function (req, res, next) {
   }
 }
 
-
+/**
+ * Adds a challenge to a location
+ * Also adds the location reference back to the challenge to keep things in sync.
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
 exports.apiAddChallenge = function (req, res, next) {
 
   var location = req.location;
@@ -182,11 +189,20 @@ exports.apiAddChallenge = function (req, res, next) {
   if (!location) {
     return res,status(404).json({ "error" : "not found"})
   } else {
-    Challenge.findOne({'_id': challengeId}, function (err, doc) {
+
+    // find challenge by passed in ID
+    Challenge.findOne({'_id': challengeId}, function (err, challenge) {
       if (err) {
         next(new Error(err));
       } else {
-        location.challenges.push(doc);
+        // add location to challenge
+        challenge.locations.push(location);
+        challenge.save(function (err, doc) {
+          if (err) throw err;
+          console.info("location added to challenge, proceeding");
+        });
+        // add challenge to location
+        location.challenges.push(challenge);
         location.save(function (err, doc) {
           if (err) throw err;
           return res.status(200).json({

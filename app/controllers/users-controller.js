@@ -14,7 +14,7 @@ var crypto = require('crypto');
 exports.index = function(req, res, next) {
   // limit to 20 users for now
   User.find()
-      .select({'salt':0, 'hash': 0, '__v':0})
+      .select({ 'salt':0, 'hash': 0, '__v':0 })
       .sort('username')
       .limit(10)
       .exec(function (err, users) {
@@ -34,12 +34,12 @@ exports.index = function(req, res, next) {
     // extract name from params
     var id = req.params.id;
 
-    User.findOne({ "_id": id})
-        .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+    User.findOne({ "_id": id })
+        .select({ 'salt':0, 'hash': 0, '__v':0 }) // omit fields
         .exec(function (err, user) {
           if (err || !user) {
             console.log("user not found! error....");
-            return res.render('404', {title: "User not found", errorMessage: "The user you requested does not exist."});
+            return res.render('404', { title: "User not found", errorMessage: "The user you requested does not exist." });
           }
           // answer with JSON only atm
           res.render("users/show", {
@@ -166,6 +166,9 @@ exports.logout = function (req, res) {
  *  API STUFF - json methods
  *--------------------------------------------------*/
 
+
+// FIXME: replace with User.list static
+
 exports.apiIndex = function(req, res, next) {
     // limit to 20 users for now
     User.find()
@@ -179,12 +182,14 @@ exports.apiIndex = function(req, res, next) {
 }
 
 
+// FIXME: replace with User.load static
+
 exports.apiShow = function (req, res, next) {
     // extract name from params
     var id = req.params.id;
 
-    User.findOne({ "_id": id})
-        .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+    User.findOne({ "_id": id })
+        .select({ 'salt':0, 'hash': 0, '__v':0 }) // omit fields
         .exec(function (err, user) {
           if (err || !user) {
             console.log("user not found! error....");

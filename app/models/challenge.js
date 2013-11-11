@@ -16,10 +16,10 @@ var Location = require('./location');
 var Schema = mongoose.Schema;
 
 var ChallengeSchema = new Schema({
-  slug: {type: String, required: true}, // this is the SEO optimized title, lowercased, dashed
-  title:  {type: String, required: true},
+  slug: { type: String, required: true }, // this is the SEO optimized title, lowercased, dashed
+  title:  { type: String, required: true },
   body:   String,
-  points: {type: Number, required: true, default: 0},
+  points: { type: Number, required: true, default: 0 },
   //comments: [{ body: String, date: Date }],
   hidden: Boolean,
   author: { type: Schema.ObjectId, ref: 'User' },
@@ -95,9 +95,9 @@ ChallengeSchema.statics = {
     options.page = options.page || 0;
 
     this.find(criteria)
-      .select('id slug title body created points image meta')
+      .select('id slug title body created points image meta locations')
       .populate('locations', 'name adress fourSquareId')
-      .sort({'created': -1}) // sort by date
+      .sort({ 'created': -1 }) // sort by date
       .limit(options.perPage)
       .skip(options.perPage * options.page)
       .exec(cb);

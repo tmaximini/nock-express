@@ -12,9 +12,9 @@ var config = require('../../config/config')[env];
 var imagerConfig = require(config.root + '/config/imager.js');
 
 var LocationSchema = new Schema({
-  slug: {type: String, required: true},
+  slug: { type: String, required: true },
   fourSquareId: String,
-  name:  {type: String, required: true},
+  name:  { type: String, required: true },
   adress: String,
   body:   String,
   images: Array,
@@ -82,7 +82,7 @@ LocationSchema.statics = {
     this.find(criteria)
       .select('id name body fourSquareId adress image location meta challenges')
       .populate('challenges', 'id title body created points image meta')
-      .sort({'created': -1}) // sort by date
+      .sort({ 'created': -1 }) // sort by date
       .limit(options.perPage)
       .skip(options.perPage * options.page)
       .exec(cb);

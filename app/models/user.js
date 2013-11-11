@@ -8,15 +8,15 @@ var validateEmail = require ('../helpers/validate/email');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-  _id:      {type: String, lowercase: true, trim: true },  // use email for _id
-  username: {type: String, required: true},
-  points:   {type: Number, required: true, default: 0},
-  date:     {type: Date, default: Date.now},
-  salt:     {type: String, required: true, default: ''},
-  hash:     {type: String, required: true, default: ''},
+  _id:      { type: String, lowercase: true, trim: true  },  // use email for _id
+  username: { type: String, required: true },
+  points:   { type: Number, required: true, default: 0 },
+  date:     { type: Date, default: Date.now },
+  salt:     { type: String, required: true, default: '' },
+  hash:     { type: String, required: true, default: '' },
   location: Array,
   email: String,
-  provider: {type: String, required: true, default: "email"}
+  provider: { type: String, required: true, default: "email" }
 });
 
 
