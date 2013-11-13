@@ -243,7 +243,7 @@ exports.apiShow = function (req, res, next) {
 }
 
 
-exports.updateLocation = function (req, res, next) {
+exports.apiUpdate = function (req, res, next) {
   // extract id from params
   var id = req.params.id;
   var data = req.body;

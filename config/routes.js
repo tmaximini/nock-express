@@ -70,24 +70,26 @@ module.exports = exports = function(app, db) {
     app.post('/api/users/login', usersController.apiLogin);
 
     // POST /users => add new users
-    app.post('/users/:id', usersController.updateLocation);
-    app.post('/api/users/:id', usersController.updateLocation);
+    app.post('/users/:id', usersController.apiUpdate);
+    app.post('/api/users/:id', usersController.apiUpdate);
 
 
     /**
      * CHALLENGE ROUTES
      */
-    app.param('challenge',                 challengesController.load);
-    app.get('/challenges',                 challengesController.index);
-    app.get('/challenges/new',             challengesController.new);
-    app.post('/challenges',                challengesController.create);
-    app.get('/challenges/:challenge',      challengesController.show);
-    app.get('/challenges/:challenge/edit', challengesController.edit);
-    app.put('/challenges/:challenge',      challengesController.update);
-    app.del('/challenges/:challenge',      challengesController.destroy);
-    app.get('/api/challenges',             challengesController.apiIndex);
-    app.get('/api/challenges/search',      challengesController.apiSearch);
-    app.get('/api/challenges/:challenge',  challengesController.apiShow);
+    app.param('challenge',                        challengesController.load);
+    app.get('/challenges',                        challengesController.index);
+    app.get('/challenges/new',                    challengesController.new);
+    app.post('/challenges',                       challengesController.create);
+    app.get('/challenges/:challenge',             challengesController.show);
+    app.get('/challenges/:challenge/edit',        challengesController.edit);
+    app.put('/challenges/:challenge',             challengesController.update);
+    app.del('/challenges/:challenge',             challengesController.destroy);
+    app.get('/challenges/:challenge/attempts',    challengesController.showAttempts);
+    app.get('/api/challenges',                    challengesController.apiIndex);
+    app.get('/api/challenges/search',             challengesController.apiSearch);
+    app.get('/api/challenges/:challenge',         challengesController.apiShow);
+    app.post('/api/challenges/:challenge/attempts',  challengesController.apiAddAttempt);
 
 
 

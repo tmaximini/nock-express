@@ -118,14 +118,6 @@ exports.update = function (req, res, next) {
   challenge.set(req.body);
   challenge.slug = utils.convertToSlug(req.body.title);
 
-  //challenge.connectToLocation('527127050506df6897000004', function (err) {
-  //  if (err) {
-  //    console.log(err);
-  //  } else {
-  //    console.log('Successfully connected to location');
-  //  }
-  //})
-
   challenge.uploadAndSave(req.files.image, function(err) {
     if (!err) {
       console.log('update successful');
@@ -159,6 +151,13 @@ exports.destroy = function (req, res, next) {
     // TODO display a confirmation msg to user
     res.redirect('/challenges');
   });
+}
+
+
+exports.showAttempts = function (req, res, next) {
+  console.log("showing attempts");
+  var challenge = req.challenge;
+  res.status(200).json({ challengeId: challenge.id, attempts: challenge.attempts });
 }
 
 
@@ -210,7 +209,39 @@ exports.apiSearch = function (req, res, next) {
       });
     }
   });
+}
 
+
+/**
+ * adds a users attempt to the challenge
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+exports.apiAddAttempt = function (req, res, next) {
+
+  console.log("add attempt");
+
+  // TODO: create attempt from post data
+  var newAttempt = {
+    date: new Date(),
+    userId: req.session.user,
+    success: true
+  }
+
+  var challenge = req.challenge;
+
+  // add the attempt
+  challenge.attempts.push(newAttempt);
+
+  challenge.save(function (err, doc) {
+    if (err) throw err;
+    return res.status(200).json({
+      status: "TODO: add challenge attempt",
+      challenge: doc
+    });
+  });
 }
 
 

@@ -35,6 +35,11 @@ var ChallengeSchema = new Schema({
     votes: Number,
     favs:  Number
   },
+  attempts: [{
+    date: { type: Date, default: Date.now },
+    user: { type: Schema.ObjectId, ref: 'User' },
+    success: { type: Boolean, default: false }
+  }],
   lastModified: { type: Date, default: Date.now },
   lastEditedBy: { type: Schema.ObjectId, ref: 'User' }
 });
@@ -95,7 +100,7 @@ ChallengeSchema.statics = {
     options.page = options.page || 0;
 
     this.find(criteria)
-      .select('id slug title body created points image meta locations')
+      .select('id slug title body created points image meta attempts locations')
       .populate('locations', 'name adress fourSquareId')
       .sort({ 'created': -1 }) // sort by date
       .limit(options.perPage)
