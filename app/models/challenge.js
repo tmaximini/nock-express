@@ -37,7 +37,7 @@ var ChallengeSchema = new Schema({
   },
   attempts: [{
     date: { type: Date, default: Date.now },
-    user: { type: Schema.ObjectId, ref: 'User' },
+    userId: String,
     success: { type: Boolean, default: false }
   }],
   lastModified: { type: Date, default: Date.now },
