@@ -19,7 +19,16 @@ var locationsController = require('../app/controllers/locations-controller');
 
 module.exports = exports = function(app, db) {
 
+
+    // CORS
+    app.all('/*', function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+      next();
+    });
+
     var staticHandler = new StaticHandler(db);
+
 
     /*
      *  STATIC PAGES

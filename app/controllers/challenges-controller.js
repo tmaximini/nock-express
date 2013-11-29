@@ -168,9 +168,7 @@ exports.apiIndex = function (req, res, next) {
   var options = {};
   Challenge.list(options, function (err, challenges) {
     if (err) return next(err);
-    res.status(200).json({
-      challenges: challenges
-    });
+    res.status(200).json(challenges);
   });
 }
 

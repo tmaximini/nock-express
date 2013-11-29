@@ -3,6 +3,8 @@ var MongoStore = require('connect-mongo')(express);
 var path = require('path'); // Path helpers
 var flash = require('connect-flash');
 
+var cors = require('./cors');
+
 var env = process.env.NODE_ENV || 'development'
 var config = require('../config')[env];
 
@@ -28,7 +30,7 @@ module.exports = function (app) {
 
   // for flash messages
   app.use(flash());
-
+  app.use(cors({ allowedDomains: [ 'http://localhost:9000' ] }));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.static(path.join(__dirname, '../../app/public')));
