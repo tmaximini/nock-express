@@ -5,7 +5,22 @@ var cleanString = require('../helpers/cleanString');
 var hash = require('../helpers/hash');
 var crypto = require('crypto');
 
-"use strict";
+var env = process.env.NODE_ENV || 'development';
+var config = require('../../config/config')[env];
+var FS = config.foursquare;
+var request = require('request');
+
+'use strict';
+
+
+exports.load = function(req, res, next, id) {
+  User.load(id, function (err, user) {
+    if (err) return next(err);
+    if (!user) return next(new Error('not found'));
+    req.user = user;
+    next();
+  });
+}
 
 
 /**
@@ -19,8 +34,8 @@ exports.index = function(req, res, next) {
       .limit(10)
       .exec(function (err, users) {
         if (err) return next(err);
-        res.render("users/index", {
-          title: "User Listing",
+        res.render('users/index', {
+          title: 'User Listing',
           users: users
         });
   });
@@ -31,22 +46,19 @@ exports.index = function(req, res, next) {
  * displays one user
  */
  exports.show = function (req, res, next) {
-    // extract name from params
-    var id = req.params.id;
+  // extract name from params
+  var user = req.user;
 
-    User.findOne({ "_id": id })
-        .select({ 'salt':0, 'hash': 0, '__v':0 }) // omit fields
-        .exec(function (err, user) {
-          if (err || !user) {
-            console.log("user not found! error....");
-            return res.render('404', { title: "User not found", errorMessage: "The user you requested does not exist." });
-          }
-          // answer with JSON only atm
-          res.render("users/show", {
-            title: "User Details",
-            user: user
-          });
+  if (user) {
+    // answer with JSON only atm
+    res.render('users/show', {
+      title: 'User Details',
+      user: user
     });
+  } else {
+    console.log('user not found! error....');
+    return res.render('404', { title: 'User not found', errorMessage: 'The user you requested does not exist.' });
+  }
 }
 
 
@@ -85,7 +97,7 @@ exports.login = function (req, res, next) {
   });
   function invalid () {
     req.flash('error', 'Invalid Login');
-    return res.render('users/login.jade', { invalid: true, messages: req.flash('error'), title: "Please log in." });
+    return res.render('users/login.jade', { invalid: true, messages: req.flash('error'), title: 'Please log in.' });
   }
 }
 
@@ -108,10 +120,10 @@ exports.register = function (req, res, next) {
     if (err) return next(err);
 
     if (user) {
-      console.error("user exists already");
+      console.error('user exists already');
       return  res.render('users/register.jade', {
                 invalid: false,
-                title: "Register to Nock",
+                title: 'Register to Nock',
                 exists: true
               });
     }
@@ -129,7 +141,7 @@ exports.register = function (req, res, next) {
       User.create(user, function (err, newUser) {
         if (err) {
           if (err instanceof mongoose.Error.ValidationError) {
-            console.log("invalid user creation: ", err)
+            console.log('invalid user creation: ', err)
             return invalid();
           }
           return next(err);
@@ -147,7 +159,7 @@ exports.register = function (req, res, next) {
   function invalid () {
     return res.render('users/register.jade', {
       invalid: true,
-      title: "Register to Nock",
+      title: 'Register to Nock',
       exists: false
     });
   }
@@ -177,7 +189,7 @@ exports.apiIndex = function(req, res, next) {
         .limit(20)
         .exec(function (err, users) {
           if (err) return next(err);
-          res.json({"users": users});
+          res.json({'users': users});
     });
 }
 
@@ -185,19 +197,15 @@ exports.apiIndex = function(req, res, next) {
 // FIXME: replace with User.load static
 
 exports.apiShow = function (req, res, next) {
-    // extract name from params
-    var id = req.params.id;
-
-    User.findOne({ "_id": id })
-        .select({ 'salt':0, 'hash': 0, '__v':0 }) // omit fields
-        .exec(function (err, user) {
-          if (err || !user) {
-            console.log("user not found! error....");
-            next(new Error("User not found!"));
-          }
-          // answer with JSON only atm
-          res.json(user);
-    });
+  // extract name from params
+  var user = req.user;
+  if (user) {
+    // answer with JSON only atm
+    res.json(user);
+  } else {
+    console.log('user not found! error....');
+    next(new Error('User not found!'));
+  }
 }
 
 /**
@@ -205,7 +213,7 @@ exports.apiShow = function (req, res, next) {
  */
  exports.apiLogin = function (req, res, next) {
 
-  //console.log("incoming login request: ");
+  //console.log('incoming login request: ');
   //console.dir(req.body);
 
   // validate input
@@ -221,7 +229,7 @@ exports.apiShow = function (req, res, next) {
 
     if (!user) {
       // create User if not exist
-      console.log("user not found");
+      console.log('user not found');
       next();
     }
 
@@ -238,17 +246,17 @@ exports.apiShow = function (req, res, next) {
   });
   function invalid () {
     res.status(404);
-    return res.json({ "error" : "User is invalid. mofo" });
+    return res.json({ 'error' : 'User is invalid. mofo' });
   }
 }
 
 
 exports.apiUpdate = function (req, res, next) {
   // extract id from params
-  var id = req.params.id;
+  var id = req.params.user;
   var data = req.body;
 
-  console.log("updating user " + id + " with data:");
+  console.log('updating user ' + id + ' with data:');
   console.dir(req.body);
 
   User.edit(req, function (err) {
@@ -256,7 +264,7 @@ exports.apiUpdate = function (req, res, next) {
       console.error(err);
       return next(err);
     } else {
-      return res.json({"status":"success", "action": "position updated"});
+      return res.json({'status':'success', 'action': 'position updated'});
     }
   });
 }
@@ -264,7 +272,7 @@ exports.apiUpdate = function (req, res, next) {
 
 exports.apiRegister = function (req, res, next) {
 
-  //console.log("Requesting new User registration:");
+  //console.log('Requesting new User registration:');
   //console.dir(req.body);
 
   var username = cleanString(req.param('username'));
@@ -272,7 +280,7 @@ exports.apiRegister = function (req, res, next) {
   var points = 0;
   var fbUserName = req.param('fbUserName');
   if (!(username && pass)) {
-    return res.status(400).send("bad request. needs username und password.")
+    return res.status(400).send('bad request. needs username und password.')
   }
 
   User.findById(username, function (err, user) {
@@ -287,12 +295,12 @@ exports.apiRegister = function (req, res, next) {
         user.points   = points;
         user.salt     = bytes.toString('utf8');
         user.hash     = hash(pass, user.salt);
-        user.provider = "Facebook";
+        user.provider = 'Facebook';
 
         User.create(user, function (err, newUser) {
           if (err) {
             if (err instanceof mongoose.Error.ValidationError) {
-              console.error("mongoose validation failed");
+              console.error('mongoose validation failed');
               return invalid();
             }
             return next(err);
@@ -306,11 +314,41 @@ exports.apiRegister = function (req, res, next) {
         });
       });
     } else {
-      console.log("user exists already");
+      console.log('user exists already');
       return res.status(400).json({'error': 'User Id exists already'});
     }
   });
 
 }
 
+
+/**
+ * Matches Foursquare Locations to Nock Locations by comparing FourSquare IDs
+ */
+exports.apiGetLocationsNearby = function (req, res, next) {
+
+  var user = req.user;
+
+  request({
+    method: 'GET',
+    uri: FS.url,
+    qs: {
+      client_id: FS.clientID,
+      v: FS.version,
+      client_secret: FS.clientSecret,
+      categoryId: FS.categoryId,
+      ll: user.location.toString()
+    }
+  }, function (error, response, body) {
+    if (response.statusCode == 200){
+      res.status(200).send(body);
+    } else {
+      console.error(error);
+      console.log(body);
+      res.status(404).json( { 'error': 'FourSquare sucks.' } );
+    }
+
+  });
+
+}
 

@@ -43,6 +43,8 @@ module.exports = exports = function(app, db) {
         });
     });
 
+    app.param('user', usersController.load);
+
     app.post('/users', usersController.register);
     app.post('/api/users', usersController.apiRegister);
 
@@ -51,8 +53,8 @@ module.exports = exports = function(app, db) {
     app.get('/api/users', usersController.apiIndex);
 
     // GET one user by :name
-    app.get('/users/:id', usersController.show);
-    app.get('/api/users/:id', usersController.apiShow);
+    app.get('/users/:user', usersController.show);
+    app.get('/api/users/:user', usersController.apiShow);
 
     // GET login page
     app.get('/login', function (req, res) {
@@ -70,8 +72,11 @@ module.exports = exports = function(app, db) {
     app.post('/api/users/login', usersController.apiLogin);
 
     // POST /users => add new users
-    app.post('/users/:id', usersController.apiUpdate);
-    app.post('/api/users/:id', usersController.apiUpdate);
+    app.post('/users/:user', usersController.apiUpdate);
+    app.post('/api/users/:user', usersController.apiUpdate);
+
+    // GET locations around user
+    app.get('/api/users/:user/nearby', usersController.apiGetLocationsNearby);
 
 
     /**

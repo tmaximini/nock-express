@@ -21,36 +21,47 @@ var userSchema = new Schema({
 
 
 // edit method on model level
-userSchema.statics.edit = function (req, callback) {
-
-  if (!req.session.user) {
-    res.status(401).send("forbidden");
-  }
-
-  // validate current user authored this blogpost
-  var query = { _id: req.session.user };
-
-  var update = {};
-  if (req.param('points')) {
-    var points = req.param('points');
-    update = { $inc: { 'points': points.inc } };
-  }
-  if (req.param('location')) update.location = req.param('location');
+userSchema.statics = {
 
 
-  console.log("update to do: ", update);
+  edit: function (req, callback) {
 
-  this.update(query, update, function (err, numAffected) {
-    if (err) return callback(err);
-
-    console.log("user updated, numAffected: " + numAffected);
-
-    if (0 === numAffected) {
-      return callback(new Error('no post to modify'));
+    if (!req.session.user) {
+      res.status(401).send("forbidden");
     }
 
-    callback(null);
-  })
+    // validate current user authored this blogpost
+    var query = { _id: req.session.user };
+
+    var update = {};
+    if (req.param('points')) {
+      var points = req.param('points');
+      update = { $inc: { 'points': points.inc } };
+    }
+    if (req.param('location')) update.location = req.param('location');
+
+
+    console.log("update to do: ", update);
+
+    this.update(query, update, function (err, numAffected) {
+      if (err) return callback(err);
+
+      console.log("user updated, numAffected: " + numAffected);
+
+      if (0 === numAffected) {
+        return callback(new Error('no post to modify'));
+      }
+
+      callback(null);
+    })
+  },
+
+  load: function (id, cb) {
+    this.findOne({ _id : id })
+      .select({ 'salt':0, 'hash': 0, '__v':0 }) // omit fields
+      .exec(cb)
+  }
+
 }
 
 

@@ -25,7 +25,9 @@
     "connect-flash": "~0.1.1",
     "underscore": "~1.5.2",
     "async": "~0.2.9",
-    "imager": "~0.1.12"
+    "imager": "~0.1.12",
+    "request": "~2.27.0",
+    "bluebird": "~0.10.11-0"
   },
   "devDependencies": {
     "chai": "~1.8.0",
