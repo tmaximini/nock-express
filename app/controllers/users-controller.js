@@ -9,6 +9,9 @@ var env = process.env.NODE_ENV || 'development';
 var config = require('../../config/config')[env];
 var FS = config.foursquare;
 var request = require('request');
+var LRU = require("lru-cache")
+
+var cache = LRU(1024);
 
 'use strict';
 
@@ -329,26 +332,34 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
   var user = req.user;
 
-  request({
-    method: 'GET',
-    uri: FS.url,
-    qs: {
-      client_id: FS.clientID,
-      v: FS.version,
-      client_secret: FS.clientSecret,
-      categoryId: FS.categoryId,
-      ll: user.location.toString()
-    }
-  }, function (error, response, body) {
-    if (response.statusCode == 200){
-      res.status(200).send(body);
-    } else {
-      console.error(error);
-      console.log(body);
-      res.status(404).json( { 'error': 'FourSquare sucks.' } );
-    }
+  var tryCache = cache.get(user.location.toString());
 
-  });
+  if (tryCache) {
+    console.log('serving request from cache!');
+    return res.status(200).send(JSON.parse(tryCache));
+  } else {
+    console.log('no cache object found, requesting foursquare...');
+    request({
+      method: 'GET',
+      uri: FS.url,
+      qs: {
+        client_id: FS.clientID,
+        v: FS.version,
+        client_secret: FS.clientSecret,
+        categoryId: FS.categoryId,
+        ll: user.location.toString()
+      }
+    }, function (error, response, body) {
+      if (response.statusCode == 200){
+        cache.set(user.location.toString(), JSON.stringify(body));
+        return res.status(200).send(body);
+      } else {
+        console.error(error);
+        console.log(body);
+        res.status(404).json( { 'error': 'FourSquare sucks.' } );
+      }
 
+    });
+  }
 }
 
