@@ -14,7 +14,7 @@ var userSchema = new Schema({
   date:     { type: Date, default: Date.now },
   salt:     { type: String, required: true, default: '' },
   hash:     { type: String, required: true, default: '' },
-  location: Array,
+  location: { type: Array, required: true, default: [52.503466, 13.410959] }, // Moritzplatz
   email: String,
   provider: { type: String, required: true, default: "email" }
 });
