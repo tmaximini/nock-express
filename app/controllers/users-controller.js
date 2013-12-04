@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Location = mongoose.model('Location');
 
 var cleanString = require('../helpers/cleanString');
 var hash = require('../helpers/hash');
@@ -9,7 +10,8 @@ var env = process.env.NODE_ENV || 'development';
 var config = require('../../config/config')[env];
 var FS = config.foursquare;
 var request = require('request');
-var LRU = require("lru-cache")
+var LRU = require('lru-cache'); // least recent used cache
+var geolib = require('geolib');
 
 var cache = LRU(1024);
 
@@ -35,7 +37,7 @@ exports.index = function(req, res, next) {
       .select({ 'salt':0, 'hash': 0, '__v':0 })
       .sort('username')
       .limit(10)
-      .exec(function (err, users) {
+      .exec(function (err, users) {Ï
         if (err) return next(err);
         res.render('users/index', {
           title: 'User Listing',
@@ -332,12 +334,24 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
   var user = req.user;
 
+  // truncate user location to 8 digits after comma to improve cache rate
+  user.location[0] = parseFloat(user.location[0].toFixed(8));
+  user.location[1] = parseFloat(user.location[1].toFixed(8));
+
+  //var distance = geolib.getDistance(
+  //  { latitude: user.location[0], longitude: user.location[1] },
+  //  { latitude: parseFloat(user.location[0].toFixed(8)), longitude: parseFloat(user.location[1].toFixed(8)) }
+  //);
+
+
   var tryCache = cache.get(user.location.toString());
 
   if (tryCache) {
+    // many cache, such perform... wow
     console.log('serving request from cache!');
     return res.status(200).send(JSON.parse(tryCache));
   } else {
+    // no cache found, make request
     console.log('no cache object found, requesting foursquare...');
     request({
       method: 'GET',
@@ -350,9 +364,20 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         ll: user.location.toString()
       }
     }, function (error, response, body) {
-      if (response.statusCode == 200){
+      if (response.statusCode === 200) {
+
+        // parse JSON response into an JS object
+        var responseObj = JSON.parse(body).response;
+
+        // TODO : match foursquare ids to our location objects and inject needed properties
+        responseObj.venues.forEach(function (venue) {
+          console.log('venue: ' + venue.id);
+        });
+        // cache modified response for next request
         cache.set(user.location.toString(), JSON.stringify(body));
+
         return res.status(200).send(body);
+
       } else {
         console.error(error);
         console.log(body);
