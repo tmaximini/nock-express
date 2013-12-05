@@ -399,17 +399,6 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         // match foursquare ids to our location objects and inject needed properties
         responseObj.venues.forEach(function (venue) {
 
-          var loc = new Location({
-            fourSquareId: venue.id,
-            name: venue.name,
-            slug: utils.convertToSlug(venue.name),
-            adress: venue.location.adress
-          });
-          loc.save(function (savedObj) {
-            console.log('location has been saved;');
-          });
-
-
           nockObj.venues[venue.id] = venue;
 
           delete nockObj.venues[venue.id].events;
