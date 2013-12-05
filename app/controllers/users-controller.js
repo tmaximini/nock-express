@@ -40,7 +40,7 @@ exports.index = function(req, res, next) {
       .select({ 'salt':0, 'hash': 0, '__v':0 })
       .sort('username')
       .limit(10)
-      .exec(function (err, users) {Ï
+      .exec(function (err, users) {
         if (err) return next(err);
         res.render('users/index', {
           title: 'User Listing',
@@ -376,7 +376,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
         function getVenueAsync (venue) {
           var q = Promise.defer();
-          Location.findOne({ fourSquareId: venue.id }, function (err, doc) {
+          Location.findOne({ fourSquareId: venue.id }, {}, function (err, doc) {
             if (err) {
               q.reject(err);
             }
@@ -384,7 +384,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
               doc.populate('challenges', 'title body points meta image');
               q.resolve(doc);
             } else {
-              q.reject(new Error('no location with id ' + venue.id + 'found'))
+              q.reject('no location with id ' + venue.id + 'found');
             }
           });
           return q.promise;
@@ -398,6 +398,17 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
         // match foursquare ids to our location objects and inject needed properties
         responseObj.venues.forEach(function (venue) {
+
+          var loc = new Location({
+            fourSquareId: venue.id,
+            name: venue.name,
+            slug: utils.convertToSlug(venue.name),
+            adress: venue.location.adress
+          });
+          loc.save(function (savedObj) {
+            console.log('location has been saved;');
+          });
+
 
           nockObj.venues[venue.id] = venue;
 
@@ -420,8 +431,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
             if (nockObj.venues[results[i].fourSquareId]) {
               nockObj.venues[results[i].fourSquareId].nock = results[i];
             }
-          };
-
+          }
 
 
           // cache modified response for next request
