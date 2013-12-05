@@ -101,7 +101,22 @@ LocationSchema.statics = {
     this.findOne({ slug : id })
       .populate('challenges', 'title body points meta image')
       .exec(cb)
+  },
+
+
+  createFromFourSquareVenue: function (venue) {
+    var loc = new Location({
+      fourSquareId: venue.id,
+      name: venue.name,
+      slug: utils.convertToSlug(venue.name),
+      adress: venue.location.adress
+    });
+    loc.save(function (savedObj) {
+      console.log('location has been saved;');
+    });
   }
+
+
 
 
 }

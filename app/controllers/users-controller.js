@@ -5,6 +5,9 @@ var Location = mongoose.model('Location');
 var cleanString = require('../helpers/cleanString');
 var hash = require('../helpers/hash');
 var crypto = require('crypto');
+var utils = require('../../lib/utils');
+
+var Promise = require('bluebird');
 
 var env = process.env.NODE_ENV || 'development';
 var config = require('../../config/config')[env];
@@ -369,14 +372,65 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         // parse JSON response into an JS object
         var responseObj = JSON.parse(body).response;
 
-        // TODO : match foursquare ids to our location objects and inject needed properties
-        responseObj.venues.forEach(function (venue) {
-          console.log('venue: ' + venue.id);
-        });
-        // cache modified response for next request
-        cache.set(user.location.toString(), JSON.stringify(body));
+        var promises = [];
 
-        return res.status(200).send(body);
+        function getVenueAsync (venue) {
+          var q = Promise.defer();
+          Location.findOne({ fourSquareId: venue.id }, function (err, doc) {
+            if (err) {
+              q.reject(err);
+            }
+            if (doc) {
+              doc.populate('challenges', 'title body points meta image');
+              q.resolve(doc);
+            } else {
+              q.reject(new Error('no location with id ' + venue.id + 'found'))
+            }
+          });
+          return q.promise;
+        }
+
+
+        var nockObj = {
+          id: user.location.toString(),
+          venues: {}
+        };
+
+        // match foursquare ids to our location objects and inject needed properties
+        responseObj.venues.forEach(function (venue) {
+
+          nockObj.venues[venue.id] = venue;
+
+          delete nockObj.venues[venue.id].events;
+          delete nockObj.venues[venue.id].specials;
+          delete nockObj.venues[venue.id].stats;
+          delete nockObj.venues[venue.id].hereNow;
+          delete nockObj.venues[venue.id].categories;
+
+          console.log('venue: ' + venue.id);
+          promises.push(getVenueAsync(venue));
+        });
+
+
+        Promise.all(promises).then(function(results){
+          console.log('all promises resolved yay');
+
+
+          for (var i = 0; i < results.length; i++) {
+            if (nockObj.venues[results[i].fourSquareId]) {
+              nockObj.venues[results[i].fourSquareId].nock = results[i];
+            }
+          };
+
+
+
+          // cache modified response for next request
+          cache.set(user.location.toString(), JSON.stringify(nockObj));
+
+          return res.status(200).send(nockObj);
+        });
+
+
 
       } else {
         console.error(error);
