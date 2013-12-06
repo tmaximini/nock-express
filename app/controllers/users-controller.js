@@ -374,21 +374,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
         var promises = [];
 
-        function getVenueAsync (venue) {
-          var q = Promise.defer();
-          Location.findOne({ fourSquareId: venue.id }, {}, function (err, doc) {
-            if (err) {
-              q.reject(err);
-            }
-            if (doc) {
-              doc.populate('challenges', 'title body points meta image');
-              q.resolve(doc);
-            } else {
-              q.reject('no location with id ' + venue.id + 'found');
-            }
-          });
-          return q.promise;
-        }
+
 
 
         var nockObj = {
@@ -408,7 +394,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
           delete nockObj.venues[venue.id].categories;
 
           console.log('venue: ' + venue.id);
-          promises.push(getVenueAsync(venue));
+          promises.push(Location.getChallengeData(venue.id));
         });
 
 

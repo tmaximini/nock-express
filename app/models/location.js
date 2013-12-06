@@ -11,6 +11,8 @@ var env = process.env.NODE_ENV || 'development';
 var config = require('../../config/config')[env];
 var imagerConfig = require(config.root + '/config/imager.js');
 
+var Promise = require('bluebird');
+
 var LocationSchema = new Schema({
   slug: { type: String, required: true },
   fourSquareId: String,
@@ -114,6 +116,22 @@ LocationSchema.statics = {
     loc.save(function (savedObj) {
       console.log('location has been saved;');
     });
+  },
+
+  getChallengeData: function (fsId) {
+    var q = Promise.defer();
+    this.findOne({ fourSquareId: fsId }, {}, function (err, doc) {
+      if (err) {
+        q.reject(err);
+      }
+      if (doc) {
+        q.resolve(doc);
+      } else {
+        q.reject('no location with id ' + venue.id + 'found');
+      }
+    }).populate('challenges', 'title body points meta image');
+
+    return q.promise;
   }
 
 
