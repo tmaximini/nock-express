@@ -16,7 +16,8 @@ var userSchema = new Schema({
   hash:     { type: String, required: true, default: '' },
   location: { type: Array, required: true, default: [52.503466, 13.410959] }, // Moritzplatz
   email: String,
-  provider: { type: String, required: true, default: "email" }
+  provider: { type: String, required: true, default: "email" },
+  admin: { type: Boolean, default: false },
 });
 
 

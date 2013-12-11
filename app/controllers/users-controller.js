@@ -100,7 +100,8 @@ exports.login = function (req, res, next) {
     }
 
     req.session.isLoggedIn = true;
-    req.session.user = username;
+    req.session.user = user.username;
+    req.session.admin = user.admin;
     res.redirect('/');
   });
   function invalid () {

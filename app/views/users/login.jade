@@ -4,6 +4,9 @@ block content
   h1= title
   form(role='form', method='post', action='/users/login', enctype='application/x-www-form-urlencoded')
     input(type='hidden', name='_csrf', value="#{csrf_token}")
+    if flashs
+      - each flash in flashs
+        .flash= flash
     if invalid
       - each err in messages
         .error= err

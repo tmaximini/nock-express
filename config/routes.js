@@ -2,6 +2,7 @@
 
 // helpers
 var loggedIn = require('./middleware/loggedIn');
+var adminOnly = require('./middleware/isAdmin');
 
 var mongoose = require('mongoose');
 var Challenge = mongoose.model('Challenge');
@@ -49,7 +50,7 @@ module.exports = exports = function(app, db) {
     app.post('/api/users', usersController.apiRegister);
 
     // GET all users
-    app.get('/users', usersController.index);
+    app.get('/users', loggedIn, usersController.index);
     app.get('/api/users', usersController.apiIndex);
 
     // GET one user by :name
@@ -60,7 +61,8 @@ module.exports = exports = function(app, db) {
     app.get('/login', function (req, res) {
       res.render('users/login', {
           title: "Please log in.",
-          invalid: res.invalid || false
+          invalid: res.invalid || false,
+          flashs: req.flash('info')
         });
     });
 
@@ -84,17 +86,17 @@ module.exports = exports = function(app, db) {
      */
     app.param('challenge',                        challengesController.load);
     app.get('/challenges',                        challengesController.index);
-    app.get('/challenges/new',                    challengesController.new);
+    app.get('/challenges/new', adminOnly,          challengesController.new);
     app.post('/challenges',                       challengesController.create);
     app.get('/challenges/:challenge',             challengesController.show);
-    app.get('/challenges/:challenge/edit',        challengesController.edit);
-    app.put('/challenges/:challenge',             challengesController.update);
-    app.del('/challenges/:challenge',             challengesController.destroy);
+    app.get('/challenges/:challenge/edit',adminOnly, challengesController.edit);
+    app.put('/challenges/:challenge', adminOnly,   challengesController.update);
+    app.del('/challenges/:challenge', adminOnly,   challengesController.destroy);
     app.get('/challenges/:challenge/attempts',    challengesController.showAttempts);
     app.get('/api/challenges',                    challengesController.apiIndex);
     app.get('/api/challenges/search',             challengesController.apiSearch);
     app.get('/api/challenges/:challenge',         challengesController.apiShow);
-    app.post('/api/challenges/:challenge/attempts',  challengesController.apiAddAttempt);
+    app.post('/api/challenges/:challenge/attempts', loggedIn, challengesController.apiAddAttempt);
 
 
 
@@ -104,15 +106,15 @@ module.exports = exports = function(app, db) {
      */
     app.param('location',                locationsController.load);
     app.get('/locations',                locationsController.index);
-    app.get('/locations/new',            locationsController.new);
-    app.post('/locations',               locationsController.create);
+    app.get('/locations/new', adminOnly,  locationsController.new);
+    app.post('/locations', adminOnly,     locationsController.create);
     app.get('/locations/:location',      locationsController.show);
-    app.get('/locations/:location/edit', locationsController.edit);
-    app.put('/locations/:location',      locationsController.update);
-    app.del('/locations/:location',      locationsController.destroy);
+    app.get('/locations/:location/edit', adminOnly, locationsController.edit);
+    app.put('/locations/:location', adminOnly, locationsController.update);
+    app.del('/locations/:location', adminOnly, locationsController.destroy);
     app.get('/api/locations',            locationsController.apiIndex);
     app.get('/api/locations/:location',  locationsController.apiShow);
-    app.get('/api/locations/:location/addChallenge', locationsController.apiAddChallenge);
+    app.get('/api/locations/:location/addChallenge', adminOnly, locationsController.apiAddChallenge);
 
 
 
@@ -120,7 +122,7 @@ module.exports = exports = function(app, db) {
      *  LOCATION WEBSERVICES
      */
 
-    app.post('/api/getLocationData', locationsController.matchFourSquareIds)
+    app.post('/api/getLocationData', locationsController.matchFourSquareIds);
 
 
     // ERROR HANDLING
