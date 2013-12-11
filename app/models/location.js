@@ -120,16 +120,20 @@ LocationSchema.statics = {
 
   getChallengeData: function (fsId) {
     var q = Promise.defer();
-    this.findOne({ fourSquareId: fsId }, {}, function (err, doc) {
-      if (err) {
-        q.reject(err);
-      }
-      if (doc) {
-        q.resolve(doc);
-      } else {
-        q.reject('no location with id ' + venue.id + 'found');
-      }
-    }).populate('challenges', 'title body points meta image');
+    this.findOne({ fourSquareId: fsId },
+      { },
+      function (err, doc) {
+        if (err) {
+          q.reject(err);
+        }
+        if (doc) {
+          q.resolve(doc);
+        } else {
+          q.reject('no location with id ' + venue.id + 'found');
+        }
+      })
+      .select()
+      .populate('challenges', 'title body points meta image');
 
     return q.promise;
   }
