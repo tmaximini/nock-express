@@ -367,7 +367,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         // parse JSON response into an JS object
         var responseObj = JSON.parse(body).response;
 
-        var promises = [];
+        var challengePromises = [];
         var photoPromises = [];
 
 
@@ -390,32 +390,32 @@ exports.apiGetLocationsNearby = function (req, res, next) {
           delete nockObj.venues[venue.id].categories;
 
           console.log('venue: ' + venue.id);
-          promises.push(Location.getChallengeData(venue.id));
+          challengePromises.push(Location.getChallengeData(venue.id));
           photoPromises.push(getImageData(venue.id));
         });
 
 
-        Promise.all(promises).then(function(results) {
-          console.log('all promises resolved yay');
+        Promise.all(photoPromises).then(function(photoResults) {
 
-          for (var i = 0; i < results.length; i++) {
-            if (nockObj.venues[results[i].fourSquareId]) {
-              nockObj.venues[results[i].fourSquareId].nock = results[i];
-            }
-          }
+          Promise.all(challengePromises).then(function(results) {
+            console.log('all promises resolved yay');
 
-
-          Promise.all(photoPromises).then(function(photoResults) {
             for (var i = 0; i < results.length; i++) {
               if (nockObj.venues[results[i].fourSquareId]) {
                 nockObj.venues[results[i].fourSquareId].photos = photoResults[i];
+                nockObj.venues[results[i].fourSquareId].nock = results[i];
               }
             }
+
             // cache modified response for next request
             cache.set(user.location.toString(), JSON.stringify(nockObj));
             return res.status(200).send(nockObj);
 
           });
+
+          // cache modified response for next request
+          cache.set(user.location.toString(), JSON.stringify(nockObj));
+          return res.status(200).json(nockObj);
 
         });
       } else {
@@ -442,8 +442,13 @@ function getImageData (locationId) {
   }, function (error, response, body) {
     if (response.statusCode === 200) {
       console.log('request to ' + locationId + ' worked!');
-      //console.dir(JSON.parse(body).response.photos.items);
-      q.resolve(JSON.parse(body).response.photos.items);
+      var photos = JSON.parse(body).response.photos.items;
+      for (var i = 0; i < photos.length; i++) {
+        delete photos[i].user;
+        delete photos[i].id;
+        delete photos[i].source;
+      };
+      q.resolve(photos);
     } else {
       console.log('request to ' + locationId + ' failed!');
       q.reject();
