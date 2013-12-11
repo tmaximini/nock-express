@@ -129,7 +129,8 @@ LocationSchema.statics = {
         if (doc) {
           q.resolve(doc);
         } else {
-          q.reject('no location with id ' + venue.id + 'found');
+          console.error('no location with id ' + fsId + 'found');
+          q.resolve([]);
         }
       })
       .select()

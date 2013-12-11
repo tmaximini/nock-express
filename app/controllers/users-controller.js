@@ -341,11 +341,6 @@ exports.apiGetLocationsNearby = function (req, res, next) {
   user.location[0] = parseFloat(user.location[0].toFixed(8));
   user.location[1] = parseFloat(user.location[1].toFixed(8));
 
-  //var distance = geolib.getDistance(
-  //  { latitude: user.location[0], longitude: user.location[1] },
-  //  { latitude: parseFloat(user.location[0].toFixed(8)), longitude: parseFloat(user.location[1].toFixed(8)) }
-  //);
-
 
   var tryCache = cache.get(user.location.toString());
 
@@ -358,7 +353,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
     console.log('no cache object found, requesting foursquare...');
     request({
       method: 'GET',
-      uri: FS.url,
+      uri: FS.url + 'search',
       qs: {
         client_id: FS.clientID,
         v: FS.version,
@@ -373,6 +368,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         var responseObj = JSON.parse(body).response;
 
         var promises = [];
+        var photoPromises = [];
 
 
 
@@ -395,12 +391,12 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
           console.log('venue: ' + venue.id);
           promises.push(Location.getChallengeData(venue.id));
+          photoPromises.push(getImageData(venue.id));
         });
 
 
-        Promise.all(promises).then(function(results){
+        Promise.all(promises).then(function(results) {
           console.log('all promises resolved yay');
-
 
           for (var i = 0; i < results.length; i++) {
             if (nockObj.venues[results[i].fourSquareId]) {
@@ -409,14 +405,19 @@ exports.apiGetLocationsNearby = function (req, res, next) {
           }
 
 
-          // cache modified response for next request
-          cache.set(user.location.toString(), JSON.stringify(nockObj));
+          Promise.all(photoPromises).then(function(photoResults) {
+            for (var i = 0; i < results.length; i++) {
+              if (nockObj.venues[results[i].fourSquareId]) {
+                nockObj.venues[results[i].fourSquareId].photos = photoResults[i];
+              }
+            }
+            // cache modified response for next request
+            cache.set(user.location.toString(), JSON.stringify(nockObj));
+            return res.status(200).send(nockObj);
 
-          return res.status(200).send(nockObj);
+          });
+
         });
-
-
-
       } else {
         console.error(error);
         console.log(body);
@@ -426,4 +427,29 @@ exports.apiGetLocationsNearby = function (req, res, next) {
     });
   }
 }
+
+function getImageData (locationId) {
+  var q = Promise.defer();
+  request({
+    method: 'GET',
+    uri: FS.url + locationId.toString() + '/photos',
+    qs: {
+      client_id: FS.clientID,
+      v: FS.version,
+      client_secret: FS.clientSecret,
+      limit: 5
+    }
+  }, function (error, response, body) {
+    if (response.statusCode === 200) {
+      console.log('request to ' + locationId + ' worked!');
+      //console.dir(JSON.parse(body).response.photos.items);
+      q.resolve(JSON.parse(body).response.photos.items);
+    } else {
+      console.log('request to ' + locationId + ' failed!');
+      q.reject();
+    }
+  });
+  return q.promise;
+}
+
 
