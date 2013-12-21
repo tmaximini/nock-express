@@ -195,20 +195,29 @@ exports.apiAddChallenge = function (req, res, next) {
       if (err) {
         next(new Error(err));
       } else {
-        // add location to challenge
-        challenge.locations.push(location);
-        challenge.save(function (err, doc) {
-          if (err) throw err;
-          console.info("location added to challenge, proceeding");
-        });
-        // add challenge to location
-        location.challenges.push(challenge);
-        location.save(function (err, doc) {
-          if (err) throw err;
-          return res.status(200).json({
-            'success': 'Challenge added'
+        if (challenge) {
+          // add location to challenge
+          challenge.locations.push(location);
+          challenge.save(function (err, doc) {
+            if (err) throw err;
+            console.info("location added to challenge, proceeding");
           });
-        })
+          // add challenge to location
+          location.challenges.push(challenge);
+          location.save(function (err, doc) {
+            if (err) throw err;
+            return res.status(200).json({
+              'success': 'Challenge added'
+            });
+          });
+        }
+        else {
+            return res.status(400).json({
+              'error': 'bad request - challenge not found.'
+            });
+          });
+        }
+
       }
 
     });
