@@ -106,7 +106,12 @@ exports.login = function (req, res, next) {
   });
   function invalid () {
     req.flash('error', 'Invalid Login');
-    return res.render('users/login.jade', { invalid: true, messages: req.flash('error'), title: 'Please log in.' });
+    return res.render('users/login.jade', {
+      invalid: true,
+      messages: req.flash('error'),
+      flashs: [],
+      title: 'Please log in.'
+    });
   }
 }
 

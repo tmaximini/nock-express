@@ -212,9 +212,8 @@ exports.apiAddChallenge = function (req, res, next) {
           });
         }
         else {
-            return res.status(400).json({
-              'error': 'bad request - challenge not found.'
-            });
+          return res.status(400).json({
+            'error': 'bad request - challenge not found.'
           });
         }
 
