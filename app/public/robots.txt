@@ -1,2 +1,9 @@
 User-agent: *
-Disallow: /config/
+
+Disallow:
+
+/config/
+/node_modules/
+/test/
+
+Allow: /
