@@ -11,9 +11,15 @@ function StaticHandler (db) {
     }
 
     this.displayWebsite = function(req, res, next) {
-
-        // show index page
+        // show website index page
         res.render("website/index", {
+          title: "Welcome to Nock"
+        });
+    }
+
+    this.displayProvider = function(req, res, next) {
+        // show website/provider
+        res.render("website/provider", {
           title: "Welcome to Nock"
         });
     }

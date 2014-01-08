@@ -30,6 +30,7 @@ module.exports = exports = function(app, db) {
     app.get('/', staticHandler.displayIndex);
 
     app.get('/website', staticHandler.displayWebsite);
+    app.get('/provider', staticHandler.displayProvider);
 
     //app.get('/contact', staticHandler.displayContact);
 

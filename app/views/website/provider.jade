@@ -1,0 +1,205 @@
+!!! 5
+
+include websiteHeader
+
+body
+  #wrapper_margins
+
+    #hiddenNav
+      a(href='#container') Skip to content
+      | |
+      a(href='#nav') Skip to navigation
+    #header
+      nav.navbar.navbar-default(role='navigation')
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-ex1-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='http://www.getnock.com/')
+            img(src='/stylesheets/website/img/nock.png', alt='NOCK', height='57', width='124')
+        .collapse.navbar-collapse.navbar-ex1-collapse
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='/website', title='So funktioniert\'s') So funktioniert's
+            li.active
+              a(href='/provider', title='Für Geschäftsinhaber') Für Geschäftsinhaber
+            li
+              a(href='/contact', title='Kontakt') Kontakt
+
+    #content
+      .container
+        .provider-head
+          .provider-head-box
+            h2
+              | NOCK ist eine Smartphone-App,
+              br
+              | die Erfolge direkt belohnt.
+            p
+              | Durch spannende, lustige oder digitale Aufgaben entdeckt der Spieler neue Locations in seiner Umgebung und erhält tolle Belohnungen direkt vor Ort!
+          img.provider-head-image(src='/stylesheets/website/img/provider-head-image.png', alt='NOCK iPhone-Screens', height='315', width='398')
+        .full-width-attention
+          a.inline.btn(href='#provider-subscription') Jetzt kostenlos teilnehmen
+        .container-inner
+          h3.headline-big Darum sollte Ihre Location teilnehmen
+          .provider-benefits.clearfix
+            .provider-benefits-image
+              img(src='/stylesheets/website/img/provider-benefits-image.jpg', alt='NOCK iPhone-Screen', height='700', width='330')
+            .provider-benefits-list
+              ul
+                li.clearfix
+                  img.provider-benefits-list-icon(src='/stylesheets/website/img/provider-benefit-icon-customer.png', height='70', width='60')
+                  .provider-benefits-list-text
+                    h4 Neue Kunden
+                    p
+                      | Gäste entdecken Ihre Location, merken sie sich, bleiben länger und kommen wieder weil sie Spaß hatten.
+                li.clearfix
+                  img.provider-benefits-list-icon(src='/stylesheets/website/img/provider-benefit-icon-revenue.png', height='70', width='60')
+                  .provider-benefits-list-text
+                    h4 Mehr Umsatz
+                    p
+                      | Der Nutzer muss immer etwas kaufen. Die einmalige Belohnung erfolgt nur zusätzlich, z.B. "Kaufe zwei, bekomme drei". Die Belohnung gilt nur für den NOCK-Nutzer selbst, nicht etwa für weitere Begleitpersonen.
+                li.clearfix
+                  img.provider-benefits-list-icon(src='/stylesheets/website/img/provider-benefit-icon-atmosphere.png', height='70', width='60')
+                  .provider-benefits-list-text
+                    h4 Gute Stimmung
+                    p
+                      | Unerwartete und lustige Situationen entstehen zwischen den beteiligten und unbeteiligten Gästen.
+                li.clearfix
+                  img.provider-benefits-list-icon(src='/stylesheets/website/img/provider-benefit-icon-time.png', height='70', width='60')
+                  .provider-benefits-list-text
+                    h4 Minimaler Aufwand
+                    p
+                      | Die Aufgaben stehlen Ihrem Personal keine Zeit und sind somit perfekt in den Arbeits-Alltag integriert. Sie selbst bestimmen welche Aufgabe in Ihrer Location absolviert wird.
+                li.clearfix
+                  img.provider-benefits-list-icon(src='/stylesheets/website/img/provider-benefit-icon-costs.png', height='70', width='60')
+                  .provider-benefits-list-text
+                    h4 Keine Kosten &amp; kein Risiko
+                    p
+                      strong NOCK ist und bleibt kostenlos!
+                      | Lediglich die Kosten der ausgegebenen Belohnung reduzieren einmalig Ihre Gewinnmarge. Die Teilnahme bei NOCK kann monatlich beendet werden.
+        .provider-challenge-reward.clearfix
+          .provider-challenge
+            img.provider-challenge-reward-icon(src='/stylesheets/website/img/icon-challenge-white.png', height='140', width='182')
+            h3 Aufgaben
+            ul
+              li NOCK stellt eine Auswahl von Aufgaben zur Verfügung.
+              li
+                | Nach dem Erfüllen einer Aufgabe kann der Nutzer erst nach 12 Stunden erneut eine Aufgabe in Ihrer Location absolvieren.
+              li
+                | Von verrückten Aktionen bis zu digitalen Spielen ist alles dabei. Wählen Sie das Passende für sich.
+              li
+                | Es gibt pro Location immer nur eine Aufgabe. Diese kann jederzeit verändert werden.
+          .provider-reward
+            img.provider-challenge-reward-icon(src='/stylesheets/website/img/icon-reward-white.png', height='140', width='182')
+            h3 Belohnungen
+            ul
+              li
+                | Sie wählen aus einer Aushwahl von NOCK zur Verfügung gestellten Belohnungs-Varianten.
+              li
+                | Absolviert ein Nutzer erfolgreich seine Aufgabe muss die ausgewählte Belohnung ausgegeben werden.
+              li
+                | Die Belohnungen sind so gestaltet, dass Sie immer verdienen und keine Verluste haben.
+              li Umso besser die Belohnung, umso attraktiver ist es für den Nutzer.
+        .full-width-attention
+          a.inline.btn(href='#provider-subscription') Jetzt kostenlos teilnehmen
+        .container-inner.provider-steps
+          h3.headline-big So läuft's vor Ort
+          .clearfix
+            .provider-steps-step
+              img.provider-steps-icon(src='/stylesheets/website/img/icon-step-1.png', height='87', width='87')
+              h4 Personal informieren
+              p
+                | Informieren Sie Ihr Personal, dass in Zukunft Nutzer von NOCK die von Ihnen festgelegte Aufgabe vor Ort absolvieren.
+            .provider-steps-step
+              img.provider-steps-icon(src='/stylesheets/website/img/icon-step-2.png', height='87', width='87')
+              h4 Aufgabe bestätigen
+              p
+                | Mit einem Klick auf dem Smartphone des Nutzers bestätigt Ihr Personal, dass die Aufgabe erfolgreich absolviert wurde.
+            .provider-steps-step
+              img.provider-steps-icon(src='/stylesheets/website/img/icon-step-3.png', height='87', width='87')
+              h4 Belohnung ausgeben
+              p
+                | Hat der Benutzer seine Aufgabe erfolgreich absolviert, wird die von Ihnen vorher festgelegte Belohnung ausgegeben.
+
+        .full-width-attention
+          a.inline.btn(href='#provider-subscription') Jetzt kostenlos teilnehmen
+        .container-inner
+          h3.headline-big Sie haben noch Fragen?
+          .provider-contact.clearfix
+            .left
+              p.provider-contact-text
+                | Wir haben Ihr Interesse geweckt, aber es sind nach wie vor Unklarheiten vorhanden? Kein Problem! Gerne beantworten wir alle Fragen entweder telefonisch oder per E-Mail.
+            .left.clearfix
+              img.provider-contact-image(src='/stylesheets/website/img/team-julian-small.png', height='130', width='130')
+              .provider-contact-info
+                h4 Julian Koch
+                p
+                  a(href='mailto:julian@getnock.com', title='Mail an julian@getnock.com', target='_blank') julian@getnock.com
+                  br
+                  | +49 (0) 176 - 64 12 50 34
+      #footer-big
+        .footer-inner
+          img.footer-big-appstore(src='/stylesheets/website/img/appstore.png', alt='Soon available on the App Store', height='77', width='230')
+          img.footer-big-iphone(src='/stylesheets/website/img/footer-image.jpg', alt='NOCK - Your challenge. Your reward.', height='700', width='960')
+          .footer-big-facebook.clearfix
+            .footer-big-facebook-like
+              .fb-like(data-href='https://www.facebook.com/getnock', data-width='The pixel width of the plugin', data-height='The pixel height of the plugin', data-colorscheme='dark', data-layout='button_count', data-action='like', data-show-faces='false', data-send='false')
+            a.btn.btn-facebook(href='http://www.facebook.com/getnock', title='Besuch uns auf facebook', target='_blank')
+              img(src='/stylesheets/website/img/btn-fbIcon.png', alt='f', height='26', width='31')
+              | Besuch uns auf facebook
+
+    #provider-subscription(style='display: none; width: 700px;')
+      .form
+        .provider-subscription-hedaer
+          h2.red
+            strong
+              | NOCK ist in Kürze im
+              br
+              | App Store verfügbar.
+          p
+            | Tragen Sie schon jetzt Ihre Location ein
+            br
+            | und profitieren Sie davon, einer der Ersten
+            br
+            | zu sein.
+
+        #mc_embed_signup
+          form#mc-embedded-subscribe-form.validate(action='http://getnock.us6.list-manage.com/subscribe/post?u=9afcd3f289&id=1d926de354', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
+            .mc-field-group.clearfix
+              label(for='mce-LOCATION')
+                | Name Deiner Location:
+                span.asterisk *
+              input#mce-LOCATION.required(type='text', value='', name='LOCATION')
+            .mc-field-group.clearfix
+              label(for='mce-FNAME')
+                | Vorname:
+                span.asterisk *
+              input#mce-FNAME.required(type='text', value='', name='FNAME')
+            .mc-field-group.clearfix
+              label(for='mce-LNAME')
+                | Nachname:
+                span.asterisk *
+              input#mce-LNAME.required(type='text', value='', name='LNAME')
+            .mc-field-group.clearfix
+              label(for='mce-TELEFON')
+                | Telefon o. Mobil:
+                span.asterisk *
+              input#mce-TELEFON.required(type='text', value='', name='TELEFON')
+            .mc-field-group.clearfix
+              label(for='mce-EMAIL')
+                | E-Mail
+                span.asterisk *
+              input#mce-EMAIL.required.email(type='email', value='', name='EMAIL')
+            #mce-responses.clear
+              #mce-error-response.response(style='display: none;')
+              #mce-success-response.response(style='display: none;')
+            .form-footer.clearfix
+              .left
+                span.asterisk * Pflichtfelder
+              .right
+                input#mc-embedded-subscribe.btn(type='submit', value='Eintragen', name='subscribe')
+        script(type='text/javascript', src='/javascripts/vendor/mailchimp/mailchimp-provider.js')
+
+  include websiteFooter
