@@ -1,0 +1,142 @@
+!!! 5
+head
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    meta(name='Description', content='Das Social Game, bei dem Deine Erfolge direkt belohnt werden.')
+    meta(name='Keywords', content='NOCK, Game, Spiel, Reward, Coupon, Discovery, Challenge, Startup, Bars, Locations, Location-based')
+    meta(name='robots', content='index,follow')
+    meta(name='language', content='de')
+    meta(name='publisher', content='NOCK')
+    meta(http-equiv='imagetoolbar', content='no')
+    meta(content='img/logo-app.png', property='og:image')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title NOCK | Your challenge. Your reward.
+
+    link(rel='shortcut icon', href='img/favicon.ico')
+
+    link(href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700', rel='stylesheet', type='text/css')
+
+    link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/website/css/master.css')
+    link(rel='stylesheet', href='/javascripts/vendor/fancybox/jquery.fancybox.css', type='text/css', media='screen')
+  body
+    #fb-root
+    script
+      (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src="//connect.facebook.net/de_DE/all.js#xfbml=1&appId=555860827816362";
+      fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    #wrapper_margins
+
+      #hiddenNav
+        a(href='#container') Skip to content
+        | |
+        a(href='#nav') Skip to navigation
+      #header
+        nav.navbar.navbar-default(role='navigation')
+          .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-ex1-collapse')
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='http://www.getnock.com/')
+              img(src='/stylesheets/website/img/nock.png', alt='NOCK', height='57', width='124')
+          .collapse.navbar-collapse.navbar-ex1-collapse
+            ul.nav.navbar-nav.navbar-right
+              li.active
+                a(href='http://www.getnock.com/', title='So funktioniert\'s') So funktioniert's
+              li
+                a(href='http://www.getnock.com/provider', title='Für Geschäftsinhaber') Für Geschäftsinhaber
+              li
+                a(href='http://www.getnock.com/contact', title='Kontakt') Kontakt
+
+      #content
+
+        .step.step1
+          .step1-box
+            h1 Your challenge. Your reward.
+            h2 Die Smartphone-App, bei der Deine Erfolge direkt belohnt werden.
+            .subscribe
+              h2 Wir benachrichtigen Dich gerne sobald NOCK im App Store verfügbar ist:
+              .clearfix
+                #user-subscription.right
+
+                  #mc_embed_signup
+                    form#mc-embedded-subscribe-form.validate.clearfix(action='http://getnock.us6.list-manage1.com/subscribe/post?u=9afcd3f289&id=435988fc25', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
+                      .mc-field-group
+                        input#mce-EMAIL.required.email(type='email', value='', name='EMAIL', placeholder='E-Mail-Adresse')
+                      .mc-submit
+                        input#mc-embedded-subscribe.button(type='submit', value='Eintragen', name='subscribe')
+                      #mce-responses.clear
+                        #mce-error-response.response(style='display: none;')
+                        #mce-success-response.response(style='display: none;')
+                  script(type='text/javascript', src='/javascripts/vendor/mailchimp/mailchimp-user.js')
+
+                .left
+                  img.subscribe-appstore(src='/stylesheets/website/img/appstore.png', alt='Soon available on the App Store', height='50', width='149')
+
+          img.step1-image(src='/stylesheets/website/img/step1-image.png', alt='NOCK Home-Screen', height='588', width='477')
+          .arrow-down
+            img(src='/stylesheets/website/img/arrow-down.png', alt='Scroll down', height='62', width='16')
+
+        .step.step2
+          .step-container
+            .step-description
+              .step-description-icon
+                img(src='/stylesheets/website/img/icon-location-white.png', alt='Location aussuchen', height='200', width='260')
+              .step-description-text
+                h3 1. Location aussuchen
+                p
+                  | Starte damit neue Bars um Dich herum zu entdecken. Verschwende keine Zeit mit langen Entscheidungen,
+                  strong.red wähle aus 3 von NOCK vorgeschlagenen Locations
+                  | und los geht's! Jede Location hat eine kleine Aufgabe für Dich, die Du in der Bar bestehen musst.
+            .step-image
+              img(src='/stylesheets/website/img/step2-image.png', alt='Location aussuchen', height='603', width='256')
+
+        .step.step3
+          .step-container
+            .step-description
+              .step-description-icon
+                img(src='/stylesheets/website/img/icon-challenge-white.png', alt='Vor Ort Challenge bestehen', height='200', width='260')
+              .step-description-text
+                h3 2. Vor Ort Challenge bestehen
+                p
+                  | Lass Dich auf das Spiel ein und beweise Dich bei den originellen Challenges von NOCK wie zum Beispiel "
+                  strong.red REIME DEINE BESTELLUNG
+                  | ". Eine Vielfalt von Challenges erwartet Dich - egal ob digital oder real. Für jeden ist etwas dabei!
+                p
+                  strong Nimm die Herausforderung an und gib alles!
+            .step-image
+              img(src='/stylesheets/website/img/step3-image.png', alt='Vor Ort Challenge bestehen', height='603', width='256')
+
+        .step.step4
+          .step-container
+            .step-description
+              img.step4-shine-white(src='/stylesheets/website/img/shine-white.png', alt='', height='660', width='660')
+              .step-description-icon
+                img(src='/stylesheets/website/img/icon-reward-white.png', alt='Belohnung kassieren', height='200', width='260')
+              .step-description-text
+                h3 3. Belohnung kassieren
+                p
+                  | Klasse, Du hast die Location GENOCKED! Genieße jetzt direkt in der Bar Deine Belohnung wie "
+                  strong.red EIN GRATIS DRINK ON TOP
+                  | ", sofern sie eine Partner-Bar ist oder sammle weiter fleißig NOCK-Coins, die Du gegen tolle Prämien eintauschen kannst.
+                p
+                  strong
+                    | Zeig Deinen Freunden wer die Hosen an hat und verweise sie im Highscore auf ihre Plätze!
+            .step-image
+              img(src='/stylesheets/website/img/step4-image.png', alt='Belohnung kassieren', height='603', width='256')
+        #footer-big
+          .footer-inner
+            img.footer-big-appstore(src='/stylesheets/website/img/appstore.png', alt='Soon available on the App Store', height='77', width='230')
+            img.footer-big-iphone(src='/stylesheets/website/img/footer-image.jpg', alt='NOCK - Your challenge. Your reward.', height='700', width='960')
+            .footer-big-facebook.clearfix
+              .footer-big-facebook-like
+                .fb-like(data-href='https://www.facebook.com/getnock', data-width='The pixel width of the plugin', data-height='The pixel height of the plugin', data-colorscheme='dark', data-layout='button_count', data-action='like', data-show-faces='false', data-send='false')
+              a.btn.btn-facebook(href='http://www.facebook.com/getnock', title='Besuch uns auf facebook', target='_blank')
+                img(src='/stylesheets/website/img/btn-fbIcon.png', alt='f', height='26', width='31')
+                | Besuch uns auf facebook
+
+    include websiteFooter

@@ -1,0 +1,394 @@
+@charset "UTF-8";
+	/* 
+	* ============================================================== 
+	*
+	* @copyright       NOCK
+	* @author          Julian Koch
+	*
+	* ============================================================== 
+	*/
+	
+	
+	/* 
+	* ============================================================== 
+	* =Header
+	* ============================================================== 
+	*/
+	
+	.provider-head {
+		position:relative;
+		background:url(../img/provider-head-background.jpg) no-repeat right bottom #323a45;
+		padding:40px 40px 0 40px;
+		border-radius:5px 5px 0 0;
+	}
+	
+	@media (max-width: 480px) {
+		.provider-head {
+			padding:20px 20px 0 20px;
+		}
+	}
+	
+	.provider-head-box {  
+		max-width:460px;
+		padding-bottom:40px;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-head-box {  
+			max-width:100%;
+		}
+	}
+	
+	.provider-head h2 {
+		color:#fff;
+	}
+	
+	.provider-head p {
+		color:#fff;
+		font-size:22px;
+		line-height:1.2em;
+		margin-top:20px;
+	}
+	
+	.provider-head-image {
+		position:absolute;
+		bottom:0;
+		right:20px;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-head-image {
+			position:inherit;
+			width:398px;
+			margin:0 auto;
+			display:block;
+		}
+	}
+	
+	@media (max-width: 480px) {
+		.provider-head-image {
+			width:100%;
+			height:100%;
+			margin:0 20px;
+		}
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Benefits
+	* ============================================================== 
+	*/
+	
+	.provider-benefits {
+		width:100%;
+	}
+	
+	.provider-benefits-image {
+		width:37%;
+		margin-right:3%;
+		float:left;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-benefits-image {
+			display:none;
+		}
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-benefits-image img {
+			width:100%;
+			height:100%;
+		}
+	}
+		
+	.provider-benefits-list {
+		width:53%;
+		margin:0 5% 0 2%;
+		float:left;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-benefits-list {
+			width:100%;
+			margin:0;
+			float:none;
+		}
+	}
+	
+	.provider-benefits-list ul {
+		margin:0;
+		padding:0;
+		list-style:none;
+	}
+	
+	.provider-benefits-list ul li {
+		margin:20px 0;
+	}
+	
+	.provider-benefits-list-icon {
+		float:left;
+		margin:15px 25px 15px 0;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-benefits-list-icon {
+			float:none;
+			display:block;
+			width:60px;
+			margin:0 auto;
+		}
+	}
+	
+	.provider-benefits-list-text h4 {
+		font-size:22px;
+		margin-bottom:5px;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-benefits-list-text h4 {
+			text-align:center;
+		}
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-benefits-list-text p {
+			text-align:center;
+		}
+	}
+	
+	/* 
+	* ============================================================== 
+	* =Challenge & Reward
+	* ============================================================== 
+	*/
+	
+	.provider-challenge-reward {
+		margin-top:50px;
+	}
+	
+	.provider-challenge-reward ul {
+		margin:0;
+		padding:0;
+		list-style:none;
+	}
+	
+	.provider-challenge-reward ul li {
+		background:url(../img/icon-list-arrow-white.png) no-repeat 0 5px;
+		padding-left:30px;
+		font-size:17px;
+		margin:12px 0;
+	}
+	
+	.provider-challenge-reward h3 {
+		font-size:40px;
+		text-align:center;	
+		margin-bottom:30px;	
+	}
+	
+	.provider-challenge {
+		width:50%;
+		float:left;
+		background:#beb52c;
+		color:#fff;
+		padding:80px 30px;
+	}
+	
+	.provider-reward {
+		width:50%;
+		float:left;
+		background:#15c5fe;
+		color:#fff;
+		padding:80px 30px;
+	}
+	
+	@media (max-width: 780px) {
+		.provider-challenge, .provider-reward {
+			width:100%;
+			float:none;
+		}
+	}
+	
+	.provider-challenge-reward-icon {
+		width:182px;
+		margin:0 auto 50px;
+		display:block;
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Steps
+	* ============================================================== 
+	*/
+	
+	.provider-steps {
+		background:#f3f4f7;
+		padding:80px 30px;
+	}
+	
+	.provider-steps h3 {
+		margin-top:0;
+	}
+	
+	.provider-steps h4 {
+		text-align:center;
+		font-size:22px;
+	}
+	
+	.provider-steps p {
+		text-align:center;
+	}
+	
+	.provider-steps-step {
+		width:33%;
+		float:left;
+		padding:0 20px;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-steps-step {
+			width:100%;
+			float:none;
+		}
+	}
+	
+	.provider-steps-icon {
+		display:block;
+		width:87px;
+		margin:20px auto;
+	}
+	
+	@media (max-width: 1000px) {
+		.provider-steps-icon {
+			margin:40px auto 20px;
+		}
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Partner
+	* ============================================================== 
+	*/
+	
+	.provider-partner {
+		margin-bottom:80px;	
+	}
+	
+	.provider-partner ul {
+		margin:0 4px;
+		padding:0;
+		list-style:none;
+	}
+	
+	.provider-partner ul li {
+		float:left;
+	}
+	
+	@media (max-width: 480px) {
+		.provider-partner ul li {
+			float:none;
+			width:180px;
+			margin:0 auto;
+		}
+	}
+	
+	.provider-partner ul li a {
+		display:block;
+		padding:20px 19px;
+		opacity:0.7;
+	}
+	
+	.provider-partner ul li a:hover {
+		opacity:1;
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Contact
+	* ============================================================== 
+	*/
+		
+	.provider-contact .left {
+		float:left;
+		width:50%;
+	}
+	
+	@media (max-width: 780px) {
+		.provider-contact .left {
+			float:none;
+			width:100%;
+		}
+	}
+	
+	.provider-contact-text {
+		margin:25px 0;
+	}
+	
+	.provider-contact-image {
+		float:left;
+		margin:0 20px 0 60px;
+	}
+	
+	@media (max-width: 780px) {
+		.provider-contact-image {
+			width:130px;
+			margin:0 auto;
+			display:block;
+			float:none;
+		}
+	}
+	
+	.provider-contact-info {
+		float:left;
+		margin:13px 0;
+	}
+	
+	@media (max-width: 780px) {
+		.provider-contact-info {
+			float:none;
+			margin:0;
+		}
+	}
+		
+	@media (max-width: 780px) {
+		.provider-contact p, .provider-contact h4 {
+			text-align:center;
+		}
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Subscription
+	* ============================================================== 
+	*/
+	
+	
+	#provider-subscription .form {
+		width:90%;
+		margin:0 5%;
+	}
+	
+	#provider-subscription #mc_embed_signup {
+		padding-top:20px;
+	}
+	
+	.provider-subscription-hedaer {
+		width:100%;
+		height:300px;
+		background:url(../img/subscription-provider-header.jpg) no-repeat bottom right;
+		padding-top:30px;
+	}
+	
+	.provider-subscription-hedaer h2 {
+		font-size:30px;
+	}
+	
+	.provider-subscription-hedaer p {
+		font-size:18px;
+	}
+	

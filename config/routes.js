@@ -28,6 +28,9 @@ module.exports = exports = function(app, db) {
 
     // GET index (static page for now)
     app.get('/', staticHandler.displayIndex);
+
+    app.get('/website', staticHandler.displayWebsite);
+
     //app.get('/contact', staticHandler.displayContact);
 
 

@@ -10,6 +10,14 @@ function StaticHandler (db) {
         });
     }
 
+    this.displayWebsite = function(req, res, next) {
+
+        // show index page
+        res.render("website/index", {
+          title: "Welcome to Nock"
+        });
+    }
+
 }
 
 module.exports = StaticHandler;

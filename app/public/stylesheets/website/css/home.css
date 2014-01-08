@@ -1,0 +1,365 @@
+@charset "UTF-8";
+	/* 
+	* ============================================================== 
+	*
+	* @copyright       NOCK
+	* @author          Julian Koch
+	*
+	* ============================================================== 
+	*/
+	
+	
+	/* 
+	* ============================================================== 
+	* =Global
+	* ============================================================== 
+	*/
+	
+	.step { 
+		height:900px;
+		position:relative; 
+		overflow:hidden;
+	}
+	
+	@media (max-width: 768px) {
+		.step { 
+			height:auto;
+		}
+	}
+		
+	.step-container {
+		width:960px;
+		margin:0 auto;
+		position:relative;
+	}
+	
+	@media (max-width: 960px) {
+		.step-container {
+			width:100%;
+		}
+	}
+	
+	@media (max-width: 768px) {
+		.step-container {
+			padding:50px 20px;
+		}
+	}
+	
+	.step-description {  
+		max-width:610px;
+		position:absolute;
+		top:250px;
+		left:0;
+	}
+	
+	@media (max-width: 960px) {
+		.step-description { 
+			max-width:60%;
+		}
+	}
+	
+	@media (max-width: 768px) {
+		.step-description { 
+			max-width:100%;
+			position:relative;
+			top:auto;
+			left:auto;
+		}
+	}
+	
+	.step-description-icon {
+		position:relative;
+		width:260px;
+		margin:0 auto;
+		z-index:10;
+	}
+	
+	.step-description-icon img {
+		position:relative;
+	}
+	
+	.step-description-text {
+		position:relative;
+		z-index:10;
+	}
+	
+	.step-description-text h3 {
+		font-size:45px;
+	}
+	
+	@media (max-width: 768px) {
+		.step-description-text h3 {
+			text-align:center;
+		}
+	}
+	
+	.step-description-text p {
+		font-size:18px;
+	}
+	
+	@media (max-width: 768px) {
+		.step-description-text p {
+			text-align:center;
+		}
+	}
+	
+	.step-image {
+		position:absolute;
+		right:0;
+		top:170px;
+	}
+	
+	@media (max-width: 768px) {
+		.step-image {
+			position:inherit;
+			right:auto;
+			top:auto;
+			width:256px;
+			margin:50px auto 0;
+		}
+	}
+	
+	@media (max-width: 480px) {
+		.step-image {
+			display:none;
+		}
+	}
+	
+
+  /* 
+	* ============================================================== 
+	* =Step 1
+	* ============================================================== 
+	*/
+	
+	.step1 { 
+		background:#b21741;
+		padding-top:71px;
+		color:#fff;
+	}
+	
+	@media (max-width: 768px) {
+		.step1 {
+			min-height:0;
+			padding-top:20px;
+		}
+	}
+
+	
+	.step1-image {
+		position:absolute;
+		right:-150px;
+		bottom:-1px;
+		z-index:10;
+		animation:fadeIn 3s;
+	}
+	
+	@media (max-width: 768px) {
+		.step1-image {
+			display:none;		
+		}
+	}
+	
+	.step1-box {
+		position:relative;
+		margin:180px auto 0;
+		z-index:100;
+		max-width:960px;
+		-webkit-animation:fadeIn 3s;
+    -moz-animation:fadeIn 3s;
+		animation:fadeIn 3s;
+	}
+	
+	@media (max-width: 768px) {
+		.step1-box {
+			margin-top:0px;		
+		}
+	}
+	
+	.step1 h1 {
+		font-size:45px;
+		font-weight:bold;
+		margin-bottom:5px;
+		text-align:center;
+	}
+	
+	.step1 h2 {
+		font-size:20px;
+		margin-top:0;
+		text-align:center;
+	}
+	
+	.arrow-down {
+		position:absolute;
+		bottom:150px;
+		left:50%;
+		margin-left:-8px;
+		-webkit-animation:fadeIn 3s;
+    -moz-animation:fadeIn 3s;
+		animation:fadeIn 3s;
+	}
+	
+	.arrow-down img {
+		-webkit-animation:bounce 2s infinite;
+    -moz-animation:bounce 2s infinite;
+		animation:bounce 2s infinite;
+	}
+	
+	@media (max-width: 768px) {
+		.arrow-down {
+			display:none;
+		}
+	}
+	
+	/*----- Subscribe -----*/
+	.subscribe {
+		max-width:605px;
+		margin:45px auto 100px;
+	}
+	
+	@media (max-width: 600px) {
+		.subscribe {
+			padding:0 10px;
+		}
+		.left, .right {
+			float:none;
+		}
+	}
+	
+	#user-subscription {
+		width:430px;
+	}
+	
+	@media (max-width: 600px) {
+		#user-subscription {
+			width:320px;
+			margin:0 auto;
+		}	
+	}
+	
+	#user-subscription .mc-field-group, #user-subscription .mc-submit {
+		float:left;
+	}
+	
+	#user-subscription .mc-field-group input {
+		background:#fff;
+		border-radius:5px 0 0 5px;
+		border:none;
+		font-size:24px;
+		color:#c6c9d0;
+		padding:10px 15px 9px;
+		width:300px;
+	}
+	
+	@media (max-width: 600px) {
+		#user-subscription .mc-field-group input {
+			width:185px;
+			padding:10px 8px 9px;
+		}
+	}
+	
+	#user-subscription .mc-submit input {
+		background:#323a45;
+		border-radius:0 5px 5px 0;
+		border:none;
+		font-size:24px;
+		color:#c6c9d0;
+		padding:10px 15px 9px;
+	}
+	
+	@media (max-width: 480px) {
+		#user-subscription .mc-submit input {
+			padding:10px 8px 9px;
+		}
+	}
+	
+	#user-subscription .mc-submit input:hover {
+		background:#293039;
+		color:#fff;
+	}
+	
+	@media (max-width: 600px) {
+		.subscribe-appstore {
+			margin:10px auto;
+			width:149px;
+			display:block;
+		}
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Step 2
+	* ============================================================== 
+	*/
+	
+	.step2 { 
+		background:#323a45;
+		color:#fff;
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Step 3
+	* ============================================================== 
+	*/
+	
+	.step3 { 
+		background:#beb52c;
+		color:#fff;
+	}
+	
+	.step3-challenge-idea-btn {
+		position:absolute;
+		bottom:20px;
+		right:180px;
+		background:#b21741;
+		border-radius:90px;
+		color:#fff;
+		font-size:20px;
+		text-align:center;
+		line-height:22px;
+		padding:20px;
+		width:175px;
+	}
+	
+	.step3-challenge-idea-btn:hover {
+		background:#9b1439;
+		text-decoration:none;
+		color:#fff;
+	}
+	
+	.step3-challenge-idea-btn strong {
+		font-size:70px;
+		font-weight:bold;
+		line-height:60px;
+	}
+	
+	.step3-challenge-idea-btn small {
+		font-size:12px;
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Step 4
+	* ============================================================== 
+	*/
+	
+	.step4 { 
+		background:#15c5fe;
+		color:#fff;
+	}
+	
+	.step4-shine-white {
+		position:absolute;
+		z-index:1;
+		top:-220px;
+		left:50%;
+		margin-left:-330px;
+		-webkit-animation:spin 20s linear infinite;
+    -moz-animation:spin 20s linear infinite;
+    animation:spin 20s linear infinite;
+	}
+	

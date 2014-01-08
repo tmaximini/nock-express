@@ -1,0 +1,570 @@
+@charset "UTF-8";
+	/* 
+	* ============================================================== 
+	*
+	* @copyright       NOCK
+	* @author          Julian Koch
+	*
+	* ============================================================== 
+	*/
+	
+	
+	/* 
+	* ============================================================== 
+	* =Info
+	* ============================================================== 
+	*/
+	
+	.registration-info {
+		background:#941336;
+		border-radius:5px 5px 0 0;
+		padding:10px 20px;
+	}
+	
+	@media (max-width: 640px) {
+		.registration-info .left {
+			float:none;
+			margin:0 auto;
+			width:58px;
+			display:block;
+		}
+	}
+	
+	@media (max-width: 640px) {
+		.registration-info .right {
+			float:none;
+			display:block;
+		}
+	}
+	
+	.registration-info img {
+		margin-right:10px;
+	}
+		
+	.registration-info h3 {
+		color:#fff;
+		font-size:30xp;
+		margin:8px 0 0 0;
+	}
+	
+	@media (max-width: 640px) {
+		.registration-info h3 {
+			text-align:center;
+		}
+	}
+	
+	.registration-info p {
+		margin:0;
+		padding:0;
+		font-size:12px;
+		color:#fff;
+	}
+	
+	@media (max-width: 640px) {
+		.registration-info p {
+			text-align:center;
+		}
+	}
+	
+	.registration-info-center {
+		margin:0 auto;
+		width:540px;
+	}
+	
+	@media (max-width: 640px) {
+		.registration-info-center {
+			width:auto;
+		}
+	}
+	
+	/* 
+	* ============================================================== 
+	* =Progress-Bar
+	* ============================================================== 
+	*/
+	
+	.registration-progess-bar ul {
+		width:100%;
+		list-style:none;
+		margin:0;
+		padding:0;
+	}
+	
+	.registration-progess-bar ul li {
+		float:left;
+		width:34%;
+	}
+	
+	.registration-progess-bar ul li.step3 {
+		width:32%;
+	}
+	
+	.registration-progess-bar ul li a {
+		background:url(../img/bg-progress-bar.jpg) no-repeat right top #c6c9d0;
+		background-size:42px 324px;
+		padding:25px 20px 25px 25px;
+		display:block;
+		font-size:22px;
+	}
+	
+	@media (max-width: 768px) {
+		.registration-progess-bar ul li a {
+			background:#c6c9d0;
+			padding:20px;
+		}
+	}
+	
+	@media (max-width: 1000px) {
+		.registration-progess-bar ul li a {
+			font-size:16px;
+			padding:30px 20px 29px 25px;
+		}
+	}
+	
+	@media (max-width: 768px) {
+		.registration-progess-bar ul li a.active {
+			background:#323a45;
+		}
+	}
+	
+	@media (max-width: 768px) {
+		.registration-progess-bar ul li.step1, .registration-progess-bar ul li.step2, .registration-progess-bar ul li.step3 {
+			float:none;
+			width:100%;
+			border-top:1px solid #fff;
+		}
+	}
+	
+	
+	/*************Step1*************/
+	.registration-progess-bar ul li {
+		padding:0;
+	}
+	
+	.registration-progess-bar ul li a.active {
+		background:url(../img/bg-progress-bar.jpg) no-repeat right -81px #323a45;
+		background-size:42px 324px;
+		color:#fff;
+	}
+	
+	@media (max-width: 768px) {
+		.registration-progess-bar ul li a.active {
+			background:#323a45;
+		}
+	}
+	
+	.registration-progess-bar ul li a.ready {
+		background:url(../img/bg-progress-bar.jpg) no-repeat right -162px #beb52c;
+		background-size:42px 324px;
+		color:#fff;
+	}
+	
+	.registration-progess-bar ul li a.ready2 {
+		background:url(../img/bg-progress-bar.jpg) no-repeat right -243px #beb52c;
+		background-size:42px 324px;
+		color:#fff;
+	}
+	
+	@media (max-width: 768px) {
+		.registration-progess-bar ul li a.ready, .registration-progess-bar ul li a.ready2 {
+			background:#beb52c;
+		}
+	}
+	
+	/*************Step3*************/
+	.registration-progess-bar ul li.step3 a {
+		background:#c6c9d0;
+	}
+	
+	.registration-progess-bar ul li.step3 a.active {
+		background:#323a45;
+	}
+	
+	.registration-progess-bar ul li.step3 a.ready {
+		background:#beb52c;
+	}
+	
+	
+	/* 
+	* ============================================================== 
+	* =Form
+	* ============================================================== 
+	*/
+	
+	.registration-form ul {
+		list-style:none;
+		padding:0 20% 0 0;
+		margin:0;
+	}
+	
+	.registration-form ul.border-bottom {
+		list-style:none;
+		padding:0 20% 20px 0;
+		margin:0 0 30px 0;
+	}
+	
+	@media (max-width: 768px) {
+		.registration-form ul.border-bottom {
+			padding:0 0 20px 0;
+		}
+	}
+	
+	.registration-form ul li {
+		padding:10px 0;
+	}
+	
+	.registration-form ul li.space {
+		margin-top:40px;
+	}
+	
+	@media (max-width: 768px) {
+		.registration-form ul {
+			width:100%;
+			padding:0;
+		}
+	}
+	
+	.registration-form label {
+		float:left;
+		padding:5px 10px 5px 0;
+		font-size:22px;
+		font-weight:normal;
+	}
+	
+	.registration-form select, .registration-form input.input {
+		float: right;
+		padding:5px;
+		font-size:22px;
+		border:1px solid #e6e6e6;
+		width:60%;
+	}
+	
+	.registration-form .input-wrap {
+		float: right;
+		width:60%;
+	}
+	
+	.registration-form .input-street {
+		float: left;
+		padding:5px;
+		font-size:22px;
+		border:1px solid #e6e6e6;
+		width:70%;
+	}
+	
+	.registration-form .input-number {
+		float: right;
+		padding:5px;
+		font-size:22px;
+		border:1px solid #e6e6e6;
+		width:25%;
+	}
+	
+	.registration-form .input-postalcode {
+		float: left;
+		padding:5px;
+		font-size:22px;
+		border:1px solid #e6e6e6;
+		width:30%;
+	}
+	
+	.registration-form .input-city {
+		float: right;
+		padding:5px;
+		font-size:22px;
+		border:1px solid #e6e6e6;
+		width:65%;
+	}
+	
+	.registration-form input.btn {
+		float: right;
+	}
+	
+	@media (max-width: 768px) {
+		.registration-form label, .registration-form select, .registration-form input.input {
+			float:none;
+		}
+		.registration-form select, .registration-form input.input, .registration-form .input-wrap {
+			width:100%;
+		}
+	}
+	
+	/*************Registration Partner*************/
+	
+	.registration-form ul.full-width {
+		padding:0 0 20px 0;
+	}
+	
+	.registration-partner li {
+		position:relative;
+		float:left;
+		height:120px;
+		width:204px;
+		padding:0 !important;
+		margin:10px;
+	}
+	
+	.registration-partner li label {
+		padding:0;
+		display:block;
+		position:absolute;
+		border:5px solid #eaedf2;
+		z-index:10;
+	}
+	
+	.registration-partner li label:hover {
+		border:5px solid #e6e6e6;
+		cursor:pointer;
+	}
+	
+	.registration-partner li input {
+		position:absolute;
+		bottom:5px;
+		left:5px;
+		border:5px solid #eaedf2;
+		z-index:100;
+		cursor:pointer;
+	}
+	
+	.registration-partner li.registration-partner-misc {
+		height:auto;
+		width:100%;
+		margin:0;
+		padding:10px !important;
+	} 
+	
+	.registration-partner li.registration-partner-misc label {
+		position:relative;
+		border:none;
+		float:left;
+		padding:5px 10px 5px 10px;
+	}
+	
+	.registration-partner li.registration-partner-misc input {
+		position:relative;
+		float:left;
+		left:auto;
+		bottom:auto;
+		width:86%;
+	}
+	
+	.registration-partner li.registration-partner-misc input.checkbox {
+		margin-top:15px;
+		border:5px solid #eaedf2;
+		width:auto;
+	}
+	
+	.registration-challenge-hl {
+		width:100%;
+		padding-left:15%;
+	}
+	
+	.registration-challenge-hl h5 {
+		float:left;
+	}
+	
+	.registration-challenge-hl h5.registration-challenge-hl-title {
+		width:25%;
+	}
+	
+	.registration-challenge-hl h5.registration-challenge-hl-description {
+		width:55%;
+	}
+	
+	.registration-challenge-hl h5.registration-challenge-hl-confirmation {
+		width:20%;
+	}
+	
+	.registration-form ul.registration-challenge li {
+		background:#eaedf2;
+		padding:2%;
+		margin:5px 0;
+		cursor:pointer;
+	}
+	
+	.registration-form ul.registration-challenge li:hover {
+		background:#e6e6e6;
+	}
+	
+	.registration-form ul.registration-challenge li label, .registration-form ul.registration-challenge li input, .registration-form ul.registration-challenge li label img, .registration-form ul.registration-challenge li label p, .registration-form ul.registration-challenge li label h4 {
+		float:left;
+	}
+	
+	.registration-form ul.registration-challenge li label {
+		width:95%;
+		margin:0;
+		padding:0;
+		cursor:pointer;
+	}
+	
+	.registration-form ul.registration-challenge li label img {
+		width:10%;
+		height:10%;
+	}
+	
+	.registration-challenge-title {
+		width:22%;
+		margin:3% 0 3% 1%;
+		font-size:22px;
+		font-weight:bold;
+		cursor:pointer;
+	}
+	
+	.registration-challenge-description {
+		width:51%;
+		margin:3% 0 3% 1%;
+		font-size:17px;
+		cursor:pointer;
+	}
+	
+	.registration-challenge-confirmation {
+		width:14%;
+		margin:3% 0 3% 1%;
+		font-size:17px;
+		cursor:pointer;
+	}
+	
+	.registration-form ul.registration-challenge li input {
+		margin:4% 0;
+		width:3%;
+		cursor:pointer;
+	}
+	
+	
+	
+	.registration-reward-hl h5.registration-reward-hl-title {
+		width:26%;
+		float:left;
+		margin-left:15%;
+	}
+	
+	.registration-reward-hl h5.registration-reward-hl-description {
+		width:59%;
+		float:left;
+	}
+		
+	.registration-form ul.registration-reward li {
+		background:#eaedf2;
+		padding:2%;
+		margin:5px 0;
+		cursor:pointer;
+	}
+	
+	.registration-form ul.registration-reward li:hover {
+		background:#e6e6e6;
+	}
+	
+	.registration-form ul.registration-reward li label, .registration-form ul.registration-reward li input, .registration-form ul.registration-reward li label img, .registration-form ul.registration-reward li label p, .registration-form ul.registration-reward li label h4 {
+		float:left;
+	}
+	
+	.registration-form ul.registration-reward li label {
+		width:95%;
+		margin:0;
+		padding:0;
+		cursor:pointer;
+	}
+	
+	.registration-form ul.registration-reward li label img {
+		width:10%;
+		height:10%;
+		margin:2% 0;
+	}
+	
+	.registration-reward-title {
+		width:28%;
+		margin:3% 0 3% 1%;
+		font-size:22px;
+		font-weight:bold;
+		cursor:pointer;
+	}
+	
+	.registration-reward-description {
+		width:60%;
+		margin:3% 0 3% 1%;
+		font-size:17px;
+		cursor:pointer;
+	}
+	
+	.registration-form ul.registration-reward li input {
+		margin:4% 0;
+		width:3%;
+		cursor:pointer;
+	}
+	
+	
+	.registration-overview {
+		width:46%;
+		margin:2%;
+		float:left;
+	}
+	
+	.registration-overview h4 {
+		font-size:22px;
+		font-weight:bold;
+	}
+	
+	.registration-overview h4 a {
+		font-size:14px;
+		cursor:pointer;
+		margin-top:6px;
+		font-weight:normal;
+	}
+	
+	.registration-overview-box {
+		background:#f3f4f7;
+		padding:5px 15px;
+	}
+	
+	.registration-overview-box ul {
+		list-style:none;
+		margin:10px 0;
+		padding:0;
+	}
+	
+	.registration-overview-box ul li span {
+		width:38%;
+		display:block;
+		font-weight:bold;
+		float:left;
+	}
+	
+	.registration-overview-box div.left {
+		width:70%
+	}
+	
+	.registration-overview-box h5 {
+		font-weight:bold;
+		font-size:17px;
+		margin:15px 0 5px 0;
+	}
+	
+	.registration-overview-image {
+		float:left;
+		margin-right:5%;
+		width:25%;
+		height:25%;
+	}
+	
+	.registration-overview-terms {
+		border-top:1px solid #eaedf2;
+		border-bottom:1px solid #eaedf2;
+		padding:10px 0 !important;
+		margin:20px 0 !important;
+	}
+	
+	.registration-overview-terms input {
+		float:left;
+	}
+	
+	.registration-overview-terms label {
+		float:left;
+		font-size:14px;
+		margin:0;
+		padding:0 0 0 10px;
+	}
+	
+	.registration-form ul.registration-overview-terms li {
+		margin:5px 0;
+		padding:0;
+	}
