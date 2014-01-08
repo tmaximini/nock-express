@@ -24,6 +24,20 @@ function StaticHandler (db) {
         });
     }
 
+    this.displayImprint = function(req, res, next) {
+        // show website/imprint
+        res.render("website/imprint", {
+          title: "Welcome to Nock"
+        });
+    }
+
+    this.displayContact = function(req, res, next) {
+        // show website/imprint
+        res.render("website/contact", {
+          title: "Welcome to Nock"
+        });
+    }
+
 }
 
 module.exports = StaticHandler;

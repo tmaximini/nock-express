@@ -31,6 +31,8 @@ module.exports = exports = function(app, db) {
 
     app.get('/website', staticHandler.displayWebsite);
     app.get('/provider', staticHandler.displayProvider);
+    app.get('/imprint', staticHandler.displayImprint);
+    app.get('/contact', staticHandler.displayContact);
 
     //app.get('/contact', staticHandler.displayContact);
 
