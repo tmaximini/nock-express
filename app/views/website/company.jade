@@ -1,0 +1,85 @@
+include websiteHeader
+
+body
+
+  include websiteFacebook
+
+  #wrapper_margins
+
+    #hiddenNav
+      a(href='#container') Skip to content
+      | |
+      a(href='#nav') Skip to navigation
+    #header
+      nav.navbar.navbar-default(role='navigation')
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-ex1-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/website')
+            img(src='/stylesheets/website/img/nock.png', alt='NOCK', height='57', width='124')
+        .collapse.navbar-collapse.navbar-ex1-collapse
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='/website', title='So funktioniert\'s') So funktioniert's
+            li
+              a(href='/provider', title='Für Geschäftsinhaber') Für Geschäftsinhaber
+            li.active
+              a(href='/contact', title='Kontakt') Kontakt
+
+    #content
+      .container
+        .container-inner
+          h3.headline-big Kontakt
+          .contact-map
+            iframe(width='898', height='300', frameborder='0', scrolling='no', marginheight='0', marginwidth='0', src='https://maps.google.de/maps?f=q&source=s_q&hl=en&geocode=&q=betahaus+GmbH+%26+CO.+KG,+Prinzessinnenstra%C3%9Fe,+Berlin&aq=0&oq=betahaus+&sll=52.506844,13.424732&sspn=0.723027,2.113495&ie=UTF8&hq=betahaus+GmbH+%26+CO.+KG,&hnear=Prinzessinnenstra%C3%9Fe,+12307+Berlin&t=m&ll=52.501332,13.416796&spn=0.015675,0.082312&z=14&output=embed')
+          .box-wrap.clearfix
+            .left
+              h3 Büroanschrift
+              .box-grey.clearfix
+                .left
+                  strong betahaus
+                  br
+                  | 3. Obergeschoss
+                  br
+                  | Prinzessinnenstraße 19-20
+                  br
+                  | 10969 Berlin
+                  br
+                  | Germany
+                .right
+                  strong Telefon:
+                  br
+                  | +49 (0) 17 6 - 64 12 50 34
+                  br
+                  br
+                  strong E-Mail:
+                  br
+                  a(href='mailto:contact@getnock.com', title='Mail an contact@getnock.com', target='_blank') contact@getnock.com
+            .right
+              h3 Postanschrift
+              .box-grey.clearfix
+                strong NOCK IT GmbH i.G.
+                br
+                | Stargarder Str. 25
+                br
+                | 10437 Berlin
+                br
+                | Germany
+                br
+                br
+      #footer-big
+        .footer-inner
+          img.footer-big-appstore(src='/stylesheets/website/img/appstore.png', alt='Soon available on the App Store', height='77', width='230')
+          img.footer-big-iphone(src='/stylesheets/website/img/footer-image.jpg', alt='NOCK - Your challenge. Your reward.', height='700', width='960')
+          .footer-big-facebook.clearfix
+            .footer-big-facebook-like
+              .fb-like(data-href='https://www.facebook.com/getnock', data-width='The pixel width of the plugin', data-height='The pixel height of the plugin', data-colorscheme='dark', data-layout='button_count', data-action='like', data-show-faces='false', data-send='false')
+            a.btn.btn-facebook(href='http://www.facebook.com/getnock', title='Besuch uns auf facebook', target='_blank')
+              img(src='/stylesheets/website/img/btn-fbIcon.png', alt='f', height='26', width='31')
+              | Besuch uns auf facebook
+
+
+  include websiteFooter

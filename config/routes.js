@@ -26,15 +26,17 @@ module.exports = exports = function(app, db) {
      *  STATIC PAGES
      */
 
-    // GET index (static page for now)
-    app.get('/', staticHandler.displayIndex);
+    // STATIC website pages for www.getnock.com
+    app.get('/admin', staticHandler.displayIndex);
 
+    app.get('/', staticHandler.displayWebsite);
     app.get('/website', staticHandler.displayWebsite);
     app.get('/provider', staticHandler.displayProvider);
     app.get('/imprint', staticHandler.displayImprint);
     app.get('/contact', staticHandler.displayContact);
+    app.get('/company', staticHandler.displayCompany);
 
-    //app.get('/contact', staticHandler.displayContact);
+
 
 
     /**

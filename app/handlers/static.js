@@ -38,6 +38,13 @@ function StaticHandler (db) {
         });
     }
 
+    this.displayCompany = function(req, res, next) {
+        // show website/imprint
+        res.render("website/company", {
+          title: "Welcome to Nock"
+        });
+    }
+
 }
 
 module.exports = StaticHandler;
