@@ -16,7 +16,9 @@ var request = require('request');
 var LRU = require('lru-cache'); // least recent used cache
 var geolib = require('geolib');
 
-var cache = LRU(1024);
+var cacheOptions = { max: 500, maxAge: 1000 * 60 * 60 * 24 };
+
+var cache = LRU(cacheOptions);
 
 'use strict';
 
