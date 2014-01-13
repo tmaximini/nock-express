@@ -16,7 +16,7 @@ var request = require('request');
 var LRU = require('lru-cache'); // least recent used cache
 var geolib = require('geolib');
 
-var cacheOptions = { max: 500, maxAge: 1000 * 60 * 60 * 24 };
+var cacheOptions = { max: 500, maxAge: 1000 * 60 * 60 * 24 }; // 24h
 
 var cache = LRU(cacheOptions);
 
@@ -357,6 +357,10 @@ exports.apiGetLocationsNearby = function (req, res, next) {
     console.log('serving request from cache!');
     return res.status(200).send(JSON.parse(tryCache));
   } else {
+
+    var highlighted = 0;
+    var maxHighlighted = 3;
+
     // no cache found, make request
     console.log('no cache object found, requesting foursquare...');
     request({
@@ -412,6 +416,14 @@ exports.apiGetLocationsNearby = function (req, res, next) {
               if (nockObj.venues[results[i].fourSquareId]) {
                 nockObj.venues[results[i].fourSquareId].photos = photoResults[i];
                 nockObj.venues[results[i].fourSquareId].nock = results[i];
+
+                if (results[i].challenges.length > 0 && (highlighted < maxHighlighted)) {
+                  nockObj.venues[results[i].fourSquareId].highlight = true;
+                  highlighted++;
+                } else {
+                  nockObj.venues[results[i].fourSquareId].highlight = false;
+                }
+
               }
             }
 
