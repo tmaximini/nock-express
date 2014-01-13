@@ -92,18 +92,18 @@ module.exports = exports = function(app, db) {
     /**
      * CHALLENGE ROUTES
      */
-    app.param('challenge',                        challengesController.load);
-    app.get('/challenges',                        challengesController.index);
-    app.get('/challenges/new', adminOnly,          challengesController.new);
-    app.post('/challenges',                       challengesController.create);
-    app.get('/challenges/:challenge',             challengesController.show);
-    app.get('/challenges/:challenge/edit',adminOnly, challengesController.edit);
-    app.put('/challenges/:challenge', adminOnly,   challengesController.update);
-    app.del('/challenges/:challenge', adminOnly,   challengesController.destroy);
-    app.get('/challenges/:challenge/attempts',    challengesController.showAttempts);
-    app.get('/api/challenges',                    challengesController.apiIndex);
-    app.get('/api/challenges/search',             challengesController.apiSearch);
-    app.get('/api/challenges/:challenge',         challengesController.apiShow);
+    app.param('challenge', challengesController.load);
+    app.get('/challenges', adminOnly, challengesController.index);
+    app.get('/challenges/new', adminOnly, challengesController.new);
+    app.post('/challenges', adminOnly, challengesController.create);
+    app.get('/challenges/:challenge', adminOnly, challengesController.show);
+    app.get('/challenges/:challenge/edit', adminOnly, challengesController.edit);
+    app.put('/challenges/:challenge', adminOnly, challengesController.update);
+    app.del('/challenges/:challenge', adminOnly, challengesController.destroy);
+    app.get('/challenges/:challenge/attempts', loggedIn, challengesController.showAttempts);
+    app.get('/api/challenges', loggedIn, challengesController.apiIndex);
+    app.get('/api/challenges/search', loggedIn, challengesController.apiSearch);
+    app.get('/api/challenges/:challenge', loggedIn, challengesController.apiShow);
     app.post('/api/challenges/:challenge/attempts', loggedIn, challengesController.apiAddAttempt);
 
 
@@ -112,16 +112,16 @@ module.exports = exports = function(app, db) {
     /**
      * LOCATION ROUTES (CRUD)
      */
-    app.param('location',                locationsController.load);
-    app.get('/locations',                locationsController.index);
-    app.get('/locations/new', adminOnly,  locationsController.new);
-    app.post('/locations', adminOnly,     locationsController.create);
-    app.get('/locations/:location',      locationsController.show);
+    app.param('location', locationsController.load);
+    app.get('/locations', adminOnly, locationsController.index);
+    app.get('/locations/new', adminOnly, locationsController.new);
+    app.post('/locations', adminOnly, locationsController.create);
+    app.get('/locations/:location', locationsController.show);
     app.get('/locations/:location/edit', adminOnly, locationsController.edit);
     app.put('/locations/:location', adminOnly, locationsController.update);
     app.del('/locations/:location', adminOnly, locationsController.destroy);
-    app.get('/api/locations',            locationsController.apiIndex);
-    app.get('/api/locations/:location',  locationsController.apiShow);
+    app.get('/api/locations', locationsController.apiIndex);
+    app.get('/api/locations/:location', locationsController.apiShow);
     app.get('/api/locations/:location/addChallenge', adminOnly, locationsController.apiAddChallenge);
 
 
@@ -130,7 +130,7 @@ module.exports = exports = function(app, db) {
      *  LOCATION WEBSERVICES
      */
 
-    app.post('/api/getLocationData', locationsController.matchFourSquareIds);
+    // app.post('/api/getLocationData', locationsController.matchFourSquareIds);
 
 
     // ERROR HANDLING
