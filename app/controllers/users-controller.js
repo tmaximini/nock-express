@@ -371,6 +371,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         v: FS.version,
         client_secret: FS.clientSecret,
         categoryId: FS.categoryId,
+        radius: 500,
         ll: user.location.toString()
       }
     }, function (error, response, body) {
