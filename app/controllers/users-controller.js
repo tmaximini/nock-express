@@ -365,6 +365,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
     console.log('no cache object found, requesting foursquare...');
     request({
       method: 'GET',
+      timeout: 6000,
       uri: FS.url + 'search',
       qs: {
         client_id: FS.clientID,
@@ -375,16 +376,13 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         ll: user.location.toString()
       }
     }, function (error, response, body) {
-      if (response.statusCode === 200) {
+      if (response && response.statusCode === 200) {
 
         // parse JSON response into an JS object
         var responseObj = JSON.parse(body).response;
 
         var challengePromises = [];
         var photoPromises = [];
-
-
-
 
         var nockObj = {
           id: user.location.toString(),
@@ -395,6 +393,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         responseObj.venues.forEach(function (venue) {
 
           nockObj.venues[venue.id] = venue;
+          nockObj.venues[venue.id].highlight = false;
 
           delete nockObj.venues[venue.id].events;
           delete nockObj.venues[venue.id].specials;
@@ -411,14 +410,16 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         Promise.all(photoPromises).then(function(photoResults) {
 
           Promise.all(challengePromises).then(function(results) {
-            console.log('all promises resolved yay');
+            console.log('all promises resolved yay', results.length );
 
             for (var i = 0; i < results.length; i++) {
+
               if (nockObj.venues[results[i].fourSquareId]) {
+
                 nockObj.venues[results[i].fourSquareId].photos = photoResults[i];
                 nockObj.venues[results[i].fourSquareId].nock = results[i];
 
-                if (results[i].challenges.length > 0 && (highlighted < maxHighlighted)) {
+                if (results[i].challenges.length > 0 && (highlighted <= maxHighlighted)) {
                   nockObj.venues[results[i].fourSquareId].highlight = true;
                   highlighted++;
                 } else {
@@ -453,6 +454,7 @@ function getImageData (locationId) {
   var q = Promise.defer();
   request({
     method: 'GET',
+    timeout: 3000,
     uri: FS.url + locationId.toString() + '/photos',
     qs: {
       client_id: FS.clientID,
@@ -461,7 +463,7 @@ function getImageData (locationId) {
       limit: 5
     }
   }, function (error, response, body) {
-    if (response.statusCode === 200) {
+    if (response && response.statusCode === 200) {
       console.log('request to ' + locationId + ' worked!');
       var photos = JSON.parse(body).response.photos.items;
       for (var i = 0; i < photos.length; i++) {
@@ -472,7 +474,7 @@ function getImageData (locationId) {
       q.resolve(photos);
     } else {
       console.log('request to ' + locationId + ' failed!');
-      q.reject();
+      q.resolve({});
     }
   });
   return q.promise;
