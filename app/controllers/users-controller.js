@@ -107,7 +107,7 @@ exports.login = function (req, res, next) {
     res.redirect('/');
   });
   function invalid () {
-    req.flash('error', 'Invalid Login');
+    req.flash('error', 'Benutzername oder Passwort falsch.');
     return res.render('users/login.jade', {
       invalid: true,
       messages: req.flash('error'),
