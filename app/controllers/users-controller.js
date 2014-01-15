@@ -195,18 +195,27 @@ exports.logout = function (req, res) {
  *--------------------------------------------------*/
 
 
-// FIXME: replace with User.list static
+// TODO: parse query strings correctly, paging
 
 exports.apiIndex = function(req, res, next) {
-    // limit to 20 users for now
-    User.find()
-        .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
-        .sort('username')
-        .limit(20)
-        .exec(function (err, users) {
-          if (err) return next(err);
-          res.json({'users': users});
-    });
+
+    console.log('API INDEX');
+    console.dir(req.query);
+
+    var sortBy = req.query.sortBy || '-points';
+    var limit  = parseInt(req.query.limit) || 20;
+
+    User.list(
+      { sortBy: sortBy, limit: limit},
+      function (err, users) {
+        if (err) {
+          return next(err);
+        } else {
+          return res.json({'users': users})
+        }
+      }
+    );
+
 }
 
 

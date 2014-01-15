@@ -60,7 +60,24 @@ userSchema.statics = {
   load: function (id, cb) {
     this.findOne({ _id : id })
       .select({ 'salt':0, 'hash': 0, '__v':0 }) // omit fields
-      .exec(cb)
+      .exec(cb);
+  },
+
+  // User Index Query
+  list: function (options, cb) {
+
+    if (!options || (typeof options !== 'object')) {
+      options = {};
+    }
+
+    if (!options.sortBy) options.sortBy = 'username';
+    if (!options.limit) options.limit = 20;
+
+    this.find()
+      .select({'salt':0, 'hash': 0, '__v':0}) // omit fields
+      .sort(options.sortBy)
+      .limit(options.limit)
+      .exec(cb);
   }
 
 }
