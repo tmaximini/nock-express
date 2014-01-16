@@ -59,7 +59,7 @@ userSchema.statics = {
 
   load: function (id, cb) {
     this.findOne({ _id : id })
-      .select({ 'salt':0, 'hash': 0, '__v':0 }) // omit fields
+      .select({ 'salt':0, 'hash': 0, '__v':0, 'admin': 0 }) // omit fields
       .exec(cb);
   },
 
