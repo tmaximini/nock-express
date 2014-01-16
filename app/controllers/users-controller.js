@@ -423,9 +423,14 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
             for (var i = 0; i < results.length; i++) {
 
+              if (nockObj.venues[photoResults[i].locationId]) {
+                nockObj.venues[photoResults[i].locationId].photos = photoResults[i].items;
+              }
+
+
               if (nockObj.venues[results[i].fourSquareId]) {
 
-                nockObj.venues[results[i].fourSquareId].photos = photoResults[i];
+
                 nockObj.venues[results[i].fourSquareId].nock = results[i];
 
                 if (results[i].challenges.length > 0 && (highlighted <= maxHighlighted)) {
@@ -474,11 +479,13 @@ function getImageData (locationId) {
   }, function (error, response, body) {
     if (response && response.statusCode === 200) {
       console.log('request to ' + locationId + ' worked!');
-      var photos = JSON.parse(body).response.photos.items;
-      for (var i = 0; i < photos.length; i++) {
-        delete photos[i].user;
-        delete photos[i].id;
-        delete photos[i].source;
+      var photos = {};
+      photos.items = JSON.parse(body).response.photos.items;
+      photos.locationId = locationId;
+      for (var i = 0; i < photos.items.length; i++) {
+        delete photos.items[i].user;
+        delete photos.items[i].id;
+        delete photos.items[i].source;
       };
       q.resolve(photos);
     } else {
