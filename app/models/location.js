@@ -14,8 +14,8 @@ var imagerConfig = require(config.root + '/config/imager.js');
 var Promise = require('bluebird');
 
 var LocationSchema = new Schema({
-  slug: { type: String, required: true },
-  fourSquareId: String,
+  slug: { type: String, required: true, unique: true },
+  fourSquareId: { type: String, unique: true },
   name:  { type: String, required: true },
   adress: String,
   body:   String,
@@ -106,19 +106,8 @@ LocationSchema.statics = {
   },
 
 
-  createFromFourSquareVenue: function (venue) {
-    var loc = new Location({
-      fourSquareId: venue.id,
-      name: venue.name,
-      slug: utils.convertToSlug(venue.name),
-      adress: venue.location.adress
-    });
-    loc.save(function (savedObj) {
-      console.log('location has been saved;');
-    });
-  },
-
   getChallengeData: function (fsId) {
+    var self = this;
     var q = Promise.defer();
     this.findOne({ fourSquareId: fsId },
       { },
@@ -127,6 +116,7 @@ LocationSchema.statics = {
           q.reject(err);
         }
         if (doc) {
+          console.info('found location with id ' + fsId);
           q.resolve(doc);
         } else {
           console.error('no location with id ' + fsId + 'found');

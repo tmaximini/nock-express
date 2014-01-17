@@ -354,6 +354,10 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
   var user = req.user;
 
+  var radiusToSearch = req.query.radius || 500;
+
+  var createVenues = !!req.query.createVenues;
+
   // truncate user location to 8 digits after comma to improve cache rate
   user.location[0] = parseFloat(user.location[0].toFixed(8));
   user.location[1] = parseFloat(user.location[1].toFixed(8));
@@ -368,7 +372,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
   } else {
 
     var highlighted = 0;
-    var maxHighlighted = 3;
+    var maxHighlighted = 5;
 
     // no cache found, make request
     console.log('no cache object found, requesting foursquare...');
@@ -381,7 +385,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
         v: FS.version,
         client_secret: FS.clientSecret,
         categoryId: FS.categoryId,
-        radius: 500,
+        radius: radiusToSearch,
         ll: user.location.toString()
       }
     }, function (error, response, body) {
@@ -410,6 +414,10 @@ exports.apiGetLocationsNearby = function (req, res, next) {
           delete nockObj.venues[venue.id].hereNow;
           delete nockObj.venues[venue.id].categories;
 
+          if (createVenues) {
+            createVenueFromFourSquare(venue);
+          }
+
           console.log('venue: ' + venue.id);
           challengePromises.push(Location.getChallengeData(venue.id));
           photoPromises.push(getImageData(venue.id));
@@ -427,17 +435,13 @@ exports.apiGetLocationsNearby = function (req, res, next) {
                 nockObj.venues[photoResults[i].locationId].photos = photoResults[i].items;
               }
 
-
               if (nockObj.venues[results[i].fourSquareId]) {
-
 
                 nockObj.venues[results[i].fourSquareId].nock = results[i];
 
                 if (results[i].challenges.length > 0 && (highlighted <= maxHighlighted)) {
                   nockObj.venues[results[i].fourSquareId].highlight = true;
                   highlighted++;
-                } else {
-                  nockObj.venues[results[i].fourSquareId].highlight = false;
                 }
 
               }
@@ -495,5 +499,20 @@ function getImageData (locationId) {
   });
   return q.promise;
 }
+
+
+function createVenueFromFourSquare (venue) {
+  var loc = new Location({
+    fourSquareId: venue.id,
+    name: venue.name,
+    slug: utils.convertToSlug(venue.name),
+    adress: venue.location.adress
+  });
+  loc.save(function (savedObj) {
+    console.log('location has been saved;');
+  });
+}
+
+
 
 
