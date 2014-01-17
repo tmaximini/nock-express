@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var Location = mongoose.model('Location');
+var Challenge = mongoose.model('Challenge');
 
 var cleanString = require('../helpers/cleanString');
 var hash = require('../helpers/hash');
@@ -500,17 +501,30 @@ function getImageData (locationId) {
   return q.promise;
 }
 
+/*
+ * Saves a new location from FS database and adds a random challenge
+ */
+
 
 function createVenueFromFourSquare (venue) {
+
   var loc = new Location({
     fourSquareId: venue.id,
     name: venue.name,
     slug: utils.convertToSlug(venue.name),
     adress: venue.location.adress
   });
-  loc.save(function (savedObj) {
-    console.log('location has been saved;');
-  });
+
+  Challenge.random(function (err, challenge) {
+    loc.challenges.push(challenge);
+    challenge.locations.push(loc);
+    challenge.save();
+    loc.save(function (savedObj) {
+      console.log('location has been saved;');
+    });
+  })
+
+
 }
 
 
