@@ -357,6 +357,14 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
   var radiusToSearch = req.query.radius || 500;
 
+  var useCache = true;
+
+  console.log(typeof req.query.cache, !Boolean(req.query.cache));
+
+  if (typeof req.query.cache !== 'undefined') {
+    useCache = Boolean(req.query.cache);
+  }
+
   var createVenues = !!req.query.createVenues;
 
   // truncate user location to 8 digits after comma to improve cache rate
@@ -366,7 +374,7 @@ exports.apiGetLocationsNearby = function (req, res, next) {
 
   var tryCache = cache.get(user.location.toString());
 
-  if (tryCache) {
+  if (useCache && tryCache) {
     // many cache, such perform... wow
     console.log('serving request from cache!');
     return res.status(200).send(JSON.parse(tryCache));
