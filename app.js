@@ -5,6 +5,10 @@
 
 var mongoose = require('mongoose');
 var express = require('express');
+var http = require('http')
+
+http.globalAgent.maxSockets = 1000; // concurrent requests
+
 require('express-mongoose');
 
 var env = process.env.NODE_ENV || 'development';
