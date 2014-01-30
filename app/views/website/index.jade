@@ -23,25 +23,23 @@ body
         .collapse.navbar-collapse.navbar-ex1-collapse
           ul.nav.navbar-nav.navbar-right
             li.active
-              a(href='/website', title='So funktioniert\'s') So funktioniert's
-            li
-              a(href='/provider', title='Für Geschäftsinhaber') Für Geschäftsinhaber
+              a(href='/website', title='Home') Home
             li
               a(href='/contact', title='Kontakt') Kontakt
-            li
-              a(href='/login', title='Kontakt') Login
+
 
     #content
 
       .step.step1
         .step1-box
-          h1 Your challenge. Your reward.
-          h2 Die Smartphone-App, bei der Deine Erfolge direkt belohnt werden.
+          h1 Spontan neue Leute kennenlernen.
+          h2 NOCK bringt dich spontan mit Gruppen in deiner Nähe zusammen.
           .subscribe
             h2 Wir benachrichtigen Dich gerne sobald NOCK im App Store verfügbar ist:
             .clearfix
               #user-subscription.right
-
+                //
+                   Begin MailChimp Signup Form
                 #mc_embed_signup
                   form#mc-embedded-subscribe-form.validate.clearfix(action='http://getnock.us6.list-manage1.com/subscribe/post?u=9afcd3f289&id=435988fc25', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='novalidate')
                     .mc-field-group
@@ -52,61 +50,11 @@ body
                       #mce-error-response.response(style='display: none;')
                       #mce-success-response.response(style='display: none;')
                 script(type='text/javascript', src='/javascripts/vendor/mailchimp/mailchimp-user.js')
-
+                //
+                   End MailChimp Signup Form
               .left
                 img.subscribe-appstore(src='/stylesheets/website/img/appstore.png', alt='Soon available on the App Store', height='50', width='149')
 
-        img.step1-image(src='/stylesheets/website/img/step1-image.png', alt='NOCK Home-Screen', height='588', width='477')
-        .arrow-down
-          img(src='/stylesheets/website/img/arrow-down.png', alt='Scroll down', height='62', width='16')
-
-      .step.step2
-        .step-container
-          .step-description
-            .step-description-icon
-              img(src='/stylesheets/website/img/icon-location-white.png', alt='Location aussuchen', height='200', width='260')
-            .step-description-text
-              h3 1. Location aussuchen
-              p
-                | Starte damit neue Bars um Dich herum zu entdecken. Verschwende keine Zeit mit langen Entscheidungen,
-                strong.red &nbsp;wähle aus 3 von NOCK vorgeschlagenen Locations&nbsp;
-                | und los geht's! Jede Location hat eine kleine Aufgabe für Dich, die Du in der Bar bestehen musst.
-          .step-image
-            img(src='/stylesheets/website/img/step2-image.png', alt='Location aussuchen', height='603', width='256')
-
-      .step.step3
-        .step-container
-          .step-description
-            .step-description-icon
-              img(src='/stylesheets/website/img/icon-challenge-white.png', alt='Vor Ort Challenge bestehen', height='200', width='260')
-            .step-description-text
-              h3 2. Vor Ort Challenge bestehen
-              p
-                | Lass Dich auf das Spiel ein und beweise Dich bei den originellen Challenges von NOCK wie zum Beispiel "
-                strong.red REIME DEINE BESTELLUNG
-                | ". Eine Vielfalt von Challenges erwartet Dich - egal ob digital oder real. Für jeden ist etwas dabei!
-              p
-                strong Nimm die Herausforderung an und gib alles!
-          .step-image
-            img(src='/stylesheets/website/img/step3-image.png', alt='Vor Ort Challenge bestehen', height='603', width='256')
-
-      .step.step4
-        .step-container
-          .step-description
-            img.step4-shine-white(src='/stylesheets/website/img/shine-white.png', alt='', height='660', width='660')
-            .step-description-icon
-              img(src='/stylesheets/website/img/icon-reward-white.png', alt='Belohnung kassieren', height='200', width='260')
-            .step-description-text
-              h3 3. Belohnung kassieren
-              p
-                | Klasse, Du hast die Location GENOCKED! Genieße jetzt direkt in der Bar Deine Belohnung wie "
-                strong.red EIN GRATIS DRINK ON TOP
-                | ", sofern sie eine Partner-Bar ist oder sammle weiter fleißig NOCK-Coins, die Du gegen tolle Prämien eintauschen kannst.
-              p
-                strong
-                  | Zeig Deinen Freunden wer die Hosen an hat und verweise sie im Highscore auf ihre Plätze!
-          .step-image
-            img(src='/stylesheets/website/img/step4-image.png', alt='Belohnung kassieren', height='603', width='256')
       #footer-big
         .footer-inner
           img.footer-big-appstore(src='/stylesheets/website/img/appstore.png', alt='Soon available on the App Store', height='77', width='230')
